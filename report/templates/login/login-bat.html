@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'login/css/login.css' %}">
+  <!--  <script type="text/javascript" src="{% static 'login/js/login.js' %}"></script> -->
+
+</head>
+<body onkeydown="keyLogin(event);">
+    <div class="wrap">
+        <div class="container">
+            <h1>Welcome</h1>
+            <form method="POST" class="form">
+                {% csrf_token %}
+                <div class="text">
+                    {{ obj1.username }}
+                    {% if obj1.errors.user %}
+                        <span class="errormsg">{{ obj1.error.user.0 }}</span>
+                    {% endif %}
+                </div>
+                <div class="password">
+                    {{ obj1.password }}
+                    <span class="errormsg">{{ obj1.error.pwd.0 }}</span>
+                </div>
+                <input type="submit" id="btn_login" value="Login"/>
+            </form>
+        </div>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</body>
+</html>
