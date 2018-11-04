@@ -31,9 +31,9 @@ def login(request):
                 #比较失败，仍在login页面
                 from django.forms.utils import ErrorDict
                 return render(request, 'login/login.html',{'obj1':objPost})
- #       else:
- #           from django.forms.utils import ErrorDict
- #       return render(request, 'login/login.html',{'obj1':objPost})
+        else:
+            from django.forms.utils import ErrorDict
+            return render(request, 'login/login.html',{'obj1':objPost})
     else:
         objGet = LoginForm()
         return render(request, 'login/login.html', {'obj1':objGet })
