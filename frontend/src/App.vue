@@ -20,7 +20,7 @@
       </el-col>
     </el-row>
     </el-header>
-    
+
   <el-container style="height: 615px; border: 1px solid #eee">
   <el-aside width="200px">
     <report-menu></report-menu>
@@ -41,11 +41,21 @@
 </template>
 
 <script>
-import ReportMenu from './components/ReportMenu'
+import ReportMenu from '@/components/ReportMenu'
 export default {
   name: 'App',
   components: {
-     'report-menu': ReportMenu,
+    'reportMenu': ReportMenu,
+  },
+  data() {
+    const item = {
+      date: '2016-05-02',
+      name: '王小虎',
+      address: '上海市普陀区金沙江路 1518 弄'
+    };
+    return {
+      tableData: Array(10).fill(item)
+    }
   }
 }
 </script>
@@ -57,7 +67,7 @@ export default {
     line-height: 60px;
 
   }
-  
+
   .el-aside {
     color: #333;
     background-color: #545c64
@@ -78,21 +88,7 @@ export default {
     font-size: 15px ;
     -webkit-background-clip : text;
     margin: 0 auto;
-    text-align: right; 
+    text-align: right;
   }
 </style>
 
-<script>
-  export default {
-    data() {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      };
-      return {
-        tableData: Array(10).fill(item)
-      }
-    }
-  };
-</script>
