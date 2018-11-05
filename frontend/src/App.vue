@@ -1,13 +1,13 @@
-<template>
-  <el-container>
+<template >
+  <el-container style="height:100%" direction="vertical">
     <el-header>
     <el-row>
-      <el-col :span="7">
+      <el-col :span="10" >
         <div id="head-title">
           测试报告管理系统
         </div>
       </el-col>
-      <el-col :span="17" id="head-name">
+      <el-col :span="14" id="head-name"  >
       <el-dropdown>
         <i class="el-icon-edit" style="margin-right: 10px"></i>
         <el-dropdown-menu slot="dropdown">
@@ -15,7 +15,7 @@
           <el-dropdown-item>新增</el-dropdown-item>
           <el-dropdown-item>删除</el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown>
+      </el-dropdown> 
       <span> Jasmine</span>
       </el-col>
     </el-row>
@@ -27,14 +27,15 @@
   </el-aside>
 
     <el-main>
-      <el-table :data="tableData">
-        <el-table-column prop="date" label="日期" width="140">
-        </el-table-column>
-        <el-table-column prop="name" label="测试人员" width="140">
-        </el-table-column>
-        <el-table-column prop="address" label="需求名称">
-        </el-table-column>
-      </el-table>
+      <report-list></report-list>
+  <!--  <el-table :data="tableData">
+    <el-table-column prop="date" label="日期" width="140">
+    </el-table-column>
+    <el-table-column prop="name" label="测试人员" width="140">
+    </el-table-column>
+    <el-table-column prop="address" label="需求名称">
+    </el-table-column>
+  </el-table>  -->
     </el-main>
   </el-container>
 </el-container>
@@ -42,12 +43,14 @@
 
 <script>
 import ReportMenu from '@/components/ReportMenu'
+import ReportList from '@/components/ReportList'
 export default {
   name: 'App',
   components: {
     'reportMenu': ReportMenu,
+    'reportList': ReportList,
   },
-  data() {
+  /*data() {
     const item = {
       date: '2016-05-02',
       name: '王小虎',
@@ -56,11 +59,21 @@ export default {
     return {
       tableData: Array(10).fill(item)
     }
-  }
+  }*/
 }
+
 </script>
 
 <style>
+html {
+  height: 100%;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
   .el-header {
     background-color: #B3C0D1;
     color: #333;
