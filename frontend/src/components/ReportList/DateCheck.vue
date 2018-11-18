@@ -19,16 +19,11 @@
         </el-button>
       </div>
    </div>
-   <show-list></show-list>
 </div>
 </template>
 
 <script>
-  import ShowList from './ShowList'
   export default {
-    components: {
-      'showList': ShowList,
-    },
     data() {
       return {
         pickerOptions2: {
@@ -59,7 +54,7 @@
           }]
         },
         value: ''
-      };
+      }
     }
   }
 </script>
@@ -68,8 +63,5 @@
 .test {
     display: inline-block;
     padding-left: 15px;
-}
-.el-table-column {
-  background-color: midnightblue
 }
 </style>

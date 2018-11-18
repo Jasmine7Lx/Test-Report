@@ -26,3 +26,8 @@ export default {
 }
 </script>
 
+<style>
+.el-table-column {
+  background-color: midnightblue
+}
+</style>

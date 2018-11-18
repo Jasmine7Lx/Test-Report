@@ -1,46 +1,32 @@
 <template >
-  <el-container style="height:100%" direction="vertical">
+  <el-container style="height:100%" direction="vertical" >
     <el-header>
-    <el-row>
-      <el-col :span="10" >
-        <div id="head-title">
-          测试报告管理系统
-        </div>
-      </el-col>
-      <el-col :span="14" id="head-name"  >
-      <el-dropdown>
-        <i class="el-icon-edit" style="margin-right: 10px"></i>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>查看</el-dropdown-item>
-          <el-dropdown-item>新增</el-dropdown-item>
-          <el-dropdown-item>删除</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown> 
-      <span> Jasmine</span>
-      </el-col>
-    </el-row>
+      <!-- 导航栏-->
+      <stable></stable>
     </el-header>
 
   <el-container style="height: 615px; border: 1px solid #eee">
   <el-aside width="200px">
+    <!-- 菜单栏 -->
     <report-menu></report-menu>
   </el-aside>
 
     <el-main>
-      <report-list></report-list>
+      <router-view></router-view>
     </el-main>
   </el-container>
 </el-container>
+
 </template>
 
 <script>
-import ReportMenu from '@/components/ReportMenu'
-import ReportList from '@/components/ReportList'
+import Stable from '@/components/Main/Stable'
+import ReportMenu from '@/components/Main/ReportMenu'
 export default {
   name: 'App',
   components: {
     'reportMenu': ReportMenu,
-    'reportList': ReportList,
+    'stable':Stable,
   },
 }
 
