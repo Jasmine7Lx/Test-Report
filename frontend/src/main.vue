@@ -12,7 +12,9 @@
   </el-aside>
 
     <el-main>
-      <router-view></router-view>
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
     </el-main>
   </el-container>
 </el-container>
@@ -70,6 +72,13 @@ body {
     -webkit-background-clip : text;
     margin: 0 auto;
     text-align: right;
+  }
+    /* 路由切换动效 */
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+  }
+  .fade-enter, .fade-leave-active {
+    opacity: 0;
   }
 </style>
 
