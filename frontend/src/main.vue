@@ -6,14 +6,17 @@
     </el-header>
 
   <el-container style="height: 615px; border: 1px solid #eee">
-  <el-aside width="200px">
-    <!-- 菜单栏 -->
-    <report-menu></report-menu>
-  </el-aside>
-
-    <el-main>
-      <router-view></router-view>
+    <el-aside width="180px">
+      <!-- 菜单栏 -->
+      <report-menu></report-menu>
+    </el-aside>
+  <el-container style="border: 10px solid #eee">
+    <el-main >
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
     </el-main>
+  </el-container>
   </el-container>
 </el-container>
 
@@ -37,6 +40,7 @@ html {
   height: 100%;
 }
 body {
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,8 +49,8 @@ body {
   .el-header {
     background-color: #B3C0D1;
     color: #333;
-    line-height: 60px;
-
+    line-height: 53px;
+    
   }
 
   .el-aside {
@@ -70,6 +74,13 @@ body {
     -webkit-background-clip : text;
     margin: 0 auto;
     text-align: right;
+  }
+/* 路由切换动效 */
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+  }
+  .fade-enter, .fade-leave-active {
+    opacity: 0;
   }
 </style>
 

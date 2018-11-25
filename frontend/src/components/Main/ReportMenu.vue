@@ -1,6 +1,6 @@
 <template>
     <el-menu 
-      default-active=/
+      :default-active="$route.path"
       router
       background-color="#545c64"
       text-color="#fff"
@@ -25,7 +25,8 @@
 <script>
   export default {
 
-  }
+}
+
 </script>
 
 <style>
