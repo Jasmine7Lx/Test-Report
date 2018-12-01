@@ -49,47 +49,112 @@
         <el-form label-position="top" ref="form2" :rules="rules" :model="form2" size="small">
             <el-form-item>
                 <span style="font-size:16.5px; padding-left:10px;">二、遗留问题：</span>
-                <el-button type="primary" size="mini" @click.native="AddList(form2.remainProblem)">添加</el-button>
-                <el-row v-for="item of form2.remainProblem" :key="item">
+                <el-button type="primary" size="mini" @click.native="AddList(form2.is_remain)">添加</el-button>
+                <el-row v-for="item of form2.is_remain" :key="item">
                     <el-col :span="10">
-                        <el-input v-model="item.title" size="small" clearable></el-input>
+                        <el-input v-model="item.remain" size="small" clearable></el-input>
                     </el-col>
-                    <el-button type="primary" icon="el-icon-delete" @click.native.prevent="removeList(item,form2.remainProblem)" title="删除"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" round @click.native.prevent="removeList(item,form2.is_remain)" title="删除"></el-button>
                     <el-dropdown trigger="click"  style="margin-left: 10px;color: #20a0ff;">
                         <el-button>移动<i class="el-icon-caret-bottom el-icon-right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item @click.native="moveTop(item,form2.remainProblem)">置顶</el-dropdown-item>
-                            <el-dropdown-item @click.native="moveUp(item,form2.remainProblem)">上移</el-dropdown-item>
-                            <el-dropdown-item @click.native="moveDown(item,form2.remainProblem)">下移</el-dropdown-item>
+                            <el-dropdown-item @click.native="moveTop(item,form2.is_remain)">置顶</el-dropdown-item>
+                            <el-dropdown-item @click.native="moveUp(item,form2.is_remain)">上移</el-dropdown-item>
+                            <el-dropdown-item @click.native="moveDown(item,form2.is_remain)">下移</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-row>
                 <!-- <el-row>
                     <el-col :span="14" :offset="5">
-                        <el-button :span="24" type="primary" size="small" @click.native="AddList(form2.remainProblem)">添加</el-button>
+                        <el-button :span="24" type="primary" size="small" @click.native="AddList(form2.is_remain)">添加</el-button>
                     </el-col>
                 </el-row> -->
             </el-form-item>
-            <el-form-item label="三、测试说明：">
+            <el-form-item>
+                <span style="font-size:16.5px; padding-left:10px;">三、测试说明：</span>
                 <el-row>
-                    <el-col :span="3"><span class="explain">1.测试环境：</span></el-col>
-                    <el-radio-group v-model="test_result">
+                    <span class="explain">1.测试环境：</span>
+                    <el-radio-group v-model="test_enviroment">
                         <el-radio :label="1">正式环境</el-radio>
                         <el-radio :label="2">测试环境</el-radio>
                         <el-radio :label="3">灰度环境</el-radio>
                     </el-radio-group>
+                </el-row >
+                <el-row>
+                    <span class="explain">2.环境配置：</span>
+                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_configure)">添加</el-button>
                 </el-row>
-                <span class="explain">2.环境配置：</span>
-                <el-button type="primary" size="mini" @click.native="AddList(form2.configure)">添加</el-button>
-                <el-row v-for="item of form2.configure" :key="item">
-                    <el-col :span="10">
-                        <el-input v-model="item.title" size="small" clearable></el-input>
+                <el-row v-for="item of form2.is_configure" :key="item" >
+                    <el-col :span="10" >
+                        <el-input v-model="item.configure" size="small" clearable></el-input>
                     </el-col>
-                    <el-button type="primary" icon="el-icon-delete" @click.native.prevent="removeList(item,form2.configure)" title="删除"></el-button>
+                    <el-col :span="10">
+                        <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_configure)" title="删除"></el-button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <span class="explain">3.测试版本/链接：</span>
+                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_build)">添加</el-button>
+                </el-row>
+                <el-row v-for="item of form2.is_build" :key="item">
+                    <el-col :span="10">
+                        <el-input v-model="item.build" size="small" clearable></el-input>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_build)" title="删除"></el-button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <span class="explain">4.测试时间：</span>
+                    <el-date-picker
+                        v-model="test_time"
+                        type="datetimerange"
+                        range-separator="-"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                        </el-date-picker>
                 </el-row>
             </el-form-item>
-
+            <el-form-item prop="solveproblem">
+                <span style="font-size:16.5px; padding-left:10px;">四、测试中发现的问题：</span>
+                <el-button type="primary" size="mini" @click.native="AddList(form2.is_problem)">添加</el-button>
+                <el-row  type="flex" v-for="item of form2.is_problem" :key="item.key">
+                    <el-col :span="10">
+                        <el-input v-model="item.problem" size="small" clearable></el-input>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-radio-group v-model="item.solve">
+                            <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
+                        </el-radio-group>
+                    <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_problem)" title="删除"></el-button>
+                    </el-col>
+                </el-row>
+            </el-form-item>
+        </el-form>
+        <el-form class="edit3">
+            <el-form-item>
+                <span style="font-size:16.5px; padding-left:10px;">五、兼容性：</span>
+                <el-row>
+                    <el-col>
+                    <span class="explain">1.电脑系统：</span>
+                    <el-select
+                        v-model="computer_system"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择已测试的系统">
+                        <el-option
+                            v-for="item in form3.computer"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                    </el-col>
+                </el-row>
+            </el-form-item>
         </el-form>
     </div>
 
@@ -112,8 +177,10 @@ export default {
           value: '选项3',
           label: '小C'
         }],
-        test_result: 1,
-
+        test_result: "",
+        test_enviroment: "",
+        test_time: '',
+        computer_system: [],
         rules: {
             demand_name:[
                 {required:true, message:'请输入需求名称',trigger:'blur'}
@@ -138,10 +205,50 @@ export default {
             demander: [],
         },
         form2: {
-            remain: '',
-            remainProblem: [],
-            configure: [],
+            is_remain: [{
+                remain: '',
+            }],
+            is_configure: [{
+                configure: '',
+            }],
+            is_build: [{
+                build: '',
+            }],
+            is_problem: [{
+                problem: '',
+                solve: '',
+            }],
             boxs: [],
+            solveproblem: [
+                {
+                    id: "sovle",
+                    name: "已解决",
+                    selected: "1",
+                },
+                {
+                    id: "no_solve",
+                    name: "未解决",
+                    selected: "0",
+                },
+                {
+                    id: "noneed_solve",
+                    name: "无需解决",
+                    selected: "-1",                    
+                }
+            ],
+
+        },
+        form3: {
+            computer: [
+                {
+                    value: 'win7',
+                    label: 'windows 7'
+                },
+                {
+                    value: 'win8',
+                    label: 'window 8'
+                }
+            ]
         }
       }
     },
@@ -149,8 +256,8 @@ export default {
         AddList: function(boxs) {
             var n = boxs ? boxs.length + 1 : 1;
             boxs.push({
-                title: n + '、',
-                require: false
+                value: '',
+                key: Date.now()
             });
         },
         removeList: function(item,boxs) {
@@ -178,8 +285,7 @@ export default {
                 boxs.splice(index,1);
                 boxs.splice(index+1,0,item);
             }
-        },
-
+        }
     }
 }
 </script>
@@ -191,7 +297,6 @@ body {
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     color: #606266;
 }
-
 .edit .el-input {
     padding-top: 2px;
     width: 350px;
@@ -200,18 +305,18 @@ body {
     padding-left: 45px;
     width: 400px;
 }
+.edit3 .el-input {
+    padding-left: 1px;
+    width: 400px;
+}
 .el-form-item__label {
     font-size: 16.5px;
 }
-.edit2 .el-form-item__label {
-    padding-left: 15px;
-}
 
-.edit2 .explain {
+.edit2 .edit3 .explain {
     font-size: 15px;
     padding-left: 35px;
 }
-
 hr {
     width:100%;
     margin:0 auto;
@@ -220,5 +325,4 @@ hr {
     background: rgb(195, 198, 223);
     background-image: linear-gradient(to right, #ccc, #99b0da, #ccc);
 }
-
 </style>
