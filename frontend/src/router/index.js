@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import ReportSystem from '@/main.vue'
 import ReportList from '@/views/ReportList'
-import ReportEdit from '@/views/ReportEdit'
+import Pc_Report from '@/views/Pc_Report'
+import Phone_Report from '@/views/Phone_Report'
 import BugList from '@/views/BugList'
 
 Vue.use(Router)
@@ -26,9 +27,17 @@ export default new Router({
           }
         },
         {
-          path: '/reportedit',
-          name: 'ReportEdit',
-          component: ReportEdit,
+          path: '/pc_report',
+          name: 'Pc_Report',
+          component: Pc_Report,
+          meta: {
+            keepAlive: true
+          }
+        },
+        {
+          path: '/phone_report',
+          name: 'Phone_Report',
+          component: Phone_Report,
           meta: {
             keepAlive: true
           }

@@ -51,7 +51,7 @@
                 <span style="font-size:16.5px; padding-left:10px;">二、遗留问题：</span>
                 <el-button type="primary" size="mini" @click.native="AddList(form2.is_remain)">添加</el-button>
                 <el-row v-for="item of form2.is_remain" :key="item">
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-input v-model="item.remain" size="small" clearable></el-input>
                     </el-col>
                     <el-button type="danger" icon="el-icon-delete" round @click.native.prevent="removeList(item,form2.is_remain)" title="删除"></el-button>
@@ -82,23 +82,11 @@
                     </el-radio-group>
                 </el-row >
                 <el-row>
-                    <span class="explain">2.环境配置：</span>
-                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_configure)">添加</el-button>
-                </el-row>
-                <el-row v-for="item of form2.is_configure" :key="item" >
-                    <el-col :span="7" >
-                        <el-input v-model="item.configure" size="small" clearable></el-input>
-                    </el-col>
-                    <el-col :span="10">
-                        <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_configure)" title="删除"></el-button>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <span class="explain">3.测试版本/链接：</span>
+                    <span class="explain">2.测试版本：</span>
                     <el-button type="primary" size="mini" @click.native="AddList(form2.is_build)">添加</el-button>
                 </el-row>
                 <el-row v-for="item of form2.is_build" :key="item">
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-input v-model="item.build" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
@@ -106,7 +94,7 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <span class="explain">4.测试时间：</span>
+                    <span class="explain">3.测试时间：</span>
                     <el-date-picker
                         v-model="test_time"
                         type="datetimerange"
@@ -120,10 +108,10 @@
                 <span style="font-size:16.5px; padding-left:10px;">四、测试中发现的问题：</span>
                 <el-button type="primary" size="mini" @click.native="AddList(form2.is_problem)">添加</el-button>
                 <el-row  type="flex" v-for="item of form2.is_problem" :key="item.key">
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-input v-model="item.problem" size="small" clearable></el-input>
                     </el-col>
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-radio-group v-model="item.solve">
                             <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
                         </el-radio-group>
@@ -137,26 +125,7 @@
                 <span style="font-size:16.5px; padding-left:10px;">五、兼容性：</span>
                 <el-row>
                     <el-col>
-                    <span class="explain">1.电脑系统：</span>
-                    <el-select
-                        v-model="computer"
-                        multiple
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择已测试的系统">
-                        <el-option
-                            v-for="item in form3.computer_system"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col>
-                    <span class="explain">2.手机型号/系统：</span>
+                    <span class="explain">1.手机型号/系统：</span>
                     <el-select
                         v-model="phone"
                         multiple
@@ -180,27 +149,32 @@
                     </el-select>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-col>
-                    <span class="explain">3.浏览器：</span>
-                    <el-select
-                        v-model="browser"
-                        multiple
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择已测试的系统">
-                        <el-option
-                            v-for="item in form3.browser_system"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                    </el-col>
-                </el-row>
             </el-form-item>
         </el-form>
+        <el-form class="edit4" :model="form4">
+            <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
+            <el-form-item>
+                <span class="explain">链接：</span>
+                <el-input size="small" v-model="form4.caselink"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <span class="explain">文件：</span>
+                <el-upload
+                    class="upload-demo"
+                    drag
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    multiple>
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                </el-upload>
+            </el-form-item>
+        </el-form>
+        <el-row>
+            <el-col :span="6" :offset="2">
+                <el-button type="primary" @click="submitForm(edit_form)">立即创建</el-button>
+                <el-button @click="resetForm('edit_form')">重置</el-button>
+            </el-col>
+        </el-row>
     </div>
 
 
@@ -228,6 +202,7 @@ export default {
         computer: [],
         phone: [],
         browser: [],
+        edit_form: ['form1','form2','form3','form4'],
         rules: {
             demand_name:[
                 {required:true, message:'请输入需求名称',trigger:'blur'}
@@ -286,17 +261,6 @@ export default {
 
         },
         form3: {
-            computer_system: 
-            [
-                {
-                    value: 'win7',
-                    label: 'windows 7'
-                },
-                {
-                    value: 'win8',
-                    label: 'window 8'
-                }
-            ],
             phone_system: [
                 {
                 label: 'ios系统',
@@ -321,21 +285,10 @@ export default {
                         label: '4.0.4'
                 }]
             }],
-            browser_system: [
-                {
-                    value: 'google',
-                    label: '谷歌浏览器'
-                },
-                {
-                    value: 'firefox',
-                    label: '火狐浏览器'
-                },
-                {
-                    value: 'ie 8',
-                    label: 'IE8 浏览器'
-                }
-            ]
-        }
+        },
+        form4: {
+            caselink: '',
+        },
       }
     },
     methods: {
@@ -371,6 +324,12 @@ export default {
                 boxs.splice(index,1);
                 boxs.splice(index+1,0,item);
             }
+        },
+        submitForm(forms) {
+            console.log(forms)
+        },
+        resetForm: function(forms) {
+
         }
     }
 }
@@ -392,6 +351,10 @@ body {
     width: 400px;
 }
 .edit3 .el-input {
+    padding-left: 1px;
+    width: 400px;
+}
+.edit4 .el-input {
     padding-left: 1px;
     width: 400px;
 }

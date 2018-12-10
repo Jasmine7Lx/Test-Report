@@ -6,7 +6,7 @@
     </el-header>
 
   <el-container style="height: 615px; border: 1px solid #eee">
-    <el-aside width="180px">
+    <el-aside width="200px">
       <!-- 菜单栏 -->
       <report-menu></report-menu>
     </el-aside>
@@ -32,7 +32,6 @@ export default {
     'stable':Stable,
   },
 }
-
 </script>
 
 <style>
@@ -52,12 +51,10 @@ body {
     line-height: 53px;
     
   }
-
   .el-aside {
     color: #333;
     background-color: #545c64
   }
-
   .el-row,.el-col {
     height: 60px;
   }
@@ -83,4 +80,3 @@ body {
     opacity: 0;
   }
 </style>
-

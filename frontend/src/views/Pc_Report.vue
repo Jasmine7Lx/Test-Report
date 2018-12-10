@@ -51,7 +51,7 @@
                 <span style="font-size:16.5px; padding-left:10px;">二、遗留问题：</span>
                 <el-button type="primary" size="mini" @click.native="AddList(form2.is_remain)">添加</el-button>
                 <el-row v-for="item of form2.is_remain" :key="item">
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-input v-model="item.remain" size="small" clearable></el-input>
                     </el-col>
                     <el-button type="danger" icon="el-icon-delete" round @click.native.prevent="removeList(item,form2.is_remain)" title="删除"></el-button>
@@ -86,7 +86,7 @@
                     <el-button type="primary" size="mini" @click.native="AddList(form2.is_configure)">添加</el-button>
                 </el-row>
                 <el-row v-for="item of form2.is_configure" :key="item" >
-                    <el-col :span="7" >
+                    <el-col :span="10" >
                         <el-input v-model="item.configure" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
@@ -98,7 +98,7 @@
                     <el-button type="primary" size="mini" @click.native="AddList(form2.is_build)">添加</el-button>
                 </el-row>
                 <el-row v-for="item of form2.is_build" :key="item">
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-input v-model="item.build" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
@@ -118,20 +118,39 @@
             </el-form-item>
             <el-form-item prop="solveproblem">
                 <span style="font-size:16.5px; padding-left:10px;">四、测试中发现的问题：</span>
-                <el-button type="primary" size="mini" @click.native="AddList(form2.is_problem)">添加</el-button>
-                <el-row  type="flex" v-for="item of form2.is_problem" :key="item.key">
-                    <el-col :span="7">
-                        <el-input v-model="item.problem" size="small" clearable></el-input>
+                <el-row>
+                    <span class="explain">1.前端bug：</span>
+                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_frontbug)">添加</el-button>
+                </el-row>
+                <el-row v-for="item of form2.is_frontbug" :key="item" >
+                     <el-col :span="10">
+                        <el-input v-model="item.frontbug" size="small" clearable></el-input>
                     </el-col>
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-radio-group v-model="item.solve">
                             <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
                         </el-radio-group>
-                    <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_problem)" title="删除"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_frontbug)" title="删除"></el-button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <span class="explain">2.后端bug：</span>
+                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_backbug)">添加</el-button>
+                </el-row>
+                <el-row v-for="item of form2.is_backbug" :key="item" >
+                     <el-col :span="10">
+                        <el-input v-model="item.backbug" size="small" clearable></el-input>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-radio-group v-model="item.solve">
+                            <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
+                        </el-radio-group>
+                    <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_backbug)" title="删除"></el-button>
                     </el-col>
                 </el-row>
             </el-form-item>
         </el-form>
+
         <el-form class="edit3">
             <el-form-item>
                 <span style="font-size:16.5px; padding-left:10px;">五、兼容性：</span>
@@ -156,33 +175,7 @@
                 </el-row>
                 <el-row>
                     <el-col>
-                    <span class="explain">2.手机型号/系统：</span>
-                    <el-select
-                        v-model="phone"
-                        multiple
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择已测试的系统">
-                        <el-option-group
-                            v-for="group in form3.phone_system"
-                            :key="group.label"
-                            :label="group.label">
-                            <el-option
-                                v-for="item in group.options"
-                                :key="item.value"
-                                :value="item.value"
-                            >
-                            <span style="float: left">{{ item.name }}</span>
-                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>
-                            </el-option>
-                        </el-option-group>
-                    </el-select>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col>
-                    <span class="explain">3.浏览器：</span>
+                    <span class="explain">2.浏览器：</span>
                     <el-select
                         v-model="browser"
                         multiple
@@ -201,6 +194,30 @@
                 </el-row>
             </el-form-item>
         </el-form>
+        <el-form class="edit4" :model="form4">
+            <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
+            <el-form-item>
+                <span class="explain">链接：</span>
+                <el-input size="small" v-model="form4.caselink"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <span class="explain">文件：</span>
+                <el-upload
+                    class="upload-demo"
+                    drag
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    multiple>
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                </el-upload>
+            </el-form-item>
+        </el-form>
+        <el-row>
+            <el-col :span="6" :offset="2">
+                <el-button type="primary" @click="submitForm(edit_form)">立即创建</el-button>
+                <el-button @click="resetForm('edit_form')">重置</el-button>
+            </el-col>
+        </el-row>
     </div>
 
 
@@ -226,8 +243,8 @@ export default {
         test_enviroment: "",
         test_time: '',
         computer: [],
-        phone: [],
         browser: [],
+        edit_form: ['form1','form2','form3','form4'],
         rules: {
             demand_name:[
                 {required:true, message:'请输入需求名称',trigger:'blur'}
@@ -261,9 +278,13 @@ export default {
             is_build: [{
                 build: '',
             }],
-            is_problem: [{
-                problem: '',
+            is_frontbug: [{
                 solve: '',
+                frontbug: '',
+            }],
+            is_backbug:[{
+                solve: '',
+                backbug: '',
             }],
             boxs: [],
             solveproblem: [
@@ -297,30 +318,6 @@ export default {
                     label: 'window 8'
                 }
             ],
-            phone_system: [
-                {
-                label: 'ios系统',
-                options:[
-                    {
-                        value: 'iphone4/7.1.2',
-                        name: 'iphone 4',
-                        label: '7.1.2',
-                    },
-                    {
-                        value: 'iphone4s/9.3.5',
-                        name: 'iphone 4s',
-                        label: '9.3.5'
-                    }
-                ]},
-                {
-                label: 'android系统',
-                options: [
-                    {
-                        value: '三星W2013/4.0.4',
-                        name: '三星 W2013',
-                        label: '4.0.4'
-                }]
-            }],
             browser_system: [
                 {
                     value: 'google',
@@ -335,6 +332,9 @@ export default {
                     label: 'IE8 浏览器'
                 }
             ]
+        },
+        form4: {
+            caselink: '',
         }
       }
     },
@@ -371,6 +371,12 @@ export default {
                 boxs.splice(index,1);
                 boxs.splice(index+1,0,item);
             }
+        },
+        submitForm(forms) {
+            console.log(forms)
+        },
+        resetForm: function(forms) {
+
         }
     }
 }
@@ -394,6 +400,13 @@ body {
 .edit3 .el-input {
     padding-left: 1px;
     width: 400px;
+}
+.edit4 .el-input {
+    padding-left: 1px;
+    width: 400px;
+}
+.el-upload {
+    padding-left: 45px;
 }
 .el-form-item__label {
     font-size: 16.5px;

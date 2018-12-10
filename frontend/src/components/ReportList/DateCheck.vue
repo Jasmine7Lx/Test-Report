@@ -18,7 +18,7 @@
       <el-input
         placeholder="请输入内容"
         prefix-icon="el-icon-search"
-        v-model="contain">
+        >
       </el-input>
       </div>
       <div class="check">
@@ -60,8 +60,7 @@
             }
           }]
         },
-        value: '',
-        contain: '',
+        value: ''
       }
     }
   }
@@ -77,5 +76,4 @@
     padding-left: 15px;
     padding-top: 5px;
 }
-
 </style>
