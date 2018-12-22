@@ -19,7 +19,11 @@
         <i class="el-icon-view"></i>
         <span slot="title">报告列表</span>
       </el-menu-item>
-      <el-menu-item index="buglist">
+      <el-menu-item index="demand_list">
+        <i class="el-icon-document"></i>
+        <span slot="title">需求列表</span>
+      </el-menu-item>
+      <el-menu-item index="bug_list">
         <i class="el-icon-info"></i>
         <span slot="title">bug列表</span>
       </el-menu-item>
