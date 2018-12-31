@@ -51,7 +51,7 @@
                 <span style="font-size:16.5px; padding-left:10px;">二、遗留问题：</span>
                 <el-button type="primary" size="mini" @click.native="AddList(form2.is_remain)">添加</el-button>
                 <el-row v-for="item of form2.is_remain" :key="item">
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-input v-model="item.remain" size="small" clearable></el-input>
                     </el-col>
                     <el-button type="danger" icon="el-icon-delete" round @click.native.prevent="removeList(item,form2.is_remain)" title="删除"></el-button>
@@ -86,7 +86,7 @@
                     <el-button type="primary" size="mini" @click.native="AddList(form2.is_configure)">添加</el-button>
                 </el-row>
                 <el-row v-for="item of form2.is_configure" :key="item" >
-                    <el-col :span="7" >
+                    <el-col :span="10" >
                         <el-input v-model="item.configure" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
@@ -98,7 +98,7 @@
                     <el-button type="primary" size="mini" @click.native="AddList(form2.is_build)">添加</el-button>
                 </el-row>
                 <el-row v-for="item of form2.is_build" :key="item">
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-input v-model="item.build" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
@@ -123,10 +123,10 @@
                     <el-button type="primary" size="mini" @click.native="AddList(form2.is_frontbug)">添加</el-button>
                 </el-row>
                 <el-row v-for="item of form2.is_frontbug" :key="item" >
-                     <el-col :span="7">
+                     <el-col :span="10">
                         <el-input v-model="item.frontbug" size="small" clearable></el-input>
                     </el-col>
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-radio-group v-model="item.solve">
                             <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
                         </el-radio-group>
@@ -138,10 +138,10 @@
                     <el-button type="primary" size="mini" @click.native="AddList(form2.is_backbug)">添加</el-button>
                 </el-row>
                 <el-row v-for="item of form2.is_backbug" :key="item" >
-                     <el-col :span="7">
+                     <el-col :span="10">
                         <el-input v-model="item.backbug" size="small" clearable></el-input>
                     </el-col>
-                    <el-col :span="7">
+                    <el-col :span="10">
                         <el-radio-group v-model="item.solve">
                             <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
                         </el-radio-group>

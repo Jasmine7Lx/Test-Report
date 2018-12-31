@@ -7,4 +7,6 @@ urlpatterns = [
     url(r'^$',TemplateView.as_view(template_name="index.html")),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
+    # url(r'^demo/$', views.demo, name='demo'),
+    url(r'^demand/$', views.demand, name='demand'),
 ]
