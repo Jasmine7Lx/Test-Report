@@ -10,6 +10,7 @@ from rest_framework.renderers import JSONRenderer
 from django.core import serializers
 import json
 from .serializers import DemandAllSerializer,TesterListSerializer,DeveloperListSerializer
+from django.db.models import Q
 # Create your views here.
 
 #表单
@@ -102,7 +103,7 @@ def getTesterList(request):
 @csrf_exempt
 def getDeveloperList(request):
     if request.method == 'GET':
-        developer = Developer.objects.filter(role='web')
+        developer = Developer.objects.raw('select * from report_developer where role in ("web","app","background")')
         serializer = DeveloperListSerializer(developer,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
 
