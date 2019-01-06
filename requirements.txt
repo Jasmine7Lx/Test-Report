@@ -1,0 +1,17 @@
+asn1crypto==0.24.0
+autopy==1.1.1
+cffi==1.11.5
+configobj==5.0.6
+cryptography==2.3.1
+Django==1.10.6
+django-cors-headers==2.4.0
+djangorestframework==3.9.0
+dpkt==1.9.2
+idna==2.7
+psutil==5.4.8
+pycparser==2.19
+PyMySQL==0.9.2
+python-xlib==0.23
+pytz==2018.7
+schedule==0.5.0
+six==1.11.0
