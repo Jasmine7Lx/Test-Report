@@ -1,9 +1,15 @@
 from django.shortcuts import render,get_list_or_404,render_to_response, redirect
-from django.http import HttpResponse
+from django.http import JsonResponse
 #from django.urls import reverse
-from .models import User
-from django.template import RequestContext
+from .models import User,Demand,Developer
+#from django.template import RequestContext
 from django import forms
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import serializers,viewsets
+from rest_framework.renderers import JSONRenderer
+from django.core import serializers
+import json
+from .serializers import DemandAllSerializer,TesterListSerializer,DeveloperListSerializer
 # Create your views here.
 
 #表单
@@ -49,4 +55,57 @@ def bug_list(request):
     pass
 
 def logout(request):
+    pass
+
+# @csrf_exempt
+# def getDemandAll(request):
+#     if request.method == 'GET':
+#     # demand1 = Demand1(name='123')
+#     # demand1 = Demand.objects.get(id='1')
+#         querySet = Demand.objects.all()
+#         list = json.loads(serializers.serialize('json', querySet))
+#     # serializer = DemandSerializer(demand1)
+#     # print(serializer.data)
+#     # json = serializer.data
+#     # print(json)
+#     # return JsonResponse({"result": 0, "msg": "执行成功"})
+#         return JsonResponse({"result": 200, "msg": "执行成功", "data":list})
+
+# # class DemandSerializer(serializers.Serializer):
+# #     demand_name = serializers.CharField(max_length=200)
+# #     demand_status =  serializers.CharField(max_length=200)
+# #     print("===============================")
+# #     print(demand_name)
+
+# @csrf_exempt
+# def getDemandAll(request):
+#     if request.method == 'GET':
+#         querySet = Demand.objects.all()
+#         list = json.loads(serializers.serialize('json', querySet))
+#         return JsonResponse({"result": 200, "msg": "执行成功", "data":list})
+@csrf_exempt
+def getDemandAll(request):
+    if request.method == 'GET':
+        demands = Demand.objects.all()
+        serializer = DemandAllSerializer(demands, many=True)
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+
+#获取测试人员列表
+@csrf_exempt
+def getTesterList(request):
+    if request.method == 'GET':
+        tester = Developer.objects.filter(role='tester')
+        serializer = TesterListSerializer(tester,many=True)
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+
+#获取开发人员列表
+@csrf_exempt
+def getDeveloperList(request):
+    if request.method == 'GET':
+        developer = Developer.objects.filter(role='web')
+        serializer = DeveloperListSerializer(developer,many=True)
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+
+def  getReportAll(request):
+    querySet = Report.objects.all()
     pass

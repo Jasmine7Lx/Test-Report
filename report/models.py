@@ -25,6 +25,27 @@ class Demand(models.Model):
     def __str__(self):
         return self.demand_name
 
+class Developer(models.Model):
+    DEVELOPER_TYPE = (
+        ("web","前端"),
+        ("background","后台"),
+        ("app","移动端"),
+        ("tester","测试"),
+        ("product","产品")
+    )
+    demand = models.ManyToManyField(Demand)
+    developer_name = models.CharField(max_length=30)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=40)
+    role = models.CharField(max_length=20, choices=DEVELOPER_TYPE)
+    created_time = models.DateTimeField(auto_now_add=True)
+    update_time = models.DateTimeField(auto_now=True)
+    class Meta:
+        verbose_name = "用户信息表"
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.developer_name
+
 class Report(models.Model):
     TEST_RESULT = (
         ("pass", "测试通过"),
@@ -36,6 +57,7 @@ class Report(models.Model):
         ("test", "测试环境"),
         ("gray", "灰度环境")
     )
+    demand = models.ForeignKey(Demand)
     report_name = models.CharField(default='', max_length=100)
     test_result = models.CharField(max_length=10, choices=TEST_RESULT)
     test_env = models.CharField(max_length=10, choices=TEST_ENV)
@@ -93,26 +115,6 @@ class Cases(models.Model):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.case_content
-
-class Developer(models.Model):
-    DEVELOPER_TYPE = (
-        ("web","前端"),
-        ("background","后台"),
-        ("app","移动端"),
-        ("tester","测试"),
-        ("product","产品")
-    )
-    developer_name = models.CharField(max_length=30)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=40)
-    developer_type = models.CharField(max_length=20, choices=DEVELOPER_TYPE)
-    created_time = models.DateTimeField(auto_now_add=True)
-    update_time = models.DateTimeField(auto_now=True)
-    class Meta:
-        verbose_name = "用户信息表"
-        verbose_name_plural = verbose_name
-    def __str__(self):
-        return self.user_name
 
 class Bug(models.Model):
     BUG_STATUS = (
