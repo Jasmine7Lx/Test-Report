@@ -11,12 +11,7 @@ class DemandListSerializer(serializers.ModelSerializer):
         model =Demand
         fields = ('demand_name','created_time')
 
-class TesterListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Developer
-        exclude = ('id','role','created_time','email','password','update_time','demand')
-
-class DeveloperListSerializer(serializers.ModelSerializer):
+class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
         exclude = ('id','role','created_time','email','password','update_time','demand')

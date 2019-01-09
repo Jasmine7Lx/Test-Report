@@ -9,7 +9,7 @@ from rest_framework import serializers,viewsets
 from rest_framework.renderers import JSONRenderer
 from django.core import serializers
 import json
-from .serializers import DemandAllSerializer,TesterListSerializer,DeveloperListSerializer
+from .serializers import DemandAllSerializer,UserListSerializer
 from django.db.models import Q
 # Create your views here.
 
@@ -96,7 +96,7 @@ def getDemandAll(request):
 def getTesterList(request):
     if request.method == 'GET':
         tester = Developer.objects.filter(role='tester')
-        serializer = TesterListSerializer(tester,many=True)
+        serializer = UserListSerializer(tester,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
 
 #获取开发人员列表
@@ -104,9 +104,13 @@ def getTesterList(request):
 def getDeveloperList(request):
     if request.method == 'GET':
         developer = Developer.objects.raw('select * from report_developer where role in ("web","app","background")')
-        serializer = DeveloperListSerializer(developer,many=True)
+        serializer = UserListSerializer(developer,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
 
-def  getReportAll(request):
-    querySet = Report.objects.all()
-    pass
+#获取产品人员列表
+@csrf_exempt
+def getProductList(request):
+    if request.method == 'GET':
+        developer = Developer.objects.filter(role='product')
+        serializer = UserListSerializer(developer,many=True)
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})

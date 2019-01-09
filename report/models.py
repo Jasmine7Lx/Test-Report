@@ -39,7 +39,7 @@ class Developer(models.Model):
     password = models.CharField(max_length=40)
     role = models.CharField(max_length=20, choices=DEVELOPER_TYPE)
     created_time = models.DateTimeField(auto_now_add=True)
-    update_time = models.DateTimeField(auto_now=True)
+    update_time = models.DateTimeField(auto_now=True, null=True, blank=True)
     class Meta:
         verbose_name = "用户信息表"
         verbose_name_plural = verbose_name
@@ -57,7 +57,7 @@ class Report(models.Model):
         ("test", "测试环境"),
         ("gray", "灰度环境")
     )
-    demand = models.ForeignKey(Demand)
+    demand = models.OneToOneField(Demand)
     report_name = models.CharField(default='', max_length=100)
     test_result = models.CharField(max_length=10, choices=TEST_RESULT)
     test_env = models.CharField(max_length=10, choices=TEST_ENV)

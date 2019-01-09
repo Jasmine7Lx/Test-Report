@@ -8,7 +8,9 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     # url(r'^demo/$', views.demo, name='demo'),
-    url(r'^get_demand_all/$', views.getDemandAll, name='get_demand_all'),
-    url(r'^get_tester_all/$', views.getTesterList, name='get_tester_all'),
-    url(r'^get_developer_all/$', views.getDeveloperList, name='get_developer_all'),
+    url(r'^get_demand_list/$', views.getDemandAll, name='get_demand_list'),
+    url(r'^get_tester_list/$', views.getTesterList, name='get_tester_list'),
+    url(r'^get_developer_list/$', views.getDeveloperList, name='get_developer_list'),
+    url(r'^get_product_list/$', views.getProductList, name='get_product_list'),
+    
 ]
