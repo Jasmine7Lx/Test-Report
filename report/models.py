@@ -33,6 +33,7 @@ class Developer(models.Model):
         ("tester","测试"),
         ("product","产品")
     )
+    id = models.AutoField(primary_key=True)
     demand = models.ManyToManyField(Demand)
     developer_name = models.CharField(max_length=30)
     email = models.EmailField(unique=True)
@@ -47,6 +48,10 @@ class Developer(models.Model):
         return self.developer_name
 
 class Report(models.Model):
+    REPORT_TYPE = (
+        ("pc", "PC端报告"),
+        ("app", "移动端报告"),
+    )
     TEST_RESULT = (
         ("pass", "测试通过"),
         ("block", "测试不通过"),
@@ -59,6 +64,7 @@ class Report(models.Model):
     )
     demand = models.OneToOneField(Demand)
     report_name = models.CharField(default='', max_length=100)
+    report_type = models.CharField(max_length=10, choices=REPORT_TYPE, default="pc")
     test_result = models.CharField(max_length=10, choices=TEST_RESULT)
     test_env = models.CharField(max_length=10, choices=TEST_ENV)
     created_time = models.DateTimeField(auto_now_add=True)

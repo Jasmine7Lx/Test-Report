@@ -14,4 +14,4 @@ class DemandListSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
-        exclude = ('id','role','created_time','email','password','update_time','demand')
+        exclude = ('role','created_time','email','password','update_time','demand')

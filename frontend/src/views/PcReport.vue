@@ -6,11 +6,11 @@
         </el-form-item>
         <el-form-item label="测试人员：" prop="tester_name">
             <el-select v-model="form1.tester" @change="onSelectTester" size="small" multiple filterable placeholder="请选择">
-                <el-option                     
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                <el-option
+                    v-for="item in testerList"
+                    :key="item.id"
+                    :label="item.developer_name"
+                    :value="item.id">
                 </el-option>
             </el-select>
         </el-form-item>
@@ -229,17 +229,17 @@ import https from '../https.js'
 export default {
     data() {
       return {
-        // options: [{
-        //   value: '选项1',
-        //   label: '小A'
-        // }, {
-        //   value: '选项2',
-        //   label: '小B'
-        // },
-        // {
-        //   value: '选项3',
-        //   label: '小C'
-        // }],
+        options: [{
+          value: 1,
+          label: '小A'
+        }, {
+          value: 2,
+          label: '小B'
+        },
+        {
+          value: 3,
+          label: '小C'
+        }],
         test_result: "",
         test_enviroment: "",
         test_time: '',
@@ -336,15 +336,21 @@ export default {
         },
         form4: {
             caselink: '',
-        }
+        },
+        // 用来暂时存放异步数据
+        testerList: [],
       }
     },
     methods: {
+        getTesters: function() {
+          https.fetchGet('/api/tester')
+          .then((resp) => {
+            console.log(resp)
+            this.testerList = resp.data.data;
+          })
+        },
         onSelectTester : function(value){
-            https.fetchGet('http://127.0.0.1//developer/tester')
-                .then((data) => {
-                    console.log(data)
-                })
+
         },
         AddList: function(boxs) {
             var n = boxs ? boxs.length + 1 : 1;
