@@ -16,7 +16,7 @@
         </el-form-item>
         <el-form-item label="开发人员：" prop="developer_name">
             <el-select v-model="form1.developer" size="small" multiple filterable placeholder="请选择">
-                <el-option                     
+                <el-option
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
@@ -26,7 +26,7 @@
         </el-form-item>
         <el-form-item label="产品负责人：" prop="demander_name" label-width="125px" >
             <el-select v-model="form1.demander" size="small" multiple filterable placeholder="请选择">
-                <el-option                     
+                <el-option
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
@@ -41,8 +41,8 @@
                 <el-radio :label="1">测试通过</el-radio>
                 <el-radio :label="2">测试不通过</el-radio>
                 <el-radio :label="3">测试完成</el-radio>
-            </el-radio-group>   
-        </el-form-item>        
+            </el-radio-group>
+        </el-form-item>
     </el-form>
 
     <div class="edit2">
@@ -302,13 +302,13 @@ export default {
                 {
                     id: "noneed_solve",
                     name: "无需解决",
-                    selected: "-1",                    
+                    selected: "-1",
                 }
             ],
 
         },
         form3: {
-            computer_system: 
+            computer_system:
             [
                 {
                     value: 'win7',
@@ -391,6 +391,9 @@ export default {
         resetForm: function(forms) {
 
         }
+    },
+    created() {
+      this.getTesters();
     }
 }
 </script>
