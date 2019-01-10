@@ -7,5 +7,4 @@ module.exports = [{
 }, {
     name: 'Bug统计',
     id: 'bug_list',
-}
 }]

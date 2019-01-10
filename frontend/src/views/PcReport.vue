@@ -1,11 +1,11 @@
 <template>
   <div class="edit">
-    <el-form :label-position="right" ref="form1" :rules="rules" model="form1" label-width="110px" size="small">
+    <el-form  ref="form1" :rules="rules" model="form1" label-width="110px" size="small">
         <el-form-item label="需求名称：" prop="demand_name">
             <el-input v-model="form1.demand" placeholder="请输入需求名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="测试人员：" prop="tester_name">
-            <el-select v-model="form1.tester" size="small" multiple filterable placeholder="请选择">
+            <el-select v-model="form1.tester" @change="onSelectTester" size="small" multiple filterable placeholder="请选择">
                 <el-option                     
                     v-for="item in options"
                     :key="item.value"
@@ -225,20 +225,21 @@
 </template>
 
 <script>
+import https from '../https.js'
 export default {
     data() {
       return {
-        options: [{
-          value: '选项1',
-          label: '小A'
-        }, {
-          value: '选项2',
-          label: '小B'
-        },
-        {
-          value: '选项3',
-          label: '小C'
-        }],
+        // options: [{
+        //   value: '选项1',
+        //   label: '小A'
+        // }, {
+        //   value: '选项2',
+        //   label: '小B'
+        // },
+        // {
+        //   value: '选项3',
+        //   label: '小C'
+        // }],
         test_result: "",
         test_enviroment: "",
         test_time: '',
@@ -339,6 +340,12 @@ export default {
       }
     },
     methods: {
+        onSelectTester : function(value){
+            https.fetchGet('http://127.0.0.1//developer/tester')
+                .then((data) => {
+                    console.log(data)
+                })
+        },
         AddList: function(boxs) {
             var n = boxs ? boxs.length + 1 : 1;
             boxs.push({

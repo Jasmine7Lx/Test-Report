@@ -1,16 +1,16 @@
 from django.conf.urls import url
 from . import views
-from django.views.generic import TemplateView
+# from django.views.generic import TemplateView
 
 app_name = 'report'
 urlpatterns = [
-    url(r'^$',TemplateView.as_view(template_name="index.html")),
+    # url(r'^',TemplateView.as_view(template_name="index.html")),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     # url(r'^demo/$', views.demo, name='demo'),
-    url(r'^get_demand_list/$', views.getDemandAll, name='get_demand_list'),
-    url(r'^get_tester_list/$', views.getTesterList, name='get_tester_list'),
-    url(r'^get_developer_list/$', views.getDeveloperList, name='get_developer_list'),
-    url(r'^get_product_list/$', views.getProductList, name='get_product_list'),
+    url(r'^demand', views.getDemandAll, name='demand'),
+    url(r'^tester', views.getTesterList, name='tester'),
+    url(r'^developer', views.getDeveloperList, name='developer'),
+    url(r'^product', views.getProductList, name='product'),
     
 ]

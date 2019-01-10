@@ -5,12 +5,12 @@ class DemandAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = Demand
         fields = "__all__"
-
+#需求列表-展示名字和创建时间
 class DemandListSerializer(serializers.ModelSerializer):
     class Meta:
         model =Demand
         fields = ('demand_name','created_time')
-
+#获取人员列表
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer

@@ -9,7 +9,7 @@ import DemandList from '@/views/DemandList'
 import ReportEdit from '@/views/ReportEdit'
 
 Vue.use(Router)
-
+mode: 'history'
 export default new Router({
   routes: [
     {

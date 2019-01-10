@@ -5,7 +5,6 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
-      :default-openeds="openeds"
       >
       <!-- <el-submenu index="reportedit">
         <template  slot="title">
@@ -17,7 +16,7 @@
       </el-submenu> -->
       <el-menu-item index="/report/edit">
         <i class="el-icon-edit"></i>
-        <span slot="title">报告编辑</span>
+        <span slot="title">新增报告</span>
       </el-menu-item>
       <el-menu-item index="/">
         <i class="el-icon-view"></i>
