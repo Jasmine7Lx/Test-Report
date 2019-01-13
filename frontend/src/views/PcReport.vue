@@ -2,10 +2,17 @@
   <div class="edit">
     <el-form  ref="form1" :rules="rules" model="form1" label-width="110px" size="small">
         <el-form-item label="需求名称：" prop="demand_name">
-            <el-input v-model="form1.demand" placeholder="请输入需求名称" clearable></el-input>
-        </el-form-item>
+            <el-select v-model="form1.demand" @change="onSelectDemand" size="small"  placeholder="请选择">
+                <el-option
+                    v-for="item in demandList"
+                    :key="item.id"
+                    :label="item.demand_name"
+                    :value="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>  
         <el-form-item label="测试人员：" prop="tester_name">
-            <el-select v-model="form1.tester" @change="onSelectTester" size="small" multiple filterable placeholder="请选择">
+            <el-select v-model="form1.tester" size="small" multiple filterable placeholder="请选择">
                 <el-option
                     v-for="item in testerList"
                     :key="item.id"
@@ -17,20 +24,20 @@
         <el-form-item label="开发人员：" prop="developer_name">
             <el-select v-model="form1.developer" size="small" multiple filterable placeholder="请选择">
                 <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                    v-for="item in developerList"
+                    :key="item.id"
+                    :label="item.developer_name"
+                    :value="item.id">
                 </el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="产品负责人：" prop="demander_name" label-width="125px" >
             <el-select v-model="form1.demander" size="small" multiple filterable placeholder="请选择">
                 <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                    v-for="item in productList"
+                    :key="item.id"
+                    :label="item.developer_name"
+                    :value="item.id">
                 </el-option>
             </el-select>
         </el-form-item>
@@ -229,17 +236,22 @@ import https from '../https.js'
 export default {
     data() {
       return {
-        options: [{
-          value: 1,
-          label: '小A'
-        }, {
-          value: 2,
-          label: '小B'
-        },
-        {
-          value: 3,
-          label: '小C'
-        }],
+        // options: [{
+        //   value: 1,
+        //   label: '小A'
+        // }, {
+        //   value: 2,
+        //   label: '小B'
+        // },
+        // {
+        //   value: 3,
+        //   label: '小C'
+        // }],
+        // 用来暂时存放异步数据
+        testerList: [],
+        productList: [],
+        developerList: [],
+        demandList: [],
         test_result: "",
         test_enviroment: "",
         test_time: '',
@@ -337,8 +349,7 @@ export default {
         form4: {
             caselink: '',
         },
-        // 用来暂时存放异步数据
-        testerList: [],
+        
       }
     },
     methods: {
@@ -349,8 +360,26 @@ export default {
             this.testerList = resp.data.data;
           })
         },
-        onSelectTester : function(value){
-
+        getProcduct: function() {
+            https.fetchGet('/api/product')
+            .then((resp) => {
+                console.log(resp)
+                this.productList = resp.data.data
+            })
+        },
+        getDeveloper: function() {
+            https.fetchGet('/api/developer')
+            .then((resp) => {
+                console.log(resp)
+                this.developerList = resp.data.data
+            })
+        },
+        getDemandList: function() {
+            https.fetchGet('/api/demand')
+            .then((resp) => {
+                console.log(resp)
+                this.demandList = resp.data.data
+            })
         },
         AddList: function(boxs) {
             var n = boxs ? boxs.length + 1 : 1;
@@ -394,6 +423,9 @@ export default {
     },
     created() {
       this.getTesters();
+      this.getProcduct();
+      this.getDeveloper();
+      this.getDemandList();
     }
 }
 </script>

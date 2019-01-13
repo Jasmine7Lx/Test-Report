@@ -114,3 +114,9 @@ def getProductList(request):
         developer = Developer.objects.filter(role='product')
         serializer = UserListSerializer(developer,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+ 
+@csrf_exempt
+def Report(request):
+    if request.method == 'POST':
+        pass
+
