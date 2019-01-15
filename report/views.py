@@ -11,6 +11,11 @@ from django.core import serializers
 import json
 from .serializers import DemandAllSerializer,UserListSerializer
 from django.db.models import Q
+from django.http import HttpResponse
+#from django.urls import reverse
+from .models import User
+from django.template import RequestContext
+from django import forms
 # Create your views here.
 
 #表单
@@ -38,9 +43,15 @@ def login(request):
                 #比较失败，仍在login页面
                 from django.forms.utils import ErrorDict
                 return render(request, 'login/login.html',{'obj1':objPost})
+
         else:
             from django.forms.utils import ErrorDict
             return render(request, 'login/login.html',{'obj1':objPost})
+
+ #       else:
+ #           from django.forms.utils import ErrorDict
+ #       return render(request, 'login/login.html',{'obj1':objPost})
+
     else:
         objGet = LoginForm()
         return render(request, 'login/login.html', {'obj1':objGet })
@@ -57,6 +68,7 @@ def bug_list(request):
 
 def logout(request):
     pass
+
 
 # @csrf_exempt
 # def getDemandAll(request):
@@ -96,6 +108,7 @@ def getDemandAll(request):
 def getTesterList(request):
     if request.method == 'GET':
         tester = Developer.objects.filter(role='tester')
+        print(tester)
         serializer = UserListSerializer(tester,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
 
@@ -114,9 +127,3 @@ def getProductList(request):
         developer = Developer.objects.filter(role='product')
         serializer = UserListSerializer(developer,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
- 
-@csrf_exempt
-def Report(request):
-    if request.method == 'POST':
-        pass
-

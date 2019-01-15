@@ -2,7 +2,7 @@
   <div class="edit">
     <el-form  ref="form1" :rules="rules" model="form1" label-width="110px" size="small">
         <el-form-item label="需求名称：" prop="demand_name">
-            <el-select v-model="form1.demand" @change="onSelectDemand" size="small"  placeholder="请选择">
+            <el-select v-model="form1.demand_name" @change="onSelectDemand" size="small"  placeholder="请选择">
                 <el-option
                     v-for="item in demandList"
                     :key="item.id"
@@ -32,7 +32,7 @@
             </el-select>
         </el-form-item>
         <el-form-item label="产品负责人：" prop="demander_name" label-width="125px" >
-            <el-select v-model="form1.demander" size="small" multiple filterable placeholder="请选择">
+            <el-select v-model="form1.product" size="small" multiple filterable placeholder="请选择">
                 <el-option
                     v-for="item in productList"
                     :key="item.id"
@@ -44,7 +44,7 @@
         <hr />
 
         <el-form-item label="一、测试结论：" label-width="140px" hide-required-asterisk="true" prop="test_result">
-            <el-radio-group v-model="test_result">
+            <el-radio-group v-model="form1.result">
                 <el-radio :label="1">测试通过</el-radio>
                 <el-radio :label="2">测试不通过</el-radio>
                 <el-radio :label="3">测试完成</el-radio>
@@ -82,7 +82,7 @@
                 <span style="font-size:16.5px; padding-left:10px;">三、测试说明：</span>
                 <el-row>
                     <span class="explain">1.测试环境：</span>
-                    <el-radio-group v-model="test_enviroment">
+                    <el-radio-group v-model="form2.enviroment">
                         <el-radio :label="1">正式环境</el-radio>
                         <el-radio :label="2">测试环境</el-radio>
                         <el-radio :label="3">灰度环境</el-radio>
@@ -115,7 +115,7 @@
                 <el-row>
                     <span class="explain">4.测试时间：</span>
                     <el-date-picker
-                        v-model="test_time"
+                        v-model="form2.time"
                         type="datetimerange"
                         range-separator="-"
                         start-placeholder="开始日期"
@@ -158,7 +158,7 @@
             </el-form-item>
         </el-form>
 
-        <el-form class="edit3">
+        <el-form class="edit3" :model="form3">
             <el-form-item>
                 <span style="font-size:16.5px; padding-left:10px;">五、兼容性：</span>
                 <el-row>
@@ -205,7 +205,7 @@
             <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
             <el-form-item>
                 <span class="explain">链接：</span>
-                <el-input size="small" v-model="form4.caselink"></el-input>
+                <el-input size="small" v-model="form4.case"></el-input>
             </el-form-item>
             <el-form-item>
                 <span class="explain">文件：</span>
@@ -252,11 +252,7 @@ export default {
         productList: [],
         developerList: [],
         demandList: [],
-        test_result: "",
-        test_enviroment: "",
-        test_time: '',
-        computer: [],
-        browser: [],
+        
         edit_form: ['form1','form2','form3','form4'],
         rules: {
             demand_name:[
@@ -279,9 +275,12 @@ export default {
             demand_name: '',
             tester: [],
             developer: [],
-            demander: [],
+            product: [],
+            result: "",
         },
         form2: {
+            enviroment: "",
+            time: '',
             is_remain: [{
                 remain: '',
             }],
@@ -344,10 +343,15 @@ export default {
                     value: 'ie 8',
                     label: 'IE8 浏览器'
                 }
-            ]
+            ],
+            computer: [],
+            browser: [],
         },
         form4: {
-            caselink: '',
+            case: [{
+                type: '',
+                link: '',
+            }],
         },
         
       }
