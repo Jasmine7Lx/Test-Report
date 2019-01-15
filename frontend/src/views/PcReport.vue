@@ -57,7 +57,7 @@
             <el-form-item>
                 <span style="font-size:16.5px; padding-left:10px;">二、遗留问题：</span>
                 <el-button type="primary" size="mini" @click.native="AddList(form2.is_remain)">添加</el-button>
-                <el-row v-for="item of form2.is_remain" :key="item">
+                <el-row v-for="item of form2.remains" :key="item">
                     <el-col :span="10">
                         <el-input v-model="item.remain" size="small" clearable></el-input>
                     </el-col>
@@ -90,26 +90,26 @@
                 </el-row >
                 <el-row>
                     <span class="explain">2.环境配置：</span>
-                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_configure)">添加</el-button>
+                    <el-button type="primary" size="mini" @click.native="AddList(form2.configs)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.is_configure" :key="item" >
+                <el-row v-for="item of form2.configs" :key="item" >
                     <el-col :span="10" >
-                        <el-input v-model="item.configure" size="small" clearable></el-input>
+                        <el-input v-model="item.config" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
-                        <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_configure)" title="删除"></el-button>
+                        <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.configs)" title="删除"></el-button>
                     </el-col>
                 </el-row>
                 <el-row>
                     <span class="explain">3.测试版本/链接：</span>
-                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_build)">添加</el-button>
+                    <el-button type="primary" size="mini" @click.native="AddList(form2.builds)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.is_build" :key="item">
+                <el-row v-for="item of form2.builds" :key="item">
                     <el-col :span="10">
                         <el-input v-model="item.build" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
-                        <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_build)" title="删除"></el-button>
+                        <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.builds)" title="删除"></el-button>
                     </el-col>
                 </el-row>
                 <el-row>
@@ -127,9 +127,9 @@
                 <span style="font-size:16.5px; padding-left:10px;">四、测试中发现的问题：</span>
                 <el-row>
                     <span class="explain">1.前端bug：</span>
-                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_frontbug)">添加</el-button>
+                    <el-button type="primary" size="mini" @click.native="AddList(form2.frontbugs)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.is_frontbug" :key="item" >
+                <el-row v-for="item of form2.frontbugs" :key="item" >
                      <el-col :span="10">
                         <el-input v-model="item.frontbug" size="small" clearable></el-input>
                     </el-col>
@@ -137,14 +137,14 @@
                         <el-radio-group v-model="item.solve">
                             <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
                         </el-radio-group>
-                    <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_frontbug)" title="删除"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.frontbugs)" title="删除"></el-button>
                     </el-col>
                 </el-row>
                 <el-row>
                     <span class="explain">2.后端bug：</span>
-                    <el-button type="primary" size="mini" @click.native="AddList(form2.is_backbug)">添加</el-button>
+                    <el-button type="primary" size="mini" @click.native="AddList(form2.backbugs)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.is_backbug" :key="item" >
+                <el-row v-for="item of form2.backbugs" :key="item" >
                      <el-col :span="10">
                         <el-input v-model="item.backbug" size="small" clearable></el-input>
                     </el-col>
@@ -152,7 +152,7 @@
                         <el-radio-group v-model="item.solve">
                             <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
                         </el-radio-group>
-                    <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.is_backbug)" title="删除"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.backbugs)" title="删除"></el-button>
                     </el-col>
                 </el-row>
             </el-form-item>
@@ -203,13 +203,24 @@
         </el-form>
         <el-form class="edit4" :model="form4">
             <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
-            <el-form-item>
+            <el-form-item label="请选择用例类型：" prop="casetype" class="explain">
+                <el-select v-model="type" @change="onSelectCase" size="small"  placeholder="请选择">
+                    <el-option
+                        v-for="item in types"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>  
+            <el-form-item v-if="type=='link'">
                 <span class="explain">链接：</span>
-                <el-input size="small" v-model="form4.case"></el-input>
+                <el-input size="small" v-model="form4.case_link" ></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-if="type=='file'">
                 <span class="explain">文件：</span>
                 <el-upload
+                    v-model="form4.case_file"
                     class="upload-demo"
                     drag
                     action="https://jsonplaceholder.typicode.com/posts/"
@@ -221,7 +232,7 @@
         </el-form>
         <el-row>
             <el-col :span="6" :offset="2">
-                <el-button type="primary" @click="submitForm(edit_form)">立即创建</el-button>
+                <el-button type="primary" @click="submitForm()">立即创建</el-button>
                 <el-button @click="resetForm('edit_form')">重置</el-button>
             </el-col>
         </el-row>
@@ -253,7 +264,7 @@ export default {
         developerList: [],
         demandList: [],
         
-        edit_form: ['form1','form2','form3','form4'],
+        // forms: ['form1','form2','form3','form4'],
         rules: {
             demand_name:[
                 {required:true, message:'请输入需求名称',trigger:'blur'}
@@ -281,20 +292,20 @@ export default {
         form2: {
             enviroment: "",
             time: '',
-            is_remain: [{
+            remains: [{
                 remain: '',
             }],
-            is_configure: [{
-                configure: '',
+            configs: [{
+                config: '',
             }],
-            is_build: [{
+            builds: [{
                 build: '',
             }],
-            is_frontbug: [{
+            frontbugs: [{
                 solve: '',
                 frontbug: '',
             }],
-            is_backbug:[{
+            backbugs:[{
                 solve: '',
                 backbug: '',
             }],
@@ -347,11 +358,24 @@ export default {
             computer: [],
             browser: [],
         },
+        types: [
+            {
+                value: 'link',
+                label: "链接",
+            },
+            {
+                value: 'file',
+                label: "文件",
+            }
+        ],       
+        type: "file",
         form4: {
-            case: [{
-                type: '',
-                link: '',
-            }],
+            // cases: [{
+            //     type: '',
+            //     case: '',
+            // }],
+            case_link: '',
+            case_file: '',
         },
         
       }
@@ -418,12 +442,26 @@ export default {
                 boxs.splice(index+1,0,item);
             }
         },
+        onSelectCase(val){
+            if (val=="link"){
+                this.type = "link"
+            } else{
+                this.type = "file"
+            }
+        },
         submitForm(forms) {
-            console.log(forms)
+            console.log('summit')
         },
         resetForm: function(forms) {
-
-        }
+            console.log('reset')
+        },
+        // submitForm: function() {
+        //   var dataList={a:'',b:''}
+        //   https.fetchPost('/api/report',dataList)
+        //   .then((resp) => {
+        //     console.log(resp)
+        //   })
+        // },
     },
     created() {
       this.getTesters();

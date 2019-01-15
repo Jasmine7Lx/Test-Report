@@ -34,6 +34,7 @@ export function fetchPost(url, params) {
     return new Promise((resolve, reject) => {
         axios.post(url, params)
             .then(response => {
+                console.log('promise')
                 resolve(response);
             }, err => {
                 reject(err);
@@ -48,6 +49,7 @@ export function fetchGet(url, param) {
     return new Promise((resolve, reject) => {
         axios.get(url, {params: param})
             .then(response => {
+                console.log('promise')
                 resolve(response)
             }, err => {
                 reject(err)
