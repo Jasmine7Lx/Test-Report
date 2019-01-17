@@ -1,8 +1,8 @@
 <template>
   <div class="edit">
-    <el-form  ref="form1" :rules="rules" model="form1" label-width="110px" size="small">
-        <el-form-item label="需求名称：" prop="demand_name">
-            <el-select v-model="form1.demand_name" @change="onSelectDemand" size="small"  placeholder="请选择">
+    <el-form  ref="form1"  model="form1" label-width="110px" size="small">
+        <el-form-item label="需求名称：">
+            <el-select v-model="form1.demand" @change="onSelectDemand" size="small"  placeholder="请选择">
                 <el-option
                     v-for="item in demandList"
                     :key="item.id"
@@ -11,7 +11,7 @@
                 </el-option>
             </el-select>
         </el-form-item>  
-        <el-form-item label="测试人员：" prop="tester_name">
+        <el-form-item label="测试人员：">
             <el-select v-model="form1.tester" size="small" multiple filterable placeholder="请选择">
                 <el-option
                     v-for="item in testerList"
@@ -21,7 +21,7 @@
                 </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="开发人员：" prop="developer_name">
+        <el-form-item label="开发人员：">
             <el-select v-model="form1.developer" size="small" multiple filterable placeholder="请选择">
                 <el-option
                     v-for="item in developerList"
@@ -31,7 +31,7 @@
                 </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="产品负责人：" prop="demander_name" label-width="125px" >
+        <el-form-item label="产品负责人：" label-width="125px" >
             <el-select v-model="form1.product" size="small" multiple filterable placeholder="请选择">
                 <el-option
                     v-for="item in productList"
@@ -43,32 +43,30 @@
         </el-form-item>
         <hr />
 
-        <el-form-item label="一、测试结论：" label-width="140px" hide-required-asterisk="true" prop="test_result">
+        <el-form-item label="一、测试结论：" label-width="140px" hide-required-asterisk="true">
             <el-radio-group v-model="form1.result">
-                <el-radio :label="1">测试通过</el-radio>
-                <el-radio :label="2">测试不通过</el-radio>
-                <el-radio :label="3">测试完成</el-radio>
+                <el-radio v-for="item of results" :key="item.index" :label="item.id">{{item.name}}</el-radio>
             </el-radio-group>
         </el-form-item>
     </el-form>
 
     <div class="edit2">
-        <el-form label-position="top" ref="form2" :rules="rules" :model="form2" size="small">
+        <el-form label-position="top" ref="form2" :model="form2" size="small">
             <el-form-item>
                 <span style="font-size:16.5px; padding-left:10px;">二、遗留问题：</span>
-                <el-button type="primary" size="mini" @click.native="AddList(form2.is_remain)">添加</el-button>
-                <el-row v-for="item of form2.remains" :key="item">
+                <el-button type="primary" size="mini" @click.native="AddList(form2.remains)">添加</el-button>
+                <el-row v-for="item of form2.remains" :key="item.key">
                     <el-col :span="10">
                         <el-input v-model="item.remain" size="small" clearable></el-input>
                     </el-col>
-                    <el-button type="danger" icon="el-icon-delete" round @click.native.prevent="removeList(item,form2.is_remain)" title="删除"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" round @click.native.prevent="removeList(item,form2.remains)" title="删除"></el-button>
                     <el-dropdown trigger="click"  style="margin-left: 10px;color: #20a0ff;">
                         <el-button>移动<i class="el-icon-caret-bottom el-icon-right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item @click.native="moveTop(item,form2.is_remain)">置顶</el-dropdown-item>
-                            <el-dropdown-item @click.native="moveUp(item,form2.is_remain)">上移</el-dropdown-item>
-                            <el-dropdown-item @click.native="moveDown(item,form2.is_remain)">下移</el-dropdown-item>
+                            <el-dropdown-item @click.native="moveTop(item,form2.remains)">置顶</el-dropdown-item>
+                            <el-dropdown-item @click.native="moveUp(item,form2.remains)">上移</el-dropdown-item>
+                            <el-dropdown-item @click.native="moveDown(item,form2.remains)">下移</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-row>
@@ -83,16 +81,14 @@
                 <el-row>
                     <span class="explain">1.测试环境：</span>
                     <el-radio-group v-model="form2.enviroment">
-                        <el-radio :label="1">正式环境</el-radio>
-                        <el-radio :label="2">测试环境</el-radio>
-                        <el-radio :label="3">灰度环境</el-radio>
+                        <el-radio v-for="item of enviroments" :key="item.index" :label="item.id">{{item.name}}</el-radio>
                     </el-radio-group>
                 </el-row >
                 <el-row>
                     <span class="explain">2.环境配置：</span>
                     <el-button type="primary" size="mini" @click.native="AddList(form2.configs)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.configs" :key="item" >
+                <el-row v-for="item of form2.configs" :key="item.key" >
                     <el-col :span="10" >
                         <el-input v-model="item.config" size="small" clearable></el-input>
                     </el-col>
@@ -104,7 +100,7 @@
                     <span class="explain">3.测试版本/链接：</span>
                     <el-button type="primary" size="mini" @click.native="AddList(form2.builds)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.builds" :key="item">
+                <el-row v-for="item of form2.builds" :key="item.key">
                     <el-col :span="10">
                         <el-input v-model="item.build" size="small" clearable></el-input>
                     </el-col>
@@ -129,13 +125,13 @@
                     <span class="explain">1.前端bug：</span>
                     <el-button type="primary" size="mini" @click.native="AddList(form2.frontbugs)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.frontbugs" :key="item" >
+                <el-row v-for="item of form2.frontbugs" :key="item.key" >
                      <el-col :span="10">
                         <el-input v-model="item.frontbug" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
                         <el-radio-group v-model="item.solve">
-                            <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
+                            <el-radio v-for="item in solveproblem" :key="item.index" :label="item.id">{{item.name}}</el-radio>
                         </el-radio-group>
                     <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.frontbugs)" title="删除"></el-button>
                     </el-col>
@@ -144,13 +140,13 @@
                     <span class="explain">2.后端bug：</span>
                     <el-button type="primary" size="mini" @click.native="AddList(form2.backbugs)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.backbugs" :key="item" >
+                <el-row v-for="item of form2.backbugs" :key="item.key" >
                      <el-col :span="10">
                         <el-input v-model="item.backbug" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
                         <el-radio-group v-model="item.solve">
-                            <el-radio :label="item.id" :key="item.key" v-for="item in form2.solveproblem">{{item.name}}</el-radio>
+                            <el-radio v-for="item in solveproblem" :key="item.index" :label="item.id">{{item.name}}</el-radio>
                         </el-radio-group>
                     <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.backbugs)" title="删除"></el-button>
                     </el-col>
@@ -165,14 +161,14 @@
                     <el-col>
                     <span class="explain">1.电脑系统：</span>
                     <el-select
-                        v-model="computer"
+                        v-model="form3.computer"
                         multiple
                         filterable
                         allow-create
                         default-first-option
                         placeholder="请选择已测试的系统">
                         <el-option
-                            v-for="item in form3.computer_system"
+                            v-for="item in computer_system"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value">
@@ -184,14 +180,14 @@
                     <el-col>
                     <span class="explain">2.浏览器：</span>
                     <el-select
-                        v-model="browser"
+                        v-model="form3.browser"
                         multiple
                         filterable
                         allow-create
                         default-first-option
                         placeholder="请选择已测试的系统">
                         <el-option
-                            v-for="item in form3.browser_system"
+                            v-for="item in browser_system"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value">
@@ -203,8 +199,8 @@
         </el-form>
         <el-form class="edit4" :model="form4">
             <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
-            <el-form-item label="请选择用例类型：" prop="casetype" class="explain">
-                <el-select v-model="type" @change="onSelectCase" size="small"  placeholder="请选择">
+            <el-form-item label="请选择用例类型：" class="explain">
+                <el-select v-model="form4.type" @change="onSelectCase" size="small"  placeholder="请选择">
                     <el-option
                         v-for="item in types"
                         :key="item.value"
@@ -215,12 +211,11 @@
             </el-form-item>  
             <el-form-item v-if="type=='link'">
                 <span class="explain">链接：</span>
-                <el-input size="small" v-model="form4.case_link" ></el-input>
+                <el-input size="small" v-model="form4.link" ></el-input>
             </el-form-item>
             <el-form-item v-if="type=='file'">
                 <span class="explain">文件：</span>
                 <el-upload
-                    v-model="form4.case_file"
                     class="upload-demo"
                     drag
                     action="https://jsonplaceholder.typicode.com/posts/"
@@ -263,27 +258,91 @@ export default {
         productList: [],
         developerList: [],
         demandList: [],
-        
-        // forms: ['form1','form2','form3','form4'],
-        rules: {
-            demand_name:[
-                {required:true, message:'请输入需求名称',trigger:'blur'}
-            ],
-            tester_name:[
-                {required:true, message:'请输入测试人员',trigger:'blur'}
-            ],
-            developer_name:[
-                {required:true, message:'请输入开发人员',trigger:'blur'}
-            ],
-            demander_name:[
-                {required:true, message:'请输入产品负责人',trigger:'blur'}
-            ],
-            test_result:[
-                {required:true, message:'请选择',trigger:'blur'}
-            ]
-        },
+        results: [
+            {
+                id: "pass",
+                name: "测试通过"
+            },
+            {
+                id: "block",
+                name: "测试不通过"
+            },
+            {
+                id: "finish",
+                name: "测试完成"
+            }
+        ],
+        enviroments: [
+            {
+                id: "formal",
+                name: "正式环境"
+            },
+            {
+                id: "test",
+                name: "测试环境"
+            },
+            {
+                id: "gray",
+                name: "灰度环境"
+        }],
+        solveproblem: [
+            {
+                id: "sovle",
+                name: "已解决",
+            },
+            {
+                id: "no_solve",
+                name: "未解决",
+            },
+            {
+                id: "noneed_solve",
+                name: "无需解决",
+            }
+        ],
+        browser_system: [
+            {
+                value: 'google',
+                label: '谷歌浏览器'
+            },
+            {
+                value: 'firefox',
+                label: '火狐浏览器'
+            },
+            {
+                value: 'ie 8',
+                label: 'IE8 浏览器'
+            }
+        ],
+        computer_system:
+        [
+            {
+                value: 'win7',
+                label: 'windows 7'
+            },
+            {
+                value: 'win8',
+                label: 'window 8'
+            }
+        ],
+        // rules: {
+        //     demand:[
+        //         {required:true, message:'请输入需求名称',trigger:'blur'}
+        //     ],
+        //     tester:[
+        //         {required:true, message:'请输入测试人员',trigger:'blur'}
+        //     ],
+        //     developer:[
+        //         {required:true, message:'请输入开发人员',trigger:'blur'}
+        //     ],
+        //     demander:[
+        //         {required:true, message:'请输入产品负责人',trigger:'blur'}
+        //     ],
+        //     test_result:[
+        //         {required:true, message:'请选择',trigger:'blur'}
+        //     ]
+        // },
         form1: {
-            demand_name: '',
+            demand: '',
             tester: [],
             developer: [],
             product: [],
@@ -309,75 +368,24 @@ export default {
                 solve: '',
                 backbug: '',
             }],
-            boxs: [],
-            solveproblem: [
-                {
-                    id: "sovle",
-                    name: "已解决",
-                    selected: "1",
-                },
-                {
-                    id: "no_solve",
-                    name: "未解决",
-                    selected: "0",
-                },
-                {
-                    id: "noneed_solve",
-                    name: "无需解决",
-                    selected: "-1",
-                }
-            ],
-
         },
         form3: {
-            computer_system:
-            [
-                {
-                    value: 'win7',
-                    label: 'windows 7'
-                },
-                {
-                    value: 'win8',
-                    label: 'window 8'
-                }
-            ],
-            browser_system: [
-                {
-                    value: 'google',
-                    label: '谷歌浏览器'
-                },
-                {
-                    value: 'firefox',
-                    label: '火狐浏览器'
-                },
-                {
-                    value: 'ie 8',
-                    label: 'IE8 浏览器'
-                }
-            ],
             computer: [],
             browser: [],
         },
-        types: [
-            {
-                value: 'link',
-                label: "链接",
-            },
-            {
-                value: 'file',
-                label: "文件",
-            }
-        ],       
-        type: "file",
-        form4: {
-            // cases: [{
-            //     type: '',
-            //     case: '',
-            // }],
-            case_link: '',
-            case_file: '',
+        types: [{
+            value: 'link',
+            label: "链接",
         },
-        
+        {
+            value: 'file',
+            label: "文件",
+        }],
+        form4: {
+            type: '',
+            link: '',
+            file: []
+        },
       }
     },
     methods: {
@@ -449,19 +457,22 @@ export default {
                 this.type = "file"
             }
         },
-        submitForm(forms) {
-            console.log('summit')
+        onSelectDemand(val){
+            pass
         },
+        // submitForm(forms) {
+        //     console.log('summit')
+        // },
         resetForm: function(forms) {
             console.log('reset')
         },
-        // submitForm: function() {
-        //   var dataList={a:'',b:''}
-        //   https.fetchPost('/api/report',dataList)
-        //   .then((resp) => {
-        //     console.log(resp)
-        //   })
-        // },
+        submitForm: function() {
+        //   var dataList={demand_id:'1'}
+          https.fetchPost('/api/report', this.form4)
+            .then((resp) => {
+                console.log(this.form4)
+            })
+        },
     },
     created() {
       this.getTesters();
