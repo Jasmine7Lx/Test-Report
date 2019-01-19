@@ -9,9 +9,9 @@ class DemandAllSerializer(serializers.ModelSerializer):
 class DemandListSerializer(serializers.ModelSerializer):
     class Meta:
         model =Demand
-        fields = ('demand_name','created_time')
+        fields = ('name','create_time')
 #获取人员列表
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
-        exclude = ('role','created_time','email','password','update_time','demand')
+        exclude = ('role','create_time','email','password','update_time','demand')
