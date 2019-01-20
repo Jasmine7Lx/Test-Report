@@ -108,7 +108,6 @@ def getDemandAll(request):
 def getTesterList(request):
     if request.method == 'GET':
         tester = Developer.objects.filter(role='tester')
-        print(tester)
         serializer = UserListSerializer(tester,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
 
@@ -124,8 +123,8 @@ def getDeveloperList(request):
 @csrf_exempt
 def getProductList(request):
     if request.method == 'GET':
-        developer = Developer.objects.filter(role='product')
-        serializer = UserListSerializer(developer,many=True)
+        product = Developer.objects.filter(role='product')
+        serializer = UserListSerializer(product,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
 
 #报告

@@ -23,7 +23,7 @@ class Demand(models.Model):
         verbose_name = "需求"
         verbose_name_plural = verbose_name
     def __str__(self):
-        return self.demand_name
+        return self.name
 
 class Developer(models.Model):
     DEVELOPER_TYPE = (
@@ -45,7 +45,7 @@ class Developer(models.Model):
         verbose_name = "用户信息表"
         verbose_name_plural = verbose_name
     def __str__(self):
-        return self.developer_name
+        return self.name
 
 class Report(models.Model):
     REPORT_TYPE = (
@@ -63,7 +63,7 @@ class Report(models.Model):
         ("gray", "灰度环境")
     )
     demand = models.OneToOneField(Demand)
-    name = models.CharField(default='', max_length=100)
+    # name = models.CharField(default='', max_length=100)
     type = models.CharField(max_length=10, choices=REPORT_TYPE, default="pc")
     result = models.CharField(max_length=10, choices=TEST_RESULT)
     env = models.CharField(max_length=10, choices=TEST_ENV)
@@ -73,8 +73,6 @@ class Report(models.Model):
     class Meta:
         verbose_name = "测试报告"
         verbose_name_plural = verbose_name
-    def __str__(self):
-        return self.report_name
 
 class Remain(models.Model):
     report = models.ForeignKey(Report)
@@ -95,20 +93,20 @@ class Config(models.Model):
         verbose_name_plural = verbose_name
 
 class Build(models.Model):
-    BUILD_TYPE = (
-        ("link", "网址"),
-        ("version", "版本号")
-    )
+    # BUILD_TYPE = (
+    #     ("link", "网址"),
+    #     ("version", "版本号")
+    # )
     report = models.ForeignKey(Report)
-    type = models.CharField(max_length=10, choices=BUILD_TYPE, null=True, blank=True)
+    # type = models.CharField(max_length=10, choices=BUILD_TYPE, null=True, blank=True)
     site = models.CharField(max_length=200, null=True, blank=True)
     class Meta:
         verbose_name = "测试版本/链接"
         verbose_name_plural = verbose_name
     def __str__(self):
-        return self.build_site
+        return self.site
 
-class Cases(models.Model):
+class Case(models.Model):
     CASE_TYPE = (
         ("link", "链接"),
         ("file", "文件")
@@ -120,7 +118,7 @@ class Cases(models.Model):
         verbose_name = "测试用例"
         verbose_name_plural = verbose_name
     def __str__(self):
-        return self.case_content
+        return self.content
 
 class Bug(models.Model):
     BUG_STATUS = (
@@ -134,8 +132,13 @@ class Bug(models.Model):
         ("major","一般"),
         ("minor","次要")
     )
+    BUG_TYPE = (
+        ("frontbug", "前端bug"),
+        ("backbug", "后台bug"),
+        ("appbug", "移动端bug")
+    )
     demand = models.ForeignKey(Demand)
-    developer = models.ForeignKey(Developer)
+    type = models.CharField(max_length=20, choices=BUG_TYPE, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=BUG_STATUS,null=True, blank=True)
     level = models.CharField(max_length=10, choices=BUG_LEVEL, null=True, blank=True)
@@ -143,7 +146,7 @@ class Bug(models.Model):
         verbose_name = "bug表"
         verbose_name_plural = verbose_name
     def __str__(self):
-        return self.bug_content
+        return self.content
 
 class Compat(models.Model):
     COMPAT_TYPE = (

@@ -6,7 +6,7 @@
                 <el-option
                     v-for="item in demandList"
                     :key="item.id"
-                    :label="item.demand_name"
+                    :label="item.name"
                     :value="item.id">
                 </el-option>
             </el-select>
@@ -16,7 +16,7 @@
                 <el-option
                     v-for="item in testerList"
                     :key="item.id"
-                    :label="item.developer_name"
+                    :label="item.name"
                     :value="item.id">
                 </el-option>
             </el-select>
@@ -26,7 +26,7 @@
                 <el-option
                     v-for="item in developerList"
                     :key="item.id"
-                    :label="item.developer_name"
+                    :label="item.name"
                     :value="item.id">
                 </el-option>
             </el-select>
@@ -36,7 +36,7 @@
                 <el-option
                     v-for="item in productList"
                     :key="item.id"
-                    :label="item.developer_name"
+                    :label="item.name"
                     :value="item.id">
                 </el-option>
             </el-select>
@@ -80,7 +80,7 @@
                 <span style="font-size:16.5px; padding-left:10px;">三、测试说明：</span>
                 <el-row>
                     <span class="explain">1.测试环境：</span>
-                    <el-radio-group v-model="form2.enviroment">
+                    <el-radio-group v-model="form2.environment">
                         <el-radio v-for="item of enviroments" :key="item.index" :label="item.id">{{item.name}}</el-radio>
                     </el-radio-group>
                 </el-row >
@@ -349,7 +349,7 @@ export default {
             result: "",
         },
         form2: {
-            enviroment: "",
+            environment: "",
             time: '',
             remains: [{
                 remain: '',
