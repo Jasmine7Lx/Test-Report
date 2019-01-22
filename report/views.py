@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_list_or_404,render_to_response, redirect
 from django.http import JsonResponse
 #from django.urls import reverse
-from .models import User,Demand,Developer
+from .models import User,Demand,Developer,Compat
 #from django.template import RequestContext
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +9,7 @@ from rest_framework import serializers,viewsets
 from rest_framework.renderers import JSONRenderer
 from django.core import serializers
 import json
-from .serializers import DemandAllSerializer,UserListSerializer
+from .serializers import DemandAllSerializer,UserListSerializer,CompatListSerializer
 from django.db.models import Q
 from django.http import HttpResponse
 #from django.urls import reverse
@@ -126,6 +126,27 @@ def getProductList(request):
         product = Developer.objects.filter(role='product')
         serializer = UserListSerializer(product,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+
+#获取电脑列表
+def getComputerList(request):
+    if request.method == 'GET':
+        computer = Compat.objects.filter(type='computer')
+        serializer = CompatListSerializer(computer,many=True)
+        return JsonResponse({"result":200, "msg":"执行成功", "data":serializer.data})
+
+#获取浏览器列表
+def getBrowserList(request):
+    if request.method == 'GET':
+        browser = Compat.objects.filter(type='browser')
+        serializer = CompatListSerializer(browser,many=True)
+        return JsonResponse({"result":200, "msg":"执行成功", "data":serializer.data})
+
+#获取手机列表
+def getBrowserList(request):
+    if request.method == 'GET':
+        phone = Compat.objects.filter(type='phone')
+        serializer = CompatListSerializer(phone,many=True)
+        return JsonResponse({"result":200, "msg":"执行成功", "data":serializer.data})
 
 #报告
 @csrf_exempt

@@ -164,14 +164,13 @@
                         v-model="form3.computer"
                         multiple
                         filterable
-                        allow-create
                         default-first-option
                         placeholder="请选择已测试的系统">
                         <el-option
-                            v-for="item in computer_system"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            v-for="item in computerList"
+                            :key="item.id"
+                            :label="item.system"
+                            :value="item.id">
                         </el-option>
                     </el-select>
                     </el-col>
@@ -183,14 +182,13 @@
                         v-model="form3.browser"
                         multiple
                         filterable
-                        allow-create
                         default-first-option
                         placeholder="请选择已测试的系统">
                         <el-option
-                            v-for="item in browser_system"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            v-for="item in browserList"
+                            :key="item.id"
+                            :label="item.system"
+                            :value="item.id">
                         </el-option>
                     </el-select>
                     </el-col>
@@ -200,7 +198,7 @@
         <el-form class="edit4" :model="form4">
             <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
             <el-form-item label="请选择用例类型：" class="explain">
-                <el-select v-model="form4.type" @change="onSelectCase" size="small"  placeholder="请选择">
+                <el-select v-model="form4.type" @change="onSelectCase" size="small"  placeholder="请选择" >
                     <el-option
                         v-for="item in types"
                         :key="item.value"
@@ -209,11 +207,11 @@
                     </el-option>
                 </el-select>
             </el-form-item>  
-            <el-form-item v-if="type=='link'">
+            <el-form-item v-if="case_type=='link'">
                 <span class="explain">链接：</span>
                 <el-input size="small" v-model="form4.link" ></el-input>
             </el-form-item>
-            <el-form-item v-if="type=='file'">
+            <el-form-item v-if="case_type=='file'">
                 <span class="explain">文件：</span>
                 <el-upload
                     class="upload-demo"
@@ -254,10 +252,13 @@ export default {
         //   label: '小C'
         // }],
         // 用来暂时存放异步数据
+        case_type : "link",
         testerList: [],
         productList: [],
         developerList: [],
         demandList: [],
+        computerList: [],
+        browserList: [],
         results: [
             {
                 id: "pass",
@@ -299,31 +300,7 @@ export default {
                 name: "无需解决",
             }
         ],
-        browser_system: [
-            {
-                value: 'google',
-                label: '谷歌浏览器'
-            },
-            {
-                value: 'firefox',
-                label: '火狐浏览器'
-            },
-            {
-                value: 'ie 8',
-                label: 'IE8 浏览器'
-            }
-        ],
-        computer_system:
-        [
-            {
-                value: 'win7',
-                label: 'windows 7'
-            },
-            {
-                value: 'win8',
-                label: 'window 8'
-            }
-        ],
+
         // rules: {
         //     demand:[
         //         {required:true, message:'请输入需求名称',trigger:'blur'}
@@ -374,11 +351,11 @@ export default {
             browser: [],
         },
         types: [{
-            value: 'link',
+            value: "link",
             label: "链接",
         },
         {
-            value: 'file',
+            value: "file",
             label: "文件",
         }],
         form4: {
@@ -417,6 +394,19 @@ export default {
                 this.demandList = resp.data.data
             })
         },
+        getComputerList: function() {
+            https.fetchGet('/api/computer')
+            .then((resp) => {
+                console.log(resp)
+                this.computerList = resp.data.data
+            })
+        },
+        getBrowserList: function() {
+            https.fetchGet('/api/browser')
+            .then((resp) => {
+                this.browserList = resp.data.data
+            })
+        },
         AddList: function(boxs) {
             var n = boxs ? boxs.length + 1 : 1;
             boxs.push({
@@ -452,9 +442,9 @@ export default {
         },
         onSelectCase(val){
             if (val=="link"){
-                this.type = "link"
+                this.case_type = "link"
             } else{
-                this.type = "file"
+                this.case_type = "file"
             }
         },
         onSelectDemand(val){
@@ -468,9 +458,9 @@ export default {
         },
         submitForm: function() {
         //   var dataList={demand_id:'1'}
-          https.fetchPost('/api/report', this.form4)
+          https.fetchPost('/api/report', this.form3)
             .then((resp) => {
-                console.log(this.form4)
+                console.log(this.form3)
             })
         },
     },
@@ -479,6 +469,8 @@ export default {
       this.getProcduct();
       this.getDeveloper();
       this.getDemandList();
+      this.getComputerList();
+      this.getBrowserList();
     }
 }
 </script>
