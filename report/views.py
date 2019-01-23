@@ -1,7 +1,8 @@
 from django.shortcuts import render,get_list_or_404,render_to_response, redirect
 from django.http import JsonResponse
 #from django.urls import reverse
-from .models import User,Demand,Developer,Compat
+from django.db import models
+from .models import User,Demand,Developer,Compat,Report
 #from django.template import RequestContext
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
@@ -13,7 +14,6 @@ from .serializers import DemandAllSerializer,UserListSerializer,CompatListSerial
 from django.db.models import Q
 from django.http import HttpResponse
 #from django.urls import reverse
-from .models import User
 from django.template import RequestContext
 from django import forms
 # Create your views here.
@@ -130,21 +130,21 @@ def getProductList(request):
 #获取电脑列表
 def getComputerList(request):
     if request.method == 'GET':
-        computer = Compat.objects.filter(type='computer')
+        computer = Compat.objects.filter(compat_type='computer')
         serializer = CompatListSerializer(computer,many=True)
         return JsonResponse({"result":200, "msg":"执行成功", "data":serializer.data})
 
 #获取浏览器列表
 def getBrowserList(request):
     if request.method == 'GET':
-        browser = Compat.objects.filter(type='browser')
+        browser = Compat.objects.filter(compat_type='browser')
         serializer = CompatListSerializer(browser,many=True)
         return JsonResponse({"result":200, "msg":"执行成功", "data":serializer.data})
 
 #获取手机列表
-def getBrowserList(request):
+def getPhoneList(request):
     if request.method == 'GET':
-        phone = Compat.objects.filter(type='phone')
+        phone = Compat.objects.filter(compat_type='phone')
         serializer = CompatListSerializer(phone,many=True)
         return JsonResponse({"result":200, "msg":"执行成功", "data":serializer.data})
 
@@ -152,4 +152,17 @@ def getBrowserList(request):
 @csrf_exempt
 def Report(request):
     if request.method == 'POST':
+        received_json_data = json.loads(request.body)
+        report_type = received_json_data.get("report_type")
+        result = received_json_data.get("result")
+        env = received_json_data.get("environment")
+        time = received_json_data.get("time")
+        start_time = time[0]
+        end_time = time[1]
+        demand_id = received_json_data.get("demand_id")
+        report_dic = {"report_type":report_type, "result":result,'env':env,'start_time':start_time,'end_time':end_time,'demand_id':demand_id}
+        print(report_dic)
+        print('开始操作数据库')
+        Report.objects.create(**report_dic)
+        print('操作数据库完成')
         return JsonResponse({"result": 200, "msg": "执行成功"})

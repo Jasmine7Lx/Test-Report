@@ -198,7 +198,7 @@
         <el-form class="edit4" :model="form4">
             <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
             <el-form-item label="请选择用例类型：" class="explain">
-                <el-select v-model="form4.type" @change="onSelectCase" size="small"  placeholder="请选择" >
+                <el-select v-model="form4.case_type" @change="onSelectCase" size="small"  placeholder="请选择" >
                     <el-option
                         v-for="item in types"
                         :key="item.value"
@@ -359,7 +359,7 @@ export default {
             label: "文件",
         }],
         form4: {
-            type: '',
+            case_type: '',
             link: '',
             file: []
         },
@@ -457,10 +457,24 @@ export default {
             console.log('reset')
         },
         submitForm: function() {
-        //   var dataList={demand_id:'1'}
-          https.fetchPost('/api/report', this.form3)
+          var dataList = {
+                demand_id:1, 
+                result: "pass", 
+                environment: "test", 
+                time:["2019-01-01","2019-01-10"],
+                remains:[{remain:"remain1"}, {remain:"remain2"}], 
+                configs:[{config:"config1"},{config:"config2"}], 
+                builds:[{build:"build1"}, {build:"build2"}], 
+                frontbugs:[{frontbug:"frontbug1", status:"solve"}, {frontbug:"frontbug2", status:"no_solve"}], 
+                backbugs:[{backbug:"backbug1", status:"solve"}, {backbug:"backbug2", status:"no_solve"}], 
+                computer:[1,4], 
+                browser:[2], 
+                report_type: "pc", 
+                case_type: "link",
+                link:"www.baidu.com"}
+            https.fetchPost('/api/report', dataList)
             .then((resp) => {
-                console.log(this.form3)
+                console.log(dataList)
             })
         },
     },

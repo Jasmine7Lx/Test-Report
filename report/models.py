@@ -64,7 +64,7 @@ class Report(models.Model):
     )
     demand = models.OneToOneField(Demand)
     # name = models.CharField(default='', max_length=100)
-    type = models.CharField(max_length=10, choices=REPORT_TYPE, default="pc")
+    report_type = models.CharField(max_length=10, choices=REPORT_TYPE, default="pc")
     result = models.CharField(max_length=10, choices=TEST_RESULT)
     env = models.CharField(max_length=10, choices=TEST_ENV)
     create_time = models.DateTimeField(auto_now_add=True)
@@ -112,7 +112,7 @@ class Case(models.Model):
         ("file", "文件")
     )
     report = models.ForeignKey(Report)
-    type = models.CharField(max_length=10, choices=CASE_TYPE, null=True, blank=True)
+    case_type = models.CharField(max_length=10, choices=CASE_TYPE, null=True, blank=True)
     content = models.CharField(max_length=200, null=True, blank=True)
     class Meta:
         verbose_name = "测试用例"
@@ -138,7 +138,7 @@ class Bug(models.Model):
         ("appbug", "移动端bug")
     )
     demand = models.ForeignKey(Demand)
-    type = models.CharField(max_length=20, choices=BUG_TYPE, null=True, blank=True)
+    bug_type = models.CharField(max_length=20, choices=BUG_TYPE, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=BUG_STATUS,null=True, blank=True)
     level = models.CharField(max_length=10, choices=BUG_LEVEL, null=True, blank=True)
@@ -155,5 +155,5 @@ class Compat(models.Model):
         ("phone","手机")
     )
     report = models.ManyToManyField(Report)
-    type = models.CharField(max_length=10, choices=COMPAT_TYPE, null=True, blank=True)
+    compat_type = models.CharField(max_length=10, choices=COMPAT_TYPE, null=True, blank=True)
     system = models.CharField(max_length=30, null=True, blank=True)

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import qs from 'qs'
+// import qs from 'qs'
 
 axios.defaults.timeout = 5000;                        //响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';        //配置请求头
@@ -9,7 +9,9 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000';   //配置接口地址
 axios.interceptors.request.use((config) => {
     //在发送请求之前做某件事
     if(config.method  === 'post'){
-        config.data = qs.stringify(config.data);
+        console.log("拦截处理json")
+        config.data = JSON.stringify(config.data);
+        console.log(config.data)
     }
     return config;
 },(error) =>{
