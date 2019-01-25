@@ -11,7 +11,7 @@ from rest_framework.renderers import JSONRenderer
 from django.core import serializers
 import json
 from .serializers import DemandAllSerializer,UserListSerializer,CompatListSerializer
-from django.db.models import Q
+# from django.db.models import Q
 from django.http import HttpResponse
 #from django.urls import reverse
 from django.template import RequestContext
@@ -150,7 +150,7 @@ def getPhoneList(request):
 
 #报告
 @csrf_exempt
-def Report(request):
+def PcReport(request):
     if request.method == 'POST':
         received_json_data = json.loads(request.body)
         report_type = received_json_data.get("report_type")
@@ -160,9 +160,15 @@ def Report(request):
         start_time = time[0]
         end_time = time[1]
         demand_id = received_json_data.get("demand_id")
+        # report = Report()
+        # report.report_type = report_type
+        # report.result = result
+        # report.env = env
+        # report.start_time = start_time
+        # report.end_time = end_time
+        # report.demand_id = demand_id
+        # report.save()
         report_dic = {"report_type":report_type, "result":result,'env':env,'start_time':start_time,'end_time':end_time,'demand_id':demand_id}
-        print(report_dic)
-        print('开始操作数据库')
-        Report.objects.create(**report_dic)
-        print('操作数据库完成')
+        report = Report.objects.create(**report_dic)
+
         return JsonResponse({"result": 200, "msg": "执行成功"})

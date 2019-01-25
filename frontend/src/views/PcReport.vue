@@ -472,7 +472,7 @@ export default {
                 report_type: "pc", 
                 case_type: "link",
                 link:"www.baidu.com"}
-            https.fetchPost('/api/report', dataList)
+            https.fetchPost('/api/pcreport', dataList)
             .then((resp) => {
                 console.log(dataList)
             })

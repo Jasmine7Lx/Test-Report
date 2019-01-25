@@ -73,6 +73,8 @@ class Report(models.Model):
     class Meta:
         verbose_name = "测试报告"
         verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.result
 
 class Remain(models.Model):
     report = models.ForeignKey(Report)
