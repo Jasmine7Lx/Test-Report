@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Demand,Developer,Compat
+from .models import Demand,Developer,Compat,Report
 #全部需求-序列化
 class DemandAllSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +17,8 @@ class CompatListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Compat
         fields = "__all__"
+
+class ReportListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields ="__all__"

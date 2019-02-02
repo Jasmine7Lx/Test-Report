@@ -2,7 +2,7 @@ from django.shortcuts import render,get_list_or_404,render_to_response, redirect
 from django.http import JsonResponse
 #from django.urls import reverse
 from django.db import models
-from .models import User,Demand,Developer,Compat,Report
+from .models import User,Demand,Developer,Compat,Report,Remain,Config,Build,Bug,Compat
 #from django.template import RequestContext
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
@@ -10,7 +10,7 @@ from rest_framework import serializers,viewsets
 from rest_framework.renderers import JSONRenderer
 from django.core import serializers
 import json
-from .serializers import DemandAllSerializer,UserListSerializer,CompatListSerializer
+from .serializers import DemandAllSerializer,UserListSerializer,CompatListSerializer,ReportListSerializer
 # from django.db.models import Q
 from django.http import HttpResponse
 #from django.urls import reverse
@@ -152,23 +152,88 @@ def getPhoneList(request):
 @csrf_exempt
 def PcReport(request):
     if request.method == 'POST':
-        received_json_data = json.loads(request.body)
-        report_type = received_json_data.get("report_type")
-        result = received_json_data.get("result")
-        env = received_json_data.get("environment")
-        time = received_json_data.get("time")
-        start_time = time[0]
-        end_time = time[1]
-        demand_id = received_json_data.get("demand_id")
-        # report = Report()
-        # report.report_type = report_type
-        # report.result = result
-        # report.env = env
-        # report.start_time = start_time
-        # report.end_time = end_time
-        # report.demand_id = demand_id
-        # report.save()
-        report_dic = {"report_type":report_type, "result":result,'env':env,'start_time':start_time,'end_time':end_time,'demand_id':demand_id}
-        report = Report.objects.create(**report_dic)
+        # #获取前端传过来的表单数据
+        # received_json_data = json.loads(request.body)
+        # #获取report表需要的表单数据
+        # report_type = received_json_data.get("report_type")
+        # result = received_json_data.get("result")
+        # env = received_json_data.get("environment")
+        # time = received_json_data.get("time")
+        # start_time = time[0]
+        # end_time = time[1]
+        # demand_id = received_json_data.get("demand_id")
+        # #数据存report表
+        # report_dic = {"report_type":report_type, "result":result,'env':env,'start_time':start_time,'end_time':end_time,'demand_id':demand_id}
+        # report = Report.objects.create(**report_dic)
+        # # report = Report.objects.get(id='1')
+        # report_id = report.id
+        # print(report_id)
+        # # #获取遗留问题数据
+        # remains = received_json_data.get("remains")
+        # #遍历remains并存库
+        # if(remains != None):
+        #     for remain in remains:
+        #         if(remain['remain'] != ''):
+        #             remain = Remain.objects.create(content=remain['remain'], report_id=report_id)
 
+        # # #获取配置并存库
+        # configs = received_json_data.get("configs")
+        # if(configs != None):
+        #     for config in configs:
+        #         if(config['config'] != ''):
+        #             config = Config.objects.create(content=config['config'], report_id=report_id)
+
+        # # #获取测试版本/链接信息并存库
+        # builds = received_json_data.get("builds")
+        # if(builds != None):
+        #     for build in builds:
+        #         if(build['build'] != ''):
+        #             build = Build.objects.create(site=build['build'], report_id=report_id)
+        
+        # # #获取前端bug并存库
+        # frontbugs = received_json_data.get("frontbugs")
+        # if(frontbugs != None):
+        #     for frontbug in frontbugs:
+        #         if(frontbug['frontbug'] != ''):
+        #             bug = Bug.objects.create(content=frontbug['frontbug'], status=frontbug['status'], demand_id=demand_id, bug_type="frontbug")
+        # # #获取后端bug并存库
+        # backbugs = received_json_data.get("backbugs")
+        # if(backbugs != None):
+        #     for backbug in backbugs:
+        #         if(backbug['backbug'] != ''):
+        #             bug = Bug.objects.create(content=backbug['backbug'], status=backbug['status'], demand_id=demand_id, bug_type="backbug")
+        
+        # #获取移动端bug并存库
+        # appbugs = received_json_data.get("appbugs")
+        # if(appbugs != None):
+        #     for appbug in appbugs:
+        #         if(appbug['appbug'] != ''):
+        #             bug = Bug.objects.create(content=appbug['appbug'], status=backbug['status'], demand_id=demand_id, bug_type="appbug")
+        
+        # #获取兼容性并存库
+        # computers = received_json_data.get("computer")
+        # browsers = received_json_data.get("browser")
+        # phones = received_json_data.get("phone")
+        # if(computers != None):
+        #     if(computers != []):
+        #         for x in computers:
+        #             compat_computer = Compat.objects.get(id=x)
+        #             compat_computer.report.clear()
+        #             compat_computer.report.add(report_id)
+        # if(browsers != None):
+        #     if(browsers != []):
+        #         for x in browsers:
+        #             compat_browser = Compat.objects.get(id=x)
+        #             compat_browser.report.clear()
+        #             compat_browser.report.add(report_id)
+        # if(phones != None):
+        #     if(phones != []):
+        #         for x in phones:
+        #             compat_phone = Compat.objects.get(id=x)
+        #             compat_phone.report.clear()
+        #             compat_phone.report.add(report_id)
+        
+        return JsonResponse({"result": 200, "msg": "执行成功"})
+
+    if request.method == 'GET':
         return JsonResponse({"result": 200, "msg": "执行成功"})

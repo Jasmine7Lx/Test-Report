@@ -130,8 +130,8 @@
                         <el-input v-model="item.frontbug" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
-                        <el-radio-group v-model="item.solve">
-                            <el-radio v-for="item in solveproblem" :key="item.index" :label="item.id">{{item.name}}</el-radio>
+                        <el-radio-group v-model="item.status">
+                            <el-radio v-for="item in BugStatus" :key="item.index" :label="item.id">{{item.name}}</el-radio>
                         </el-radio-group>
                     <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.frontbugs)" title="删除"></el-button>
                     </el-col>
@@ -145,8 +145,8 @@
                         <el-input v-model="item.backbug" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
-                        <el-radio-group v-model="item.solve">
-                            <el-radio v-for="item in solveproblem" :key="item.index" :label="item.id">{{item.name}}</el-radio>
+                        <el-radio-group v-model="item.status">
+                            <el-radio v-for="item in BugStatus" :key="item.index" :label="item.id">{{item.name}}</el-radio>
                         </el-radio-group>
                     <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.backbugs)" title="删除"></el-button>
                     </el-col>
@@ -286,7 +286,7 @@ export default {
                 id: "gray",
                 name: "灰度环境"
         }],
-        solveproblem: [
+        BugStatus: [
             {
                 id: "sovle",
                 name: "已解决",
@@ -338,11 +338,11 @@ export default {
                 build: '',
             }],
             frontbugs: [{
-                solve: '',
+                status: '',
                 frontbug: '',
             }],
             backbugs:[{
-                solve: '',
+                status: '',
                 backbug: '',
             }],
         },
@@ -463,12 +463,12 @@ export default {
                 environment: "test", 
                 time:["2019-01-01","2019-01-10"],
                 remains:[{remain:"remain1"}, {remain:"remain2"}], 
-                configs:[{config:"config1"},{config:"config2"}], 
+                configs:[{config:""}], 
                 builds:[{build:"build1"}, {build:"build2"}], 
                 frontbugs:[{frontbug:"frontbug1", status:"solve"}, {frontbug:"frontbug2", status:"no_solve"}], 
                 backbugs:[{backbug:"backbug1", status:"solve"}, {backbug:"backbug2", status:"no_solve"}], 
-                computer:[1,4], 
-                browser:[2], 
+                computer:[1,2,3], 
+                browser:[4,5], 
                 report_type: "pc", 
                 case_type: "link",
                 link:"www.baidu.com"}

@@ -7,6 +7,7 @@ import ReportList from '@/views/ReportList'
 import BugList from '@/views/BugList'
 import DemandList from '@/views/DemandList'
 import ReportEdit from '@/views/ReportEdit'
+import PcDetail from '@/views/PcDetail'
 
 Vue.use(Router)
 mode: 'history'
@@ -32,6 +33,14 @@ export default new Router({
           path: '/report/edit',
           name: 'ReportEdit',
           component: ReportEdit,
+          meta: {
+            keepAlive: true
+          }
+        },
+        {
+          path: '/report/detail/:id',
+          name: 'PcDetail',
+          component: PcDetail,
           meta: {
             keepAlive: true
           }

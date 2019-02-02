@@ -6,6 +6,7 @@ class User(AbstractUser):
     create_time = models.DateTimeField(auto_now_add=True)
 
 class Demand(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(default='', max_length=100)
     DEMAND_STATUS = (
         ("no_summit", "未提测"),
@@ -62,6 +63,7 @@ class Report(models.Model):
         ("test", "测试环境"),
         ("gray", "灰度环境")
     )
+    id = models.AutoField(primary_key=True)
     demand = models.OneToOneField(Demand)
     # name = models.CharField(default='', max_length=100)
     report_type = models.CharField(max_length=10, choices=REPORT_TYPE, default="pc")
@@ -74,9 +76,10 @@ class Report(models.Model):
         verbose_name = "测试报告"
         verbose_name_plural = verbose_name
     def __str__(self):
-        return self.result
+        return self.id
 
 class Remain(models.Model):
+    id = models.AutoField(primary_key=True)
     report = models.ForeignKey(Report)
     content = models.TextField(null=True, blank=True)
     class Meta:
@@ -86,6 +89,7 @@ class Remain(models.Model):
         return self.remain_content
 
 class Config(models.Model):
+    id = models.AutoField(primary_key=True)
     report = models.ForeignKey(Report)
     content = models.TextField(null=True, blank=True)
     def __str__(self):
@@ -99,6 +103,7 @@ class Build(models.Model):
     #     ("link", "网址"),
     #     ("version", "版本号")
     # )
+    id = models.AutoField(primary_key=True)
     report = models.ForeignKey(Report)
     # type = models.CharField(max_length=10, choices=BUILD_TYPE, null=True, blank=True)
     site = models.CharField(max_length=200, null=True, blank=True)
@@ -113,6 +118,7 @@ class Case(models.Model):
         ("link", "链接"),
         ("file", "文件")
     )
+    id = models.AutoField(primary_key=True)
     report = models.ForeignKey(Report)
     case_type = models.CharField(max_length=10, choices=CASE_TYPE, null=True, blank=True)
     content = models.CharField(max_length=200, null=True, blank=True)
@@ -139,6 +145,7 @@ class Bug(models.Model):
         ("backbug", "后台bug"),
         ("appbug", "移动端bug")
     )
+    id = models.AutoField(primary_key=True)
     demand = models.ForeignKey(Demand)
     bug_type = models.CharField(max_length=20, choices=BUG_TYPE, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
@@ -156,6 +163,7 @@ class Compat(models.Model):
         ("browser","浏览器"),
         ("phone","手机")
     )
+    id = models.AutoField(primary_key=True)
     report = models.ManyToManyField(Report)
     compat_type = models.CharField(max_length=10, choices=COMPAT_TYPE, null=True, blank=True)
     system = models.CharField(max_length=30, null=True, blank=True)
