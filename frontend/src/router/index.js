@@ -37,26 +37,10 @@ export default new Router({
             keepAlive: true
           }
         },
-        {
-          path: '/report/detail/:id',
-          name: 'PcDetail',
-          component: PcDetail,
-          meta: {
-            keepAlive: true
-          }
-        },
         // {
-        //   path: '/pc_report',
-        //   name: 'PcReport',
-        //   component: PcReport,
-        //   meta: {
-        //     keepAlive: true
-        //   }
-        // },
-        // {
-        //   path: '/phone_report',
-        //   name: 'PhoneReport',
-        //   component: PhoneReport,
+        //   path: '/report/detail/:id',
+        //   name: 'PcDetail',
+        //   component: PcDetail,
         //   meta: {
         //     keepAlive: true
         //   }

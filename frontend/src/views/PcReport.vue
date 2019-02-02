@@ -458,20 +458,20 @@ export default {
         },
         submitForm: function() {
           var dataList = {
-                demand_id:1, 
-                result: "pass", 
-                environment: "test", 
-                time:["2019-01-01","2019-01-10"],
-                remains:[{remain:"remain1"}, {remain:"remain2"}], 
-                configs:[{config:""}], 
-                builds:[{build:"build1"}, {build:"build2"}], 
-                frontbugs:[{frontbug:"frontbug1", status:"solve"}, {frontbug:"frontbug2", status:"no_solve"}], 
-                backbugs:[{backbug:"backbug1", status:"solve"}, {backbug:"backbug2", status:"no_solve"}], 
-                computer:[1,2,3], 
-                browser:[4,5], 
+                demand_id:this.form1.demand, 
+                result: this.form1.result, 
+                environment: this.form2.environment, 
+                time: this.form2.time,
+                remains: this.form2.remains, 
+                configs: this.form2.configs, 
+                builds: this.form2.builds, 
+                frontbugs: this.form2.frontbugs, 
+                backbugs: this.form2.backbugs, 
+                computer:this.form3.computer, 
+                browser:this.form3.browser, 
                 report_type: "pc", 
-                case_type: "link",
-                link:"www.baidu.com"}
+                case_type: this.form4.case_type,
+                link: this.form4.link}
             https.fetchPost('/api/pcreport', dataList)
             .then((resp) => {
                 console.log(dataList)
