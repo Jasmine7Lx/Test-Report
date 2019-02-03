@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^computer$', views.getComputerList, name='computer'),
     url(r'^browser$', views.getBrowserList, name='browser'),
     url(r'^phone$', views.getPhoneList, name='phone'),
+    url(r'^reportlist$', views.getReportList, name="reportlist")
 ]

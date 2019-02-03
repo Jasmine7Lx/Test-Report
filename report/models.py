@@ -65,6 +65,7 @@ class Report(models.Model):
     )
     id = models.AutoField(primary_key=True)
     demand = models.OneToOneField(Demand)
+    developer = models.ForeignKey(Developer)
     # name = models.CharField(default='', max_length=100)
     report_type = models.CharField(max_length=10, choices=REPORT_TYPE, default="pc")
     result = models.CharField(max_length=10, choices=TEST_RESULT)
@@ -75,8 +76,8 @@ class Report(models.Model):
     class Meta:
         verbose_name = "测试报告"
         verbose_name_plural = verbose_name
-    def __str__(self):
-        return self.id
+    # def __str__(self):
+    #     return self.demand.name
 
 class Remain(models.Model):
     id = models.AutoField(primary_key=True)

@@ -7,10 +7,12 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import QS from 'qs'
+import Moment from 'moment'
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 Vue.prototype.qs = QS
+Vue.prototype.moment = Moment
 
 Vue.use(ElementUI)
 /* eslint-disable no-new */

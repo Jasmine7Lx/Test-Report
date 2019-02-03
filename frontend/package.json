@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.4.10",
+    "moment": "^2.24.0",
     "qs": "^6.6.0",
     "vue": "^2.5.2",
     "vue-cli": "^2.9.6",

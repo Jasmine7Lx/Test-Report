@@ -7,7 +7,7 @@ class DemandAllSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 #获取人员列表
-class UserListSerializer(serializers.ModelSerializer):
+class DeveloperListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
         fields = "__all__"
@@ -19,6 +19,8 @@ class CompatListSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class ReportListSerializer(serializers.ModelSerializer):
+    demand_name = serializers.CharField(source='demand.name')
+    developer_name = serializers.CharField(source='developer.name')
     class Meta:
         model = Report
-        fields ="__all__"
+        fields = ('id','report_type','result','env','create_time','start_time','end_time','demand_name','developer_name')

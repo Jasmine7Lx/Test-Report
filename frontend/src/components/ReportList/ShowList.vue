@@ -1,27 +1,69 @@
 <template>
-<div>
-  <el-table :data="tableData">
-    <el-table-column prop="date" label="创建时间" width="250">
+  <el-table
+    :data="reportList.filter(data => !search || data.demand_name.toLowerCase().includes(search.toLowerCase()))"
+    style="width: 100%"
+    height="440"
+    highlight-current-row
+    >
+    <el-table-column
+      label="创建时间"
+      prop="create_time">
     </el-table-column>
-    <el-table-column prop="name" label="需求名称" width="400">
+    <el-table-column
+      label="需求名称"
+      prop="demand_name">
     </el-table-column>
-    <el-table-column prop="address" label="报告人">
+    <el-table-column
+      label="提交人"
+      prop="developer_name">
     </el-table-column>
-    </el-table> 
-</div>  
+    <el-table-column
+      align="right">
+      <template slot="header" slot-scope="scope">
+        <el-input
+          v-model="search"
+          size="mini"
+          placeholder="输入关键字搜索"/>
+      </template>
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+        <el-button
+          size="mini"
+          type="danger"
+          @click="handleDetail(scope.$index, scope.row)">查看</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
+import https from '../../https.js'
 export default {
     data() {
-        const item = {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        };
-        return {
-          tableData: Array(10).fill(item)
-        }
+      return {
+        search: '',
+        reportList: [],
+      }
+    },
+    methods: {
+      getReportList: function() {
+        https.fetchGet('/api/reportlist')
+        .then((resp) => {
+          console.log(resp.data)
+          this.reportList = resp.data.reportlist
+        })
+      },
+      handleEdit(index, row) {
+        console.log(index, row);
+      },
+      handleDetail(index, row) {
+        console.log(index, row);
+      }
+    },
+    created() {
+      this.getReportList();
     }
 }
 </script>

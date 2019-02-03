@@ -1,20 +1,20 @@
 <template>
 <div>
    <div>
-       <date-check></date-check>
+        <select-list></select-list>
    </div>
    <div>
-   <show-list></show-list>
+        <show-list></show-list>
    </div>
 </div>
 </template>
 
 <script>
-  import DateCheck from '@/components/ReportList/DateCheck'
+  import SelectList from '@/components/ReportList/SelectList'
   import ShowList from '@/components/ReportList/ShowList'
   export default {
     components: {
-      'dateCheck': DateCheck,
+      'selectList': SelectList,
       'showList': ShowList,
     },
   }

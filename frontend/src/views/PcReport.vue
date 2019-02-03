@@ -112,6 +112,7 @@
                     <span class="explain">4.测试时间：</span>
                     <el-date-picker
                         v-model="form2.time"
+                        @change="dataFormat"
                         type="datetimerange"
                         range-separator="-"
                         start-placeholder="开始日期"
@@ -366,6 +367,11 @@ export default {
       }
     },
     methods: {
+        dataFormat() {
+          let time = this.form2.time
+          this.form2.time[0] = this.moment(time[0]).format("YYYY-MM-DD HH:mm:ss");
+          this.form2.time[1] = this.moment(time[1]).format("YYYY-MM-DD HH:mm:ss")
+        },
         getTesters: function() {
           https.fetchGet('/api/tester')
           .then((resp) => {
@@ -457,24 +463,11 @@ export default {
             console.log('reset')
         },
         submitForm: function() {
-          var dataList = {
-                demand_id:this.form1.demand, 
-                result: this.form1.result, 
-                environment: this.form2.environment, 
-                time: this.form2.time,
-                remains: this.form2.remains, 
-                configs: this.form2.configs, 
-                builds: this.form2.builds, 
-                frontbugs: this.form2.frontbugs, 
-                backbugs: this.form2.backbugs, 
-                computer:this.form3.computer, 
-                browser:this.form3.browser, 
-                report_type: "pc", 
-                case_type: this.form4.case_type,
-                link: this.form4.link}
+        var dataList = Object.assign(this.form1,this.form2,this.form3,this.form4)
             https.fetchPost('/api/pcreport', dataList)
             .then((resp) => {
                 console.log(dataList)
+                this.$router.push({path:'/'})
             })
         },
     },
