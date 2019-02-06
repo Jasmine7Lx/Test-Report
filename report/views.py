@@ -156,23 +156,23 @@ def getPhoneList(request):
 def PcReport(request):
     if request.method == 'POST':
         # #获取前端传过来的表单数据
-        # received_json_data = json.loads(request.body)
+        # received_post_data = json.loads(request.body)
         # #获取report表需要的表单数据
-        # result = received_json_data.get("result")
-        # env = received_json_data.get("environment")
-        # time = received_json_data.get("time")
+        # result = received_post_data.get("result")
+        # env = received_post_data.get("environment")
+        # time = received_post_data.get("time")
         # start_time = time[0]
         # end_time = time[1]
-        # demand_id = received_json_data.get("demand")
+        # demand_id = received_post_data.get("demand")
         # developer_id = 1
         # #数据存report表
         # report_dic = {"report_type":"pc", "result":result,"env":env,"start_time":start_time,"end_time":end_time,"demand_id":demand_id, "developer_id":developer_id}
         # report = Report.objects.create(**report_dic)
         # #report = Report.objects.get(id='3')
         # report_id = report.id
-        # print(report_id)
+        # print(demand_id)
         # # #获取遗留问题数据
-        # remains = received_json_data.get("remains")
+        # remains = received_post_data.get("remains")
         # #遍历remains并存库
         # if(remains != None):
         #     for remain in remains:
@@ -180,43 +180,43 @@ def PcReport(request):
         #             remain = Remain.objects.create(content=remain['remain'], report_id=report_id)
 
         # # #获取配置并存库
-        # configs = received_json_data.get("configs")
+        # configs = received_post_data.get("configs")
         # if(configs != None):
         #     for config in configs:
         #         if(config['config'] != ''):
         #             config = Config.objects.create(content=config['config'], report_id=report_id)
 
         # # #获取测试版本/链接信息并存库
-        # builds = received_json_data.get("builds")
+        # builds = received_post_data.get("builds")
         # if(builds != None):
         #     for build in builds:
         #         if(build['build'] != ''):
         #             build = Build.objects.create(site=build['build'], report_id=report_id)
         
         # # #获取前端bug并存库
-        # frontbugs = received_json_data.get("frontbugs")
+        # frontbugs = received_post_data.get("frontbugs")
         # if(frontbugs != None):
         #     for frontbug in frontbugs:
         #         if(frontbug['frontbug'] != ''):
         #             bug = Bug.objects.create(content=frontbug['frontbug'], status=frontbug['status'], demand_id=demand_id, bug_type="frontbug")
         # # #获取后端bug并存库
-        # backbugs = received_json_data.get("backbugs")
+        # backbugs = received_post_data.get("backbugs")
         # if(backbugs != None):
         #     for backbug in backbugs:
         #         if(backbug['backbug'] != ''):
         #             bug = Bug.objects.create(content=backbug['backbug'], status=backbug['status'], demand_id=demand_id, bug_type="backbug")
         
         # #获取移动端bug并存库
-        # appbugs = received_json_data.get("appbugs")
+        # appbugs = received_post_data.get("appbugs")
         # if(appbugs != None):
         #     for appbug in appbugs:
         #         if(appbug['appbug'] != ''):
         #             bug = Bug.objects.create(content=appbug['appbug'], status=backbug['status'], demand_id=demand_id, bug_type="appbug")
         
         # #获取兼容性并存库
-        # computers = received_json_data.get("computer")
-        # browsers = received_json_data.get("browser")
-        # phones = received_json_data.get("phone")
+        # computers = received_post_data.get("computer")
+        # browsers = received_post_data.get("browser")
+        # phones = received_post_data.get("phone")
         # if(computers != None):
         #     if(computers != []):
         #         for x in computers:

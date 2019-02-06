@@ -59,7 +59,10 @@ export default {
         console.log(index, row);
       },
       handleDetail(index, row) {
-        console.log(index, row);
+        console.log(index, row.id);
+        this.$router.push({
+          path:`/report/detail/${row.id}`
+        })
       }
     },
     created() {
