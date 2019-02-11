@@ -241,6 +241,7 @@ def PcReport(request):
         return JsonResponse({"result": 200, "msg": "执行成功"})
 
     if request.method == 'GET':
+        
         return JsonResponse({"result": 200, "msg": "执行成功"})
 
 #获取报告列表
