@@ -50,9 +50,9 @@ export default {
         getReportDetail: function() {
             let reportId = this.$route.params.id;
             console.log(reportId)
-            https.fetchGet('api/pcreport', {params:{id: reportId}})
+            https.fetchGet('api/pcreport', {id:reportId})
             .then((resp) => {
-                let data = resp.data
+                console.log(resp)
             })
         }
     },

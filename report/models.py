@@ -35,7 +35,7 @@ class Developer(models.Model):
         ("product","产品")
     )
     id = models.AutoField(primary_key=True)
-    demand = models.ManyToManyField(Demand)
+    demand = models.ManyToManyField(to=Demand,related_name="developer")
     name = models.CharField(max_length=30)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=40)
@@ -65,7 +65,7 @@ class Report(models.Model):
     )
     id = models.AutoField(primary_key=True)
     demand = models.OneToOneField(Demand)
-    developer = models.ForeignKey(Developer)
+    developer = models.ForeignKey(Developer)  #提交人只有一个
     # name = models.CharField(default='', max_length=100)
     report_type = models.CharField(max_length=10, choices=REPORT_TYPE, default="pc")
     result = models.CharField(max_length=10, choices=TEST_RESULT)
@@ -81,7 +81,7 @@ class Report(models.Model):
 
 class Remain(models.Model):
     id = models.AutoField(primary_key=True)
-    report = models.ForeignKey(Report)
+    report = models.ForeignKey(to=Report,related_name="remain")
     content = models.TextField(null=True, blank=True)
     class Meta:
         verbose_name = "遗留问题"
@@ -91,7 +91,7 @@ class Remain(models.Model):
 
 class Config(models.Model):
     id = models.AutoField(primary_key=True)
-    report = models.ForeignKey(Report)
+    report = models.ForeignKey(to=Report,related_name="config")
     content = models.TextField(null=True, blank=True)
     def __str__(self):
         return self.config_content
@@ -105,7 +105,7 @@ class Build(models.Model):
     #     ("version", "版本号")
     # )
     id = models.AutoField(primary_key=True)
-    report = models.ForeignKey(Report)
+    report = models.ForeignKey(to=Report,related_name="build")
     # type = models.CharField(max_length=10, choices=BUILD_TYPE, null=True, blank=True)
     site = models.CharField(max_length=200, null=True, blank=True)
     class Meta:
@@ -120,7 +120,7 @@ class Case(models.Model):
         ("file", "文件")
     )
     id = models.AutoField(primary_key=True)
-    report = models.ForeignKey(Report)
+    report = models.ForeignKey(to=Report,related_name="case")
     case_type = models.CharField(max_length=10, choices=CASE_TYPE, null=True, blank=True)
     content = models.CharField(max_length=200, null=True, blank=True)
     class Meta:
@@ -147,7 +147,7 @@ class Bug(models.Model):
         ("appbug", "移动端bug")
     )
     id = models.AutoField(primary_key=True)
-    demand = models.ForeignKey(Demand)
+    demand = models.ForeignKey(to=Demand,related_name="bug")
     bug_type = models.CharField(max_length=20, choices=BUG_TYPE, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=BUG_STATUS,null=True, blank=True)
@@ -165,6 +165,6 @@ class Compat(models.Model):
         ("phone","手机")
     )
     id = models.AutoField(primary_key=True)
-    report = models.ManyToManyField(Report)
+    report = models.ManyToManyField(to=Report,related_name="compat")
     compat_type = models.CharField(max_length=10, choices=COMPAT_TYPE, null=True, blank=True)
     system = models.CharField(max_length=30, null=True, blank=True)
