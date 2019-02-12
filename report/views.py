@@ -246,12 +246,13 @@ def PcReport(request):
         reports = Report.objects.select_related().filter(id=report_id)
         report = ReportListSerializer(reports, many=True)
         remains = Report.objects.filter(id=report_id).values('remain__content')
-        remain = serializers.serialize('json',remains)
+        remain = serializers.serialize("json",remains)
+        print(remain)
         configs = Report.objects.filter(id=report_id).values('config__content')
         builds = Report.objects.filter(id=report_id).values('build__site')
         
         # report_detail = PcReportDetailSerializer(report,many=True)
-        return JsonResponse({"result": 200, "msg": "执行成功","data":remain.data})
+        return JsonResponse({"result": 200, "msg": "执行成功","serializer":remain.data})
 
 #获取报告列表
 @csrf_exempt
