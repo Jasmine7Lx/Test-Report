@@ -24,11 +24,6 @@ class ReportListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = ('id','report_type','result','env','create_time','start_time','end_time','demand_name','demand_id','developer_name')
+ 
 
-# class PcReportDetailSerializer(serializers.ModelSerializer):
-#     demand_name = serializers.CharField(source='demand.name')
-
-#     class Meta:
-#         model = Report
-#         fields = "__all__"
     
