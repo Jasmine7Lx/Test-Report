@@ -170,7 +170,6 @@ def PcReport(request):
     #     report = Report.objects.create(**report_dic)
     #     #report = Report.objects.get(id='3')
     #     report_id = report.id
-    #     print(demand_id)
     #     # #获取遗留问题数据
     #     remains = received_post_data.get("remains")
     #     #遍历remains并存库
@@ -241,18 +240,28 @@ def PcReport(request):
         return JsonResponse({"result": 200, "msg": "执行成功"})
 
     if request.method == 'GET':
+        #获取对应的report_id
         report_id = request.GET.get("id")
-        print("report_id=",report_id)
+        #取出report表的数据并序列化
         reports = Report.objects.select_related().filter(id=report_id)
         report = ReportListSerializer(reports, many=True)
+        #取出remain表的数据并序列化
         remains = Report.objects.filter(id=report_id).values('remain__content')
-        remain = serializers.serialize("json",remains)
-        print(remain)
+        remain = json.dumps(list(remains))
+        #取出config表的数据并序列化
         configs = Report.objects.filter(id=report_id).values('config__content')
+        config = json.dumps(list(configs))
+        #取出build表的数据并序列化
         builds = Report.objects.filter(id=report_id).values('build__site')
-        
-        # report_detail = PcReportDetailSerializer(report,many=True)
-        return JsonResponse({"result": 200, "msg": "执行成功","serializer":remain.data})
+        build = json.dumps(list(builds))
+        #获取demand_id，从而获取bug表数据并序列化
+        demand_id = Report.objects.get(id=report_id).demand_id
+        bugs = Demand.objects.filter(id=demand_id).values('bug__bug_type','bug__content','bug__status')
+        bug = json.dumps(list(bugs))
+        #获取compat_report表数据并序列化
+        compats = Compat.objects.filter(id=report_id)
+        print(compats)
+        return JsonResponse({"result": 200, "msg": "执行成功", "report":report.data[0], "bug":bug, "remain":remain, "config":config, "build":build})
 
 #获取报告列表
 @csrf_exempt

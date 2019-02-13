@@ -23,7 +23,7 @@ class ReportListSerializer(serializers.ModelSerializer):
     developer_name = serializers.CharField(source='developer.name')
     class Meta:
         model = Report
-        fields = ('id','report_type','result','env','create_time','start_time','end_time','demand_name','developer_name')
+        fields = ('id','report_type','result','env','create_time','start_time','end_time','demand_name','demand_id','developer_name')
 
 # class PcReportDetailSerializer(serializers.ModelSerializer):
 #     demand_name = serializers.CharField(source='demand.name')
