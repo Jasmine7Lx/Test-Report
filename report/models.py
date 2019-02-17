@@ -7,7 +7,7 @@ class User(AbstractUser):
 
 class Demand(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(default='', max_length=100)
+    name = models.CharField(max_length=100)
     DEMAND_STATUS = (
         ("no_summit", "未提测"),
         ("summit", "已提测"),

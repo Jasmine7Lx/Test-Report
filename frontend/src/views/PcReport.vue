@@ -2,7 +2,7 @@
   <div class="edit">
     <el-form  ref="form1"  model="form1" label-width="110px" size="small">
         <el-form-item label="需求名称：">
-            <el-select v-model="form1.demand" @change="onSelectDemand" size="small"  placeholder="请选择">
+            <el-select v-model="form1.demand" @change="onSelectDemand(id)" size="small"  placeholder="请选择">
                 <el-option
                     v-for="item in demandList"
                     :key="item.id"
@@ -132,7 +132,7 @@
                     </el-col>
                     <el-col :span="10">
                         <el-radio-group v-model="item.status">
-                            <el-radio v-for="item in BugStatus" :key="item.index" :label="item.id">{{item.name}}</el-radio>
+                            <el-radio v-for="item in BugStatus" :key="item.index" :label="item.id" :value="item.id">{{item.name}}</el-radio>
                         </el-radio-group>
                     <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.frontbugs)" title="删除"></el-button>
                     </el-col>
@@ -141,13 +141,13 @@
                     <span class="explain">2.后端bug：</span>
                     <el-button type="primary" size="mini" @click.native="AddList(form2.backbugs)">添加</el-button>
                 </el-row>
-                <el-row v-for="item of form2.backbugs" :key="item.key" >
+                <el-row v-for="item of form2.backbugs" :key="item.index">
                      <el-col :span="10">
                         <el-input v-model="item.backbug" size="small" clearable></el-input>
                     </el-col>
                     <el-col :span="10">
                         <el-radio-group v-model="item.status">
-                            <el-radio v-for="item in BugStatus" :key="item.index" :label="item.id">{{item.name}}</el-radio>
+                            <el-radio v-for="item in BugStatus" :key="item.index" :label="item.id" :value="item.id">{{item.name}}</el-radio>
                         </el-radio-group>
                     <el-button type="danger" icon="el-icon-delete" round  @click.native.prevent="removeList(item,form2.backbugs)" title="删除"></el-button>
                     </el-col>
@@ -456,9 +456,6 @@ export default {
         onSelectDemand(val){
             pass
         },
-        // submitForm(forms) {
-        //     console.log('summit')
-        // },
         resetForm: function(forms) {
             console.log('reset')
         },

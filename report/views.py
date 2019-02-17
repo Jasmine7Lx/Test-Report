@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_list_or_404,render_to_response, redirect
 from django.http import JsonResponse
-#from django.urls import reverse
+import datetime
 from django.db import models
 from .models import User,Demand,Developer,Compat,Report,Remain,Config,Build,Bug,Compat
 #from django.template import RequestContext
@@ -220,19 +220,16 @@ def PcReport(request):
         #     if(computers != []):
         #         for x in computers:
         #             compat_computer = Compat.objects.get(id=x)
-        #             compat_computer.report.clear()
         #             compat_computer.report.add(report_id)
         # if(browsers != None):
         #     if(browsers != []):
         #         for x in browsers:
         #             compat_browser = Compat.objects.get(id=x)
-        #             compat_browser.report.clear()
         #             compat_browser.report.add(report_id)
         # if(phones != None):
         #     if(phones != []):
         #         for x in phones:
         #             compat_phone = Compat.objects.get(id=x)
-        #             compat_phone.report.clear()
         #             compat_phone.report.add(report_id)
         
         # finish_time = report.create_time
@@ -273,3 +270,55 @@ def getReportList(request):
         reports = Report.objects.select_related().all()
         reportlist = ReportListSerializer(reports, many=True)
         return JsonResponse({"result":200, "msg":"执行成功", "reportlist":reportlist.data})
+
+#增加需求
+@csrf_exempt
+def getDemandList(request):
+    if request.method == 'POST':
+        #获取前端传过来的表单数据
+        received_post_data = json.loads(request.body)
+        #获取demand表需要的表单数据
+        name = received_post_data.get("name")
+        status = received_post_data.get("status")
+        testers = received_post_data.get("tester")
+        developers = received_post_data.get("developer")
+        product = received_post_data.get("product")
+        time = datetime.datetime.now()
+        if(status == "no_summit"):
+            demand_dict = {"name":name, "status":status}
+            demand = Demand.objects.create(**demand_dict)
+        elif(status == "summit"):
+            demand_dict = {"name":name, "status":status, "summit_test_time":time}
+            demand = Demand.objects.create(**demand_dict)
+        elif(status == "completed"):
+            demand_dict = {"name":name, "status":status, "finish_time":time}
+            demand = Demand.objects.create(**demand_dict)
+        if(testers != None):
+            if(testers != []):
+                for x in testers:
+                    developer_tester = Developer.objects.get(id=x)
+                    developer_tester.demand.add(demand.id)
+        if(developers != None):
+            if(developers != []):
+                for x in developers:
+                    developer_developer = Developer.objects.get(id=x)
+                    developer_developer.demand.add(demand.id)
+        if(product != None):
+            if(product != ''):
+                developer_product = Developer.objects.get(id=product)
+                developer_product.demand.add(demand.id)
+        return JsonResponse({"result":200, "msg":"执行成功"})
+
+    if request.method == 'GET':
+        demand_id = request.GET.get("id")
+        # demand_id = 11
+        demands = Demand.objects.filter(id=demand_id).all()
+        serializer = DemandAllSerializer(demands, many=True)
+        testers = Demand.objects.get(id=demand_id).developer.filter(role='tester').values('name')
+        tester = json.dumps(list(testers))
+        developers = Demand.objects.get(id=demand_id).developer.raw('select * from report_developer where role in ("web","app","background")')
+        # developer = json.dumps(list(developers))
+        developer = json.loads(serializers.serialize('json',developers))
+        products = Demand.objects.get(id=demand_id).developer.filter(role='product').values('name')
+        product = json.dumps(list(products))
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data, "tester":tester, "developer":developer, "product":product})
