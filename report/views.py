@@ -309,29 +309,29 @@ def getDemandList(request):
                 developer_product.demand.add(demand.id)
         return JsonResponse({"result":200, "msg":"执行成功"})
 
-    # if request.method == 'GET':
-    #     demand_id = request.GET.get("id")
-    #     # demand_id = 3
-    #     demands = Demand.objects.filter(id=demand_id).all()
-    #     serializer = DemandAllSerializer(demands, many=True)
-    #     testers = Demand.objects.get(id=demand_id).developer.filter(role='tester').values('name')
-    #     tester = json.dumps(list(testers))
-    #     developers = Demand.objects.get(id=demand_id).developer.raw('select * from report_developer where role in ("web","app","background")')
-    #     # developer = json.dumps(list(developers))
-    #     developer = json.loads(serializers.serialize('json',developers))
-    #     products = Demand.objects.get(id=demand_id).developer.filter(role='product').values('name')
-    #     product = json.dumps(list(products))
-    #     return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data, "tester":tester, "developer":developer, "product":product})
-
     if request.method == 'GET':
-        demands = Demand.objects.all()
+        demand_id = request.GET.get("id")
+        # demand_id = 3
+        demands = Demand.objects.filter(id=demand_id).all()
         serializer = DemandAllSerializer(demands, many=True)
-        for x in demands:
-            testers = Demand.objects.get(id=x.id).developer.filter(role='tester').values('name')
-            tester = json.dumps(list(testers))
-            developers = Demand.objects.get(id=x.id).developer.raw('select * from report_developer where role in ("web","app","background")')
-            # developer = json.dumps(list(developers))
-            developer = json.loads(serializers.serialize('json',developers))
-            products = Demand.objects.get(id=x.id).developer.filter(role='product').values('name')
-            product = json.dumps(list(products))
+        testers = Demand.objects.get(id=demand_id).developer.filter(role='tester').values('name')
+        tester = json.dumps(list(testers))
+        developers = Demand.objects.get(id=demand_id).developer.raw('select * from report_developer where role in ("web","app","background")')
+        # developer = json.dumps(list(developers))
+        developer = json.loads(serializers.serialize('json',developers))
+        products = Demand.objects.get(id=demand_id).developer.filter(role='product').values('name')
+        product = json.dumps(list(products))
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data, "tester":tester, "developer":developer, "product":product})
+
+    # if request.method == 'GET':
+    #     demands = Demand.objects.all()
+    #     serializer = DemandAllSerializer(demands, many=True)
+    #     for x in demands:
+    #         testers = Demand.objects.get(id=x.id).developer.filter(role='tester').values('name')
+    #         tester = json.dumps(list(testers))
+    #         developers = Demand.objects.get(id=x.id).developer.raw('select * from report_developer where role in ("web","app","background")')
+    #         # developer = json.dumps(list(developers))
+    #         developer = json.loads(serializers.serialize('json',developers))
+    #         products = Demand.objects.get(id=x.id).developer.filter(role='product').values('name')
+    #         product = json.dumps(list(products))
+    #     return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data, "tester":tester, "developer":developer, "product":product})
