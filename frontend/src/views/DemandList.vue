@@ -54,7 +54,7 @@
       </span>
     </el-dialog>
   <el-table
-    :data="demandList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+    :data="demandList"
     style="width: 100%"
     height="440"
     highlight-current-row
@@ -169,11 +169,10 @@ export default {
             })
         },
         getDemandList: function() {
-            https.fetchGet('/api/demand')
+            https.fetchGet('/api/demandlist')
             .then((resp) => {
-                console.log(resp)
+                console.log(resp.data)
                 this.demandList = resp.data.data
-                console.log(this.demandList)
             })
         },
         AddDemand: function() {
@@ -182,7 +181,9 @@ export default {
             .then((resp) => {
                 console.log(this.demandForm)
                 this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})
+                this.getDemandList();
             })
+
         },
         reset: function() {
           this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})
