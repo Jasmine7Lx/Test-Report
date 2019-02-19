@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Demand,Developer,Compat,Report,Remain,Config,Build
+from .models import Demand,Developer,Compat,Report,Remain,Config,Build,Bug
 #全部需求-序列化
 class DisplayChoiceField(serializers.ChoiceField):
     def to_representation(self, obj):
@@ -33,5 +33,16 @@ class ReportListSerializer(serializers.ModelSerializer):
         model = Report
         fields = ('id','report_type','result','env','create_time','start_time','end_time','demand_name','demand_id','developer_name')
  
+#获取bug所有信息（对应需求）
+class BugListSerializer(serializers.ModelSerializer):
+    demand_name = serializers.CharField(source='demand.name')
+    status = DisplayChoiceField(choices = (
+        ("no_solve","未修复"),
+        ("solve","已修复"),
+        ("noneed_solve","无需修复")
+    ))
+    class Meta:
+        model = Bug
+        fields = ('id', 'bug_type', 'content', 'status', 'level', 'demand_name')
 
     

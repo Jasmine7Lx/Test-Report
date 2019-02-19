@@ -10,7 +10,7 @@ from rest_framework import serializers,viewsets
 from rest_framework.renderers import JSONRenderer
 from django.core import serializers
 import json
-from .serializers import DemandAllSerializer,DeveloperListSerializer,CompatListSerializer,ReportListSerializer
+from .serializers import DemandAllSerializer,DeveloperListSerializer,CompatListSerializer,ReportListSerializer,BugListSerializer
 # from django.db.models import Q
 from django.http import HttpResponse
 #from django.urls import reverse
@@ -335,3 +335,12 @@ def getDemandList(request):
     #         products = Demand.objects.get(id=x.id).developer.filter(role='product').values('name')
     #         product = json.dumps(list(products))
     #     return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data, "tester":tester, "developer":developer, "product":product})
+
+
+#bug列表
+@csrf_exempt
+def getBugList(request):
+    if request.method == 'GET':
+        bugs = Bug.objects.all()
+        serializer = BugListSerializer(bugs, many=True)
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})

@@ -289,7 +289,7 @@ export default {
         }],
         BugStatus: [
             {
-                id: "sovle",
+                id: "solve",
                 name: "已解决",
             },
             {

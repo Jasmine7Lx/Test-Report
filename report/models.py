@@ -132,8 +132,8 @@ class Case(models.Model):
 class Bug(models.Model):
     BUG_STATUS = (
         ("no_solve","未修复"),
-        ("soved","已修复"),
-        ("no_need_solve","无需修复")
+        ("solve","已修复"),
+        ("noneed_solve","无需修复")
     )
     BUG_LEVEL = (
         ("blocker","崩溃"),
