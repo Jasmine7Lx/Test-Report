@@ -3,7 +3,6 @@ from django.http import JsonResponse
 import datetime
 from django.db import models
 from .models import User,Demand,Developer,Compat,Report,Remain,Config,Build,Bug,Compat
-#from django.template import RequestContext
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import serializers,viewsets
@@ -11,12 +10,9 @@ from rest_framework.renderers import JSONRenderer
 from django.core import serializers
 import json
 from .serializers import DemandAllSerializer,DeveloperListSerializer,CompatListSerializer,ReportListSerializer,BugListSerializer
-# from django.db.models import Q
 from django.http import HttpResponse
-#from django.urls import reverse
 from django.template import RequestContext
 from django import forms
-# Create your views here.
 
 #表单
 class LoginForm(forms.Form):
@@ -69,39 +65,21 @@ def bug_list(request):
 def logout(request):
     pass
 
-
-# @csrf_exempt
-# def getDemandAll(request):
-#     if request.method == 'GET':
-#     # demand1 = Demand1(name='123')
-#     # demand1 = Demand.objects.get(id='1')
-#         querySet = Demand.objects.all()
-#         list = json.loads(serializers.serialize('json', querySet))
-#     # serializer = DemandSerializer(demand1)
-#     # print(serializer.data)
-#     # json = serializer.data
-#     # print(json)
-#     # return JsonResponse({"result": 0, "msg": "执行成功"})
-#         return JsonResponse({"result": 200, "msg": "执行成功", "data":list})
-
-# # class DemandSerializer(serializers.Serializer):
-# #     demand_name = serializers.CharField(max_length=200)
-# #     demand_status =  serializers.CharField(max_length=200)
-# #     print("===============================")
-# #     print(demand_name)
-
-# @csrf_exempt
-# def getDemandAll(request):
-#     if request.method == 'GET':
-#         querySet = Demand.objects.all()
-#         list = json.loads(serializers.serialize('json', querySet))
-#         return JsonResponse({"result": 200, "msg": "执行成功", "data":list})
 @csrf_exempt
 def getDemandAll(request):
     if request.method == 'GET':
         demands = Demand.objects.all()
         serializer = DemandAllSerializer(demands, many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+
+#报告编辑页，选择需求后获取对应产研测人员列表
+@csrf_exempt
+def getDeveloperAll(request):
+    if request.method == 'GET':
+        demand_id = request.GET.get("id")
+        developers = Demand.objects.get(id=demand_id).developer.values('id','name','role')
+        developer = json.dumps(list(developers))
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":developer})
 
 #获取测试人员列表
 @csrf_exempt
@@ -155,85 +133,85 @@ def getPhoneList(request):
 @csrf_exempt
 def PcReport(request):
     if request.method == 'POST':
-        # #获取前端传过来的表单数据
-        # received_post_data = json.loads(request.body)
-        # #获取report表需要的表单数据
-        # result = received_post_data.get("result")
-        # env = received_post_data.get("environment")
-        # time = received_post_data.get("time")
-        # start_time = time[0]
-        # end_time = time[1]
-        # demand_id = received_post_data.get("demand")
-        # developer_id = 1
-        # #数据存report表
-        # report_dic = {"report_type":"pc", "result":result,"env":env,"start_time":start_time,"end_time":end_time,"demand_id":demand_id, "developer_id":developer_id}
-        # report = Report.objects.create(**report_dic)
-        # #report = Report.objects.get(id='3')
-        # report_id = report.id
-        # # #获取遗留问题数据
-        # remains = received_post_data.get("remains")
-        # #遍历remains并存库
-        # if(remains != None):
-        #     for remain in remains:
-        #         if(remain['remain'] != ''):
-        #             remain = Remain.objects.create(content=remain['remain'], report_id=report_id)
+        #获取前端传过来的表单数据
+        received_post_data = json.loads(request.body)
+        #获取report表需要的表单数据
+        result = received_post_data.get("result")
+        env = received_post_data.get("environment")
+        time = received_post_data.get("time")
+        start_time = time[0]
+        end_time = time[1]
+        demand_id = received_post_data.get("demand")
+        developer_id = 1
+        #数据存report表
+        report_dic = {"report_type":"pc", "result":result,"env":env,"start_time":start_time,"end_time":end_time,"demand_id":demand_id, "developer_id":developer_id}
+        report = Report.objects.create(**report_dic)
+        #report = Report.objects.get(id='3')
+        report_id = report.id
+        # #获取遗留问题数据
+        remains = received_post_data.get("remains")
+        #遍历remains并存库
+        if(remains != None):
+            for remain in remains:
+                if(remain['remain'] != ''):
+                    remain = Remain.objects.create(content=remain['remain'], report_id=report_id)
 
-        # # #获取配置并存库
-        # configs = received_post_data.get("configs")
-        # if(configs != None):
-        #     for config in configs:
-        #         if(config['config'] != ''):
-        #             config = Config.objects.create(content=config['config'], report_id=report_id)
+        # #获取配置并存库
+        configs = received_post_data.get("configs")
+        if(configs != None):
+            for config in configs:
+                if(config['config'] != ''):
+                    config = Config.objects.create(content=config['config'], report_id=report_id)
 
-        # # #获取测试版本/链接信息并存库
-        # builds = received_post_data.get("builds")
-        # if(builds != None):
-        #     for build in builds:
-        #         if(build['build'] != ''):
-        #             build = Build.objects.create(site=build['build'], report_id=report_id)
+        # #获取测试版本/链接信息并存库
+        builds = received_post_data.get("builds")
+        if(builds != None):
+            for build in builds:
+                if(build['build'] != ''):
+                    build = Build.objects.create(site=build['build'], report_id=report_id)
         
-        # # #获取前端bug并存库
-        # frontbugs = received_post_data.get("frontbugs")
-        # if(frontbugs != None):
-        #     for frontbug in frontbugs:
-        #         if(frontbug['frontbug'] != ''):
-        #             bug = Bug.objects.create(content=frontbug['frontbug'], status=frontbug['status'], demand_id=demand_id, bug_type="frontbug")
-        # # #获取后端bug并存库
-        # backbugs = received_post_data.get("backbugs")
-        # if(backbugs != None):
-        #     for backbug in backbugs:
-        #         if(backbug['backbug'] != ''):
-        #             bug = Bug.objects.create(content=backbug['backbug'], status=backbug['status'], demand_id=demand_id, bug_type="backbug")
+        # #获取前端bug并存库
+        frontbugs = received_post_data.get("frontbugs")
+        if(frontbugs != None):
+            for frontbug in frontbugs:
+                if(frontbug['frontbug'] != ''):
+                    bug = Bug.objects.create(content=frontbug['frontbug'], status=frontbug['status'], demand_id=demand_id, bug_type="frontbug")
+        # #获取后端bug并存库
+        backbugs = received_post_data.get("backbugs")
+        if(backbugs != None):
+            for backbug in backbugs:
+                if(backbug['backbug'] != ''):
+                    bug = Bug.objects.create(content=backbug['backbug'], status=backbug['status'], demand_id=demand_id, bug_type="backbug")
         
-        # #获取移动端bug并存库
-        # appbugs = received_post_data.get("appbugs")
-        # if(appbugs != None):
-        #     for appbug in appbugs:
-        #         if(appbug['appbug'] != ''):
-        #             bug = Bug.objects.create(content=appbug['appbug'], status=backbug['status'], demand_id=demand_id, bug_type="appbug")
+        #获取移动端bug并存库
+        appbugs = received_post_data.get("appbugs")
+        if(appbugs != None):
+            for appbug in appbugs:
+                if(appbug['appbug'] != ''):
+                    bug = Bug.objects.create(content=appbug['appbug'], status=backbug['status'], demand_id=demand_id, bug_type="appbug")
         
-        # #获取兼容性并存库
-        # computers = received_post_data.get("computer")
-        # browsers = received_post_data.get("browser")
-        # phones = received_post_data.get("phone")
-        # if(computers != None):
-        #     if(computers != []):
-        #         for x in computers:
-        #             compat_computer = Compat.objects.get(id=x)
-        #             compat_computer.report.add(report_id)
-        # if(browsers != None):
-        #     if(browsers != []):
-        #         for x in browsers:
-        #             compat_browser = Compat.objects.get(id=x)
-        #             compat_browser.report.add(report_id)
-        # if(phones != None):
-        #     if(phones != []):
-        #         for x in phones:
-        #             compat_phone = Compat.objects.get(id=x)
-        #             compat_phone.report.add(report_id)
-        
-        # finish_time = report.create_time
-        # demand_finish_time = Demand.objects.filter(id=demand_id).update(finish_time=finish_time)
+        #获取兼容性并存库
+        computers = received_post_data.get("computer")
+        browsers = received_post_data.get("browser")
+        phones = received_post_data.get("phone")
+        if(computers != None):
+            if(computers != []):
+                for x in computers:
+                    compat_computer = Compat.objects.get(id=x)
+                    compat_computer.report.add(report_id)
+        if(browsers != None):
+            if(browsers != []):
+                for x in browsers:
+                    compat_browser = Compat.objects.get(id=x)
+                    compat_browser.report.add(report_id)
+        if(phones != None):
+            if(phones != []):
+                for x in phones:
+                    compat_phone = Compat.objects.get(id=x)
+                    compat_phone.report.add(report_id)
+
+        finish_time = report.create_time
+        demand_finish_time = Demand.objects.filter(id=demand_id).update(finish_time=finish_time)
         return JsonResponse({"result": 200, "msg": "执行成功"})
 
     if request.method == 'GET':

@@ -1,8 +1,8 @@
 <template>
   <div class="edit">
-    <el-form  ref="form1"  model="form1" label-width="110px" size="small">
+    <el-form  ref="form1"  :model="form1" label-width="110px" size="small">
         <el-form-item label="需求名称：">
-            <el-select v-model="form1.demand" @change="onSelectDemand(id)" size="small"  placeholder="请选择">
+            <el-select v-model="form1.demand" @change="onSelectDemand" size="small"  placeholder="请选择">
                 <el-option
                     v-for="item in demandList"
                     :key="item.id"
@@ -372,27 +372,27 @@ export default {
           this.form2.time[0] = this.moment(time[0]).format("YYYY-MM-DD HH:mm:ss");
           this.form2.time[1] = this.moment(time[1]).format("YYYY-MM-DD HH:mm:ss")
         },
-        getTesters: function() {
-          https.fetchGet('/api/tester')
-          .then((resp) => {
-            console.log(resp)
-            this.testerList = resp.data.data;
-          })
-        },
-        getProcduct: function() {
-            https.fetchGet('/api/product')
-            .then((resp) => {
-                console.log(resp)
-                this.productList = resp.data.data
-            })
-        },
-        getDeveloper: function() {
-            https.fetchGet('/api/developer')
-            .then((resp) => {
-                console.log(resp)
-                this.developerList = resp.data.data
-            })
-        },
+        // getTesters: function() {
+        //   https.fetchGet('/api/tester')
+        //   .then((resp) => {
+        //     console.log(resp)
+        //     this.testerList = resp.data.data;
+        //   })
+        // },
+        // getProcduct: function() {
+        //     https.fetchGet('/api/product')
+        //     .then((resp) => {
+        //         console.log(resp)
+        //         this.productList = resp.data.data
+        //     })
+        // },
+        // getDeveloper: function() {
+        //     https.fetchGet('/api/developer')
+        //     .then((resp) => {
+        //         console.log(resp)
+        //         this.developerList = resp.data.data
+        //     })
+        // },
         getDemandList: function() {
             https.fetchGet('/api/demand')
             .then((resp) => {
@@ -453,8 +453,13 @@ export default {
                 this.case_type = "file"
             }
         },
-        onSelectDemand(val){
-            pass
+        onSelectDemand(item) {
+            var demand_id = item
+            console.log(demand_id)
+            https.fetchGet('/api/developerall',{id: demand_id})
+            .then((resp) => {
+                console.log(resp.data);
+            })
         },
         resetForm: function(forms) {
             console.log('reset')
@@ -469,9 +474,9 @@ export default {
         },
     },
     created() {
-      this.getTesters();
-      this.getProcduct();
-      this.getDeveloper();
+    //   this.getTesters();
+    //   this.getProcduct();
+    //   this.getDeveloper();
       this.getDemandList();
       this.getComputerList();
       this.getBrowserList();

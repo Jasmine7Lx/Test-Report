@@ -169,7 +169,7 @@ export default {
             })
         },
         getDemandList: function() {
-            https.fetchGet('/api/demandlist')
+            https.fetchGet('/api/demand')
             .then((resp) => {
                 console.log(resp.data)
                 this.demandList = resp.data.data
