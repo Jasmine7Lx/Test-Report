@@ -1,10 +1,11 @@
 <template>
-    <el-menu 
+    <el-menu
       :default-active="$route.path"
       router
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b"
+      background-color="#fff"
+      text-color="#303133"
+      active-text-color="#409eff"
+      class="sidebar"
       >
       <!-- <el-submenu index="reportedit">
         <template  slot="title">
@@ -42,5 +43,8 @@
 }
 </script>
 
-<style>
+<style scoped >
+.sidebar {
+  border: none;
+}
 </style>
