@@ -74,7 +74,7 @@
     </el-table-column>
     <el-table-column
       label="需求名称"
-      prop="name">
+      prop="demand.name">
     </el-table-column>
     <el-table-column
       label="产品负责人"
@@ -169,10 +169,10 @@ export default {
             })
         },
         getDemandList: function() {
-            https.fetchGet('/api/demand')
+            https.fetchGet('/api/demandlist')
             .then((resp) => {
                 console.log(resp.data)
-                this.demandList = resp.data.data
+                this.demandList = resp.data.demand
             })
         },
         AddDemand: function() {
@@ -183,7 +183,6 @@ export default {
                 this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})
                 this.getDemandList();
             })
-
         },
         reset: function() {
           this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})

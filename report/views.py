@@ -215,6 +215,7 @@ def PcReport(request):
         return JsonResponse({"result": 200, "msg": "执行成功"})
 
     if request.method == 'GET':
+        data={}   #存储转化后的数据
         #获取对应的report_id
         report_id = request.GET.get("id")
         #取出report表的数据并序列化
@@ -222,24 +223,21 @@ def PcReport(request):
         report = ReportListSerializer(reports, many=True)
         #取出remain表的数据并序列化
         remains = Report.objects.filter(id=report_id).values('remain__content')
-        remain = json.dumps(list(remains))
+        data['remain'] = list(remains)
         #取出config表的数据并序列化
         configs = Report.objects.filter(id=report_id).values('config__content')
-        config = json.dumps(list(configs))
+        data['config'] = list(configs)
         #取出build表的数据并序列化
         builds = Report.objects.filter(id=report_id).values('build__site')
-        build = json.dumps(list(builds))
+        data['build'] = list(builds)
         #获取demand_id，从而获取bug表数据并序列化
         demand_id = Report.objects.get(id=report_id).demand_id
         bugs = Demand.objects.filter(id=demand_id).values('bug__bug_type','bug__content','bug__status')
-        bug = json.dumps(list(bugs))
+        data['bug'] = list(bugs)
         #获取compat_report表数据并序列化
         compats = Report.objects.get(id=report_id).compat.values('compat_type','system')
-        compat = json.dumps(list(compats))
-        # for compat in compats:
-        #         print(compat.system)
-        
-        return JsonResponse({"result": 200, "msg": "执行成功", "report":report.data[0], "remain":remain, "bug":bug, "config":config, "build":build, "compat":compat})
+        data['compat'] = list(compats)
+        return JsonResponse({"result": 200, "msg": "执行成功","data":data,"report":report.data[0]})
 
 #获取报告列表
 @csrf_exempt
@@ -288,32 +286,18 @@ def getDemandList(request):
         return JsonResponse({"result":200, "msg":"执行成功"})
 
     if request.method == 'GET':
+        data={}  #存储转化后的数据
         demand_id = request.GET.get("id")
         # demand_id = 3
         demands = Demand.objects.filter(id=demand_id).all()
-        serializer = DemandAllSerializer(demands, many=True)
+        demand = DemandAllSerializer(demands, many=True)
         testers = Demand.objects.get(id=demand_id).developer.filter(role='tester').values('name')
-        tester = json.dumps(list(testers))
+        data['tester'] = list(testers)
         developers = Demand.objects.get(id=demand_id).developer.raw('select * from report_developer where role in ("web","app","background")')
-        # developer = json.dumps(list(developers))
         developer = json.loads(serializers.serialize('json',developers))
         products = Demand.objects.get(id=demand_id).developer.filter(role='product').values('name')
-        product = json.dumps(list(products))
-        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data, "tester":tester, "developer":developer, "product":product})
-
-    # if request.method == 'GET':
-    #     demands = Demand.objects.all()
-    #     serializer = DemandAllSerializer(demands, many=True)
-    #     for x in demands:
-    #         testers = Demand.objects.get(id=x.id).developer.filter(role='tester').values('name')
-    #         tester = json.dumps(list(testers))
-    #         developers = Demand.objects.get(id=x.id).developer.raw('select * from report_developer where role in ("web","app","background")')
-    #         # developer = json.dumps(list(developers))
-    #         developer = json.loads(serializers.serialize('json',developers))
-    #         products = Demand.objects.get(id=x.id).developer.filter(role='product').values('name')
-    #         product = json.dumps(list(products))
-    #     return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data, "tester":tester, "developer":developer, "product":product})
-
+        data['product'] = list(products)
+        return JsonResponse({"result": 200, "msg": "执行成功", "demand":demand.data[0], "developer":developer, "data":data})
 
 #bug列表
 @csrf_exempt

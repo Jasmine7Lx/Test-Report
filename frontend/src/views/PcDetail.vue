@@ -52,7 +52,7 @@ export default {
             console.log(reportId)
             https.fetchGet('api/pcreport', {id:reportId})
             .then((resp) => {
-                console.log(typeof(resp.data));
+                console.log(resp.data);
             })
         }
     },
