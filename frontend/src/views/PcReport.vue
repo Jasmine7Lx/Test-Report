@@ -408,10 +408,8 @@ export default {
 };
 </script>
 
-<style>
-.el-input__inner {
-  width: 300px;
-}
+<style lang="css" scoped >
+
 .el-input {
   width: auto;
 }
