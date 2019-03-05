@@ -1,7 +1,7 @@
  <template>
  <div>
     <el-button type="text" @click="dialogVisible = true">添加需求</el-button>
-    <el-dialog title="表单弹框" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="新增需求" :visible.sync="dialogVisible" width="30%">
      <el-form  ref="demandForm" :rules="rules" :model="demandForm" label-width="110px" size="small">
         <el-form-item label="需求名称：" prop="name">
             <el-input v-model="demandForm.name" size="small" clearable placeholder="请填写"></el-input>
@@ -74,7 +74,7 @@
     </el-table-column>
     <el-table-column
       label="需求名称"
-      prop="demand.name">
+      prop="name">
     </el-table-column>
     <el-table-column
       label="产品负责人"
@@ -169,10 +169,10 @@ export default {
             })
         },
         getDemandList: function() {
-            https.fetchGet('/api/demandlist')
+            https.fetchGet('/api/demand')
             .then((resp) => {
                 console.log(resp.data)
-                this.demandList = resp.data.demand
+                this.demandList = resp.data.data
             })
         },
         AddDemand: function() {

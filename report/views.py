@@ -76,10 +76,19 @@ def getDemandAll(request):
 @csrf_exempt
 def getDeveloperAll(request):
     if request.method == 'GET':
+        data = {}
         demand_id = request.GET.get("id")
-        developers = Demand.objects.get(id=demand_id).developer.values('id','name','role')
-        developer = json.dumps(list(developers))
-        return JsonResponse({"result": 200, "msg": "执行成功", "data":developer})
+        participators = Demand.objects.get(id=demand_id).developer.all()
+        testers = participators.filter(role="tester").values('id','name')
+        data['tester'] = list(testers)
+        webs = participators.filter(role="web").values('id','name')
+        data['web'] = list(webs)
+        backgrounds = participators.filter(role="background").values('id','name')
+        data['background'] = list(backgrounds)
+        apps = participators.filter(role="apps").values('id','name')
+        data['app'] = list(apps)
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":data})
+
 
 #获取测试人员列表
 @csrf_exempt

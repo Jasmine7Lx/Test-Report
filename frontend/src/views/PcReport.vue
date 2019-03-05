@@ -398,12 +398,12 @@ export default {
     }
   },
   created() {
-    //   this.getTesters();
-    //   this.getProcduct();
-    //   this.getDeveloper();
-    // this.getDemandList();
-    // this.getComputerList();
-    // this.getBrowserList();
+      // this.getTesters();
+      // this.getProcduct();
+      // this.getDeveloper();
+    this.getDemandList();
+    this.getComputerList();
+    this.getBrowserList();
   }
 };
 </script>
