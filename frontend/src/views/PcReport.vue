@@ -191,7 +191,7 @@
             </el-form-item>
           </el-form>
         </el-form-item>
-
+<!-- 
         <el-form-item label="六、测试用例:">
           <el-form label-position="left" label-width="125px" size="small">
             <el-form-item label="请选择用例类型:">
@@ -227,7 +227,7 @@
               </el-upload>
             </el-form-item>
           </el-form>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item>
           <el-button type="primary" @click="submitForm()">立即创建</el-button>
@@ -297,21 +297,21 @@ export default {
         computer: [],
         browser: []
       },
-      types: [
-        {
-          value: "link",
-          label: "链接"
-        },
-        {
-          value: "file",
-          label: "文件"
-        }
-      ],
-      form4: {
-        case_type: "",
-        link: "",
-        file: []
-      }
+      // types: [
+      //   {
+      //     value: "link",
+      //     label: "链接"
+      //   },
+      //   {
+      //     value: "file",
+      //     label: "文件"
+      //   }
+      // ],
+      // form4: {
+      //   case_type: "",
+      //   link: "",
+      //   file: []
+      // }
     };
   },
   computed: {

@@ -134,11 +134,11 @@ def getBrowserList(request):
 @csrf_exempt
 def getPhoneList(request):
     if request.method == 'GET':
-        phone = Compat.objects.filter(compat_type='phone')
+        phone = Compat.objects.filter(compat_type='phone') 
         serializer = CompatListSerializer(phone,many=True)
         return JsonResponse({"result":200, "msg":"执行成功", "data":serializer.data})
 
-#报告
+#PC报告
 @csrf_exempt
 def PcReport(request):
     if request.method == 'POST':
@@ -236,6 +236,80 @@ def PcReport(request):
         #取出config表的数据并序列化
         configs = Report.objects.filter(id=report_id).values('config__content')
         data['config'] = list(configs)
+        #取出build表的数据并序列化
+        builds = Report.objects.filter(id=report_id).values('build__site')
+        data['build'] = list(builds)
+        #获取demand_id，从而获取bug表数据并序列化
+        demand_id = Report.objects.get(id=report_id).demand_id
+        bugs = Demand.objects.filter(id=demand_id).values('bug__bug_type','bug__content','bug__status')
+        data['bug'] = list(bugs)
+        #获取compat_report表数据并序列化
+        compats = Report.objects.get(id=report_id).compat.values('compat_type','system')
+        data['compat'] = list(compats)
+        return JsonResponse({"result": 200, "msg": "执行成功","data":data,"report":report.data[0]})
+
+#App报告
+@csrf_exempt
+def AppReport(request):
+    if request.method == 'POST':
+        #获取前端传过来的表单数据
+        received_post_data = json.loads(request.body)
+        #获取report表需要的表单数据
+        result = received_post_data.get("result")
+        env = received_post_data.get("environment")
+        time = received_post_data.get("time")
+        start_time = time[0]
+        end_time = time[1]
+        demand_id = received_post_data.get("demand")
+        developer_id = 7
+        #数据存report表
+        report_dic = {"report_type":"app", "result":result,"env":env,"start_time":start_time,"end_time":end_time,"demand_id":demand_id, "developer_id":developer_id}
+        report = Report.objects.create(**report_dic)
+        report_id = report.id
+        # #获取遗留问题数据
+        remains = received_post_data.get("remains")
+        #遍历remains并存库
+        if(remains != None):
+            for remain in remains:
+                if(remain['remain'] != ''):
+                    remain = Remain.objects.create(content=remain['remain'], report_id=report_id)
+
+        # #获取测试版本/链接信息并存库
+        builds = received_post_data.get("builds")
+        if(builds != None):
+            for build in builds:
+                if(build['build'] != ''):
+                    build = Build.objects.create(site=build['build'], report_id=report_id)
+        
+        #获取移动端bug并存库
+        appbugs = received_post_data.get("appbugs")
+        if(appbugs != None):
+            for appbug in appbugs:
+                if(appbug['appbug'] != ''):
+                    bug = Bug.objects.create(content=appbug['appbug'], status=appbug['status'], demand_id=demand_id, bug_type="appbug")
+        
+        #获取兼容性并存库
+        phones = received_post_data.get("phone")
+        if(phones != None):
+            if(phones != []):
+                for x in phones:
+                    compat_phone = Compat.objects.get(id=x)
+                    compat_phone.report.add(report_id)
+
+        finish_time = report.create_time
+        demand_finish_time = Demand.objects.filter(id=demand_id).update(finish_time=finish_time)
+        return JsonResponse({"result": 200, "msg": "执行成功"})
+
+    if request.method == 'GET':
+        data={}   #存储转化后的数据
+        #获取对应的report_id
+        report_id = request.GET.get("id")
+        #取出report表的数据并序列化
+        reports = Report.objects.select_related().filter(id=report_id)
+        report = ReportListSerializer(reports, many=True)
+        #取出remain表的数据并序列化
+        remains = Report.objects.filter(id=report_id).values('remain__content')
+        data['remain'] = list(remains)
         #取出build表的数据并序列化
         builds = Report.objects.filter(id=report_id).values('build__site')
         data['build'] = list(builds)

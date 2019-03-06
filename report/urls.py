@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^developer$', views.getDeveloperList, name='developer'),      #获取所有开发人员信息
     url(r'^product$', views.getProductList, name='product'),        #获取所有产品人员信息
     url(r'^pcreport$', views.PcReport, name='pcreport'),            #新增PC端报告&获取对应报告的详情页信息
+    url(r'^appreport$', views.AppReport, name='appreport'),       #新增移动端报告&获取对应报告的详情页信息
     url(r'^computer$', views.getComputerList, name='computer'),     #获取电脑兼容性列表
     url(r'^browser$', views.getBrowserList, name='browser'),        #获取浏览器兼容性列表
     url(r'^phone$', views.getPhoneList, name='phone'),              #暂时未做，同pcreport

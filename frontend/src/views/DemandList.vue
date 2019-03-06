@@ -6,6 +6,16 @@
         <el-form-item label="需求名称：" prop="name">
             <el-input v-model="demandForm.name" size="small" clearable placeholder="请填写"></el-input>
         </el-form-item>  
+        <el-form-item label="产品负责人：" :rule="rules" label-width="125px" prop="product">
+            <el-select v-model="demandForm.product" size="small" filterable  placeholder="请选择" clearable>
+                <el-option
+                    v-for="item in productList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
         <el-form-item label="测试人员：" prop="tester">
             <el-select v-model="demandForm.tester" size="small" multiple filterable placeholder="请选择">
                 <el-option
@@ -20,16 +30,6 @@
             <el-select v-model="demandForm.developer" size="small" multiple filterable placeholder="请选择">
                 <el-option
                     v-for="item in developerList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                </el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="产品负责人：" label-width="125px" prop="product">
-            <el-select v-model="demandForm.product" size="small" filterable  placeholder="请选择" clearable>
-                <el-option
-                    v-for="item in productList"
                     :key="item.id"
                     :label="item.name"
                     :value="item.id">
@@ -131,9 +131,13 @@ export default {
           name: [
             { required: true, message: '请输入活动名称', trigger: 'blur' }
           ],
+          product: [
+            { required: true, message: '请选择产品负责人', trigger: 'change' }
+          ],
           status: [
             { required: true, message: '请选择任务状态', trigger: 'change' }
           ],
+
         },
         search: '',
         dialogVisible:false,

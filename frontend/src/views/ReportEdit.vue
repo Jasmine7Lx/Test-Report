@@ -11,7 +11,7 @@
 
 <script>
 import PcReport from "./PcReport";
-import PhoneReport from "./PhoneReport";
+import PhoneReport from "./AppReport";
 export default {
   components: {
     PcReport,
