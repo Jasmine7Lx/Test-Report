@@ -1,43 +1,10 @@
- <template>
+<template>
  <div>
-    <el-button type="text" @click="dialogVisible = true">添加需求</el-button>
-    <el-dialog title="新增需求" :visible.sync="dialogVisible" width="30%">
-     <el-form  ref="demandForm" :rules="rules" :model="demandForm" label-width="110px" size="small">
-        <el-form-item label="需求名称：" prop="name">
-            <el-input v-model="demandForm.name" size="small" clearable placeholder="请填写"></el-input>
-        </el-form-item>  
-        <el-form-item label="产品负责人：" :rule="rules" label-width="125px" prop="product">
-            <el-select v-model="demandForm.product" size="small" filterable  placeholder="请选择" clearable>
-                <el-option
-                    v-for="item in productList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                </el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="测试人员：" prop="tester">
-            <el-select v-model="demandForm.tester" size="small" multiple filterable placeholder="请选择">
-                <el-option
-                    v-for="item in testerList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                </el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="开发人员：" prop="developer">
-            <el-select v-model="demandForm.developer" size="small" multiple filterable placeholder="请选择">
-                <el-option
-                    v-for="item in developerList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                </el-option>
-            </el-select>
-        </el-form-item>
+  <add></add>
+    <el-dialog title="更新需求" :visible.sync="dialogVisible" width="30%">
+     <el-form label-width="110px" size="small" ref="editForm" v-model="editForm">
         <el-form-item label="任务状态：" prop="status">
-            <el-select v-model="demandForm.status" size="small" placeholder="请选择" clearable>
+            <el-select v-model="status" size="small" clearable :disabled="disabledChange">
                 <el-option
                     v-for="item in statusList"
                     :key="item.id"
@@ -49,20 +16,19 @@
      </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="AddDemand()">确 定</el-button>
-        <el-button @click="reset(demandForm)">重置</el-button>
+        <el-button type="primary" @click="EditDemand()">确 定</el-button>
       </span>
     </el-dialog>
+
   <el-table
     :data="demandList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
     style="width: 100%"
     height="440"
     highlight-current-row
-    @row-click="getDetail"
+    @row-click="getDemandDetail"
     >
     <el-table-column type="expand">
       <template>
-        <!-- <span>{{demandDetail.demand}}</span> -->
          <el-form label-position="left" class="table-expand" >
           <el-form-item label="需求名称：">
             <span>{{ Demands }}</span>
@@ -110,11 +76,14 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          icon="el-icon-refresh"
+          @click="getDetail(scope.$index, scope.row)">更新状态
+        </el-button>
         <el-button
           size="mini"
           type="danger"
-          @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          @click="DeleteDemand(scope.$index, scope.row)">删除
+        </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -124,7 +93,11 @@
 <script>
 import https from '../https.js'
 import moment from 'moment'
+import Add from "@/components/Demand/Add";
 export default {
+    components: {
+      add: Add
+    },
     data() {
       return {
         testerList: [],
@@ -132,39 +105,23 @@ export default {
         developerList: [],
         demandList: [],
         demandDetail: [],
+        demandId: 0,
+        editForm: [],
         statusList: [
             {
-                id: 'no_summit',
-                name: '未提测'
+                id: "no_summit",
+                name: "未提测"
             },{
-                id: 'summit',
-                name: '已提测'
+                id: "summit",
+                name: "已提测"
             },{
-                id: 'completed',
-                name: '已完成'
-
+                id: "completed",
+                name: "已完成"
         }],
-        rules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
-          ],
-          product: [
-            { required: true, message: '请选择产品负责人', trigger: 'change' }
-          ],
-          status: [
-            { required: true, message: '请选择任务状态', trigger: 'change' }
-          ],
-
-        },
         search: '',
-        dialogVisible:false,
-        demandForm: {
-            name: '',
-            tester: [],
-            developer: [],
-            product: '',
-            status: '',
-        }
+        dialogVisible: false,
+        disabledChange: false,
+        status: ''
       }
     },
     computed: {
@@ -228,45 +185,31 @@ export default {
       },
     },
     methods: {
-        getTesters: function() {
-          https.fetchGet('/api/tester')
-          .then((resp) => {
-            // console.log(resp)
-            this.testerList = resp.data.data;
-          })
-        },
-        getProcduct: function() {
-            https.fetchGet('/api/product')
-            .then((resp) => {
-                // console.log(resp)
-                this.productList = resp.data.data
-            })
-        },
-        getDeveloper: function() {
-            https.fetchGet('/api/developer')
-            .then((resp) => {
-                // console.log(resp)
-                this.developerList = resp.data.data
-            })
-        },
         getDemandList: function() {
             https.fetchGet('/api/demand')
             .then((resp) => {
-              // console.log(resp.data.data)
               this.demandList = resp.data.data
             })
         },
-        AddDemand: function() {
-            this.dialogVisible = false;
-            https.fetchPost('/api/demandlist', this.demandForm)
-            .then((resp) => {
-                // console.log(this.demandForm)
-                this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})
-                this.getDemandList();
-            })
+        getDetail: function(index,row) {
+          this.dialogVisible = true
+          this.demandId = row.id
+          this.status = row.status
+          if(this.status == "已完成"){
+            this.disabledChange = true
+          }
         },
-        reset: function() {
-          this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})
+        EditDemand:function(index,row) {
+          console.log(this.demandId,this.status)
+          https.fetchGet('/api/editdemand', {id:this.demandId, status:this.status})
+          .then((resp) => {
+            this.dialogVisible = false;
+            // this.$nextTick(()=>{this.$refs['editForm'].resetFields();})
+            this.getDemandList();
+          })
+          // this.$router.push({
+          //   path:`/demand/list`
+          // })
         },
         formatDate: function(row, column) {
           const date = row[column.property]
@@ -276,20 +219,15 @@ export default {
           //这里的格式根据需求修改
           return moment(date).format('YYYY-MM-DD')
         },
-        getDetail: function(row) {
+        getDemandDetail: function(row) {
           let demandId = row.id
           https.fetchGet('/api/demandlist', {id:demandId})
           .then((resp) => {
-              // console.log(resp.data)
               this.demandDetail = resp.data.data
-              console.log(this.demandDetail)
           })
         }
     },
     created() {
-      this.getTesters();
-      this.getProcduct();
-      this.getDeveloper();
       this.getDemandList();
     }
 }

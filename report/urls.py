@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^phone$', views.getPhoneList, name='phone'),              #暂时未做，同pcreport
     url(r'^reportlist$', views.getReportList, name="reportlist"),          #获取报告列表需要展示的对应信息
     url(r'^demandlist$', views.getDemandList, name='demandlist'),        #新增需求&获取对应需求的详细信息
+    url(r'^editdemand$',views.editDemand, name="editdemand"),
     url(r'^buglist$', views.getBugList, name='buglist')        #获取所有bug信息
 ]

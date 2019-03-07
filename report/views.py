@@ -378,6 +378,19 @@ def getDemandList(request):
         data['demand'] = demand.data
         return JsonResponse({"result": 200, "msg": "执行成功", "data":data})
 
+#编辑需求
+@csrf_exempt
+def editDemand(request):
+    if request.method == 'GET':
+        demand_id = request.GET.get("id")
+        demand_status = request.GET.get("status")
+        if demand_status == "summit":
+            demand_update = Demand.objects.filter(id=demand_id).update(status=demand_status, summit_test_time=datetime.datetime.now()) 
+        elif demand_status == "completed":
+            demand_update = Demand.objects.filter(id=demand_id).update(status=demand_status, finish_time=datetime.datetime.now())             
+        return JsonResponse({"result": 200,"msg": "执行成功"})
+
+
 #bug列表
 @csrf_exempt
 def getBugList(request):
