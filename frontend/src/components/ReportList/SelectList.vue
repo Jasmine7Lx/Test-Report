@@ -20,11 +20,8 @@
   export default {
     data() {
       return {
-        select_show: 'myself',
+        select_show: 'all',
         showlist: [{
-          value: 'myself',
-          label: '只查看自己'
-          }, {
             value: 'all',
             label: '查看全部'
           }, {

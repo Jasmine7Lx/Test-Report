@@ -4,6 +4,7 @@ import axios from 'axios'
 axios.defaults.timeout = 5000;                        //响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';        //配置请求头
 axios.defaults.baseURL = 'http://127.0.0.1:8000';   //配置接口地址
+axios.defaults.withCredentials=true
 
 //POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use((config) => {

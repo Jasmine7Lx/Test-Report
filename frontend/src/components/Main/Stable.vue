@@ -2,20 +2,31 @@
   <header class="header">
     <h1>测试报告管理系统</h1>
     <div class="menu">
-      <el-dropdown>
         <span class="name">
-          <i class="el-icon-edit" style="margin-right: 10px"></i>
+          <i style="margin-right: 10px"></i>
           Jasmine
         </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>查看</el-dropdown-item>
-          <el-dropdown-item>新增</el-dropdown-item>
-          <el-dropdown-item>删除</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+        <el-button type="primary" size="mini" icon="el-icon-setting" @click="Logout()">退出</el-button>
     </div>
   </header>
 </template>
+
+<script>
+export default {
+  methods: {
+    Logout() {
+      var self = this
+      this.$confirm('您确定要退出吗?', '退出管理平台', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(() => {
+        self.$router.push({ path: '/login' })
+      })
+    }
+  }
+}
+</script>
+
 
 <style lang="css" scoped>
 .header h1 {

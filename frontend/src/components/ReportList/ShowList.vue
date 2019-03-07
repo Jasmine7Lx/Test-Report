@@ -28,9 +28,6 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button
-          size="mini"
           type="danger"
           @click="handleDetail(scope.$index, scope.row)">查看</el-button>
       </template>
@@ -54,9 +51,6 @@ export default {
           console.log(resp.data)
           this.reportList = resp.data.reportlist
         })
-      },
-      handleEdit(index, row) {
-        console.log(index, row);
       },
       handleDetail(index, row) {
         console.log(index, row.id);

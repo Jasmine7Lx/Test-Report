@@ -5,8 +5,8 @@ from . import views
 app_name = 'report'
 urlpatterns = [
     # url(r'^',TemplateView.as_view(template_name="index.html")),
-    url(r'^login/$', views.login, name='login'),
-    url(r'^logout/$', views.logout, name='logout'),
+    url(r'^login$', views.Login, name='login'),
+    # url(r'^logout/$', views.logout, name='logout'),
     url(r'^demand$', views.getDemandAll, name='demand'),     #获取所有需求
     url(r'^developerall', views.getDeveloperAll, name='developerall'),    #获取需求对应的产研测人员
     url(r'^tester', views.getTesterList, name='tester'),        #获取所有测试人员信息

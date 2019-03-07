@@ -14,56 +14,43 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django import forms
 
-#表单
-class LoginForm(forms.Form):
-    username = forms.CharField(required=True, label="username", error_messages={'required':'用户名不能为空'})
-    password = forms.CharField(required=True, label="password", widget=forms.PasswordInput(), min_length=6, max_length=10, error_messages={'required':'密码不能为空'})
+# #表单
+# class LoginForm(forms.Form):
+#     username = forms.CharField(required=True, label="username", error_messages={'required':'用户名不能为空'})
+#     password = forms.CharField(required=True, label="password", widget=forms.PasswordInput(), min_length=6, max_length=10, error_messages={'required':'密码不能为空'})
     
-#登录验证
-def login(request):
-    if request.POST:
-        objPost = LoginForm(request.POST)
-        if objPost.is_valid():
-            #获取表单用户名密码
-            username = objPost.cleaned_data['username']
-            password = objPost.cleaned_data['password']
-            #表单数据与数据库进行比较
-            user = User.objects.filter(username__exact = username, password__exact = password)
-            if user:
-                #成功，跳转index页面
-                response = redirect('report:index')
-                #将username写入cookie，失效时间为3600
-                response.set_cookie('username', username, 3600)
-                return response
-            else:
-                #比较失败，仍在login页面
-                from django.forms.utils import ErrorDict
-                return render(request, 'login/login.html',{'obj1':objPost})
+# #登录验证
+# def login(request):
+#     if request.POST:
+#         objPost = LoginForm(request.POST)
+#         if objPost.is_valid():
+#             #获取表单用户名密码
+#             username = objPost.cleaned_data['username']
+#             password = objPost.cleaned_data['password']
+#             #表单数据与数据库进行比较
+#             user = Developer.objects.filter(email__exact = username, password__exact = password)
+#             if user:
+#                 #成功，跳转index页面
+#                 response = redirect('report:index')
+#                 #将username写入cookie，失效时间为3600
+#                 response.set_cookie('username', username, 3600)
+#                 return response
+#             else:
+#                 #比较失败，仍在login页面
+#                 from django.forms.utils import ErrorDict
+#                 return render(request, 'login/login.html',{'obj1':objPost})
 
-        else:
-            from django.forms.utils import ErrorDict
-            return render(request, 'login/login.html',{'obj1':objPost})
+#         else:
+#             from django.forms.utils import ErrorDict
+#             return render(request, 'login/login.html',{'obj1':objPost})
 
- #       else:
- #           from django.forms.utils import ErrorDict
- #       return render(request, 'login/login.html',{'obj1':objPost})
+#  #       else:
+#  #           from django.forms.utils import ErrorDict
+#  #       return render(request, 'login/login.html',{'obj1':objPost})
 
-    else:
-        objGet = LoginForm()
-        return render(request, 'login/login.html', {'obj1':objGet })
-
-def index(request):
-    return render(request, 'report/index.html')
-    
-    
-def w_report(request):
-    pass
-
-def bug_list(request):
-    pass
-
-def logout(request):
-    pass
+#     else:
+#         objGet = LoginForm()
+#         return render(request, 'login/login.html', {'obj1':objGet })
 
 @csrf_exempt
 def getDemandAll(request):
@@ -389,3 +376,25 @@ def getBugList(request):
         bugs = Bug.objects.all()
         serializer = BugListSerializer(bugs, many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+
+   
+#登录验证
+@csrf_exempt
+def Login(request):
+    ret = {'code':1000, 'msg':None}
+    # try:
+    received_post_data = json.loads(request.body)
+    username = received_post_data.get('username')
+    password = received_post_data.get('password')
+    user = Developer.objects.filter(email=username,password=password).first()
+    if not user:
+        ret['code']=1001
+        ret['msg']='用户名或密码错误'
+    #为登录用户创建token
+    # token = md5(user)            #存在则更新，反之创建
+    # UserToken.objects.update_or_create(user=user, defaults={'token':token})
+    # ret['token'] = token
+    # except Exception as e:
+    #     ret['code'] = 1002
+    #     ret['msg'] = '登录时获取前端提交用户名和密码错误或者是数据库读写错误'
+    return JsonResponse(ret)
