@@ -320,7 +320,6 @@ export default {
     Environments: () => environments,
     BugsStatus: () => bugsStatus
   },
-
   methods: {
     dataFormat() {
       let time = this.form2.time;

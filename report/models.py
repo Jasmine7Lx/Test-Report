@@ -48,9 +48,9 @@ class Developer(models.Model):
     def __str__(self):
         return self.name
 
-class UserToken(models.Model):
-        user = models.OneToOneField(Developer, null=True)
-        token = models.CharField(max_length=64)
+# class UserToken(models.Model):
+#         user = models.OneToOneField(Developer, null=True)
+#         token = models.CharField(max_length=64)
 
 class Report(models.Model):
     REPORT_TYPE = (

@@ -7,7 +7,8 @@
     >
     <el-table-column
       label="创建时间"
-      prop="create_time">
+      prop="create_time"
+      :formatter="formatDate">
     </el-table-column>
     <el-table-column
       label="需求名称"
@@ -37,6 +38,7 @@
 
 <script>
 import https from '../../https.js'
+import moment from 'moment'
 export default {
     data() {
       return {
@@ -57,6 +59,15 @@ export default {
         this.$router.push({
           path:`/report/detail/${row.id}`
         })
+      },
+      formatDate: function(row, column) {
+        console.log(row, column)
+        const date = row[column.property]
+        if (date === undefined) {
+          return ''
+        }
+        //这里的格式根据需求修改
+        return moment(date).format('YYYY-MM-DD')
       }
     },
     created() {

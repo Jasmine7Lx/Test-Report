@@ -208,6 +208,7 @@ def PcReport(request):
 
         finish_time = report.create_time
         demand_finish_time = Demand.objects.filter(id=demand_id).update(finish_time=finish_time)
+        demand_status = Demand.objects.filter(id=demand_id).update(status="completed")
         return JsonResponse({"result": 200, "msg": "执行成功"})
 
     if request.method == 'GET':
@@ -233,7 +234,8 @@ def PcReport(request):
         #获取compat_report表数据并序列化
         compats = Report.objects.get(id=report_id).compat.values('compat_type','system')
         data['compat'] = list(compats)
-        return JsonResponse({"result": 200, "msg": "执行成功","data":data,"report":report.data[0]})
+        data['report'] = report.data
+        return JsonResponse({"result": 200, "msg": "执行成功","data":data})
 
 #App报告
 @csrf_exempt
@@ -285,6 +287,7 @@ def AppReport(request):
 
         finish_time = report.create_time
         demand_finish_time = Demand.objects.filter(id=demand_id).update(finish_time=finish_time)
+        demand_status = Demand.objects.filter(id=demand_id).update(status="completed")
         return JsonResponse({"result": 200, "msg": "执行成功"})
 
     if request.method == 'GET':
@@ -307,7 +310,8 @@ def AppReport(request):
         #获取compat_report表数据并序列化
         compats = Report.objects.get(id=report_id).compat.values('compat_type','system')
         data['compat'] = list(compats)
-        return JsonResponse({"result": 200, "msg": "执行成功","data":data,"report":report.data[0]})
+        data['report'] = report.data
+        return JsonResponse({"result": 200, "msg": "执行成功","data":data})
 
 #获取报告列表
 @csrf_exempt
@@ -363,11 +367,16 @@ def getDemandList(request):
         demand = DemandAllSerializer(demands, many=True)
         testers = Demand.objects.get(id=demand_id).developer.filter(role='tester').values('name')
         data['tester'] = list(testers)
-        developers = Demand.objects.get(id=demand_id).developer.raw('select * from report_developer where role in ("web","app","background")')
-        developer = json.loads(serializers.serialize('json',developers))
+        webs = Demand.objects.get(id=demand_id).developer.filter(role="web").values('name')
+        data['web'] = list(webs)
+        backgrounds = Demand.objects.get(id=demand_id).developer.filter(role="background").values('name')
+        data['background'] = list(backgrounds)
+        apps = Demand.objects.get(id=demand_id).developer.filter(role="apps").values('name')
+        data['app'] = list(apps)
         products = Demand.objects.get(id=demand_id).developer.filter(role='product').values('name')
         data['product'] = list(products)
-        return JsonResponse({"result": 200, "msg": "执行成功", "demand":demand.data[0], "developer":developer, "data":data})
+        data['demand'] = demand.data
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":data})
 
 #bug列表
 @csrf_exempt
