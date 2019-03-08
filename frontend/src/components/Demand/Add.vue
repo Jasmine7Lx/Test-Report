@@ -63,7 +63,6 @@ export default {
             testerList: [],
             productList: [],
             developerList: [],
-            demandList: [],
             statusList: [
                 {
                     id: "no_summit",
@@ -100,21 +99,18 @@ export default {
         getTesters: function() {
           https.fetchGet('/api/tester')
           .then((resp) => {
-            // console.log(resp)
             this.testerList = resp.data.data;
           })
         },
         getProcduct: function() {
             https.fetchGet('/api/product')
             .then((resp) => {
-                // console.log(resp)
                 this.productList = resp.data.data
             })
         },
         getDeveloper: function() {
             https.fetchGet('/api/developer')
             .then((resp) => {
-                // console.log(resp)
                 this.developerList = resp.data.data
             })
         },
@@ -125,13 +121,13 @@ export default {
             })
         },
         AddDemand: function() {
-            this.dialogVisible = false;
             https.fetchPost('/api/demandlist', this.demandForm)
             .then((resp) => {
-                // console.log(this.demandForm)
+                this.getDemandList();
+                this.dialogVisible = false;
                 this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})
+
             })
-            this.getDemandList();
         },
         reset: function() {
           this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})
@@ -141,6 +137,7 @@ export default {
       this.getTesters();
       this.getProcduct();
       this.getDeveloper();
+    //   this.getDemandList();
     }
 }
 </script>

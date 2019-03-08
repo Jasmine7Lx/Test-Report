@@ -47,6 +47,14 @@ export default {
         }
     },
     methods: {
+        formatDate: function(row, column) {
+          const date = row[column.property]
+          if (date === undefined) {
+            return ''
+          }
+          //这里的格式根据需求修改
+          return moment(date).format('YYYY-MM-DD')
+        },
         getReportDetail: function() {
             let reportId = this.$route.params.id;
             console.log(reportId)

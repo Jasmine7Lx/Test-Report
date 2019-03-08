@@ -7,23 +7,8 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="tester_name" label="测试人员:">
-        <el-select v-model="form1.tester" size="small" multiple filterable placeholder="请选择">
+        <el-select v-model="form1.tester" size="small" filterable placeholder="请选择">
           <el-option v-for="item in testerList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="developer_name" label="开发人员:">
-        <el-select v-model="form1.developer" size="small" multiple filterable placeholder="请选择">
-          <el-option
-            v-for="item in developerList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="demander_name" label="产品负责人:">
-        <el-select v-model="form1.product" size="small" multiple filterable placeholder="请选择">
-          <el-option v-for="item in productList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -159,14 +144,14 @@ export default {
       // 用来暂时存放异步数据
       case_type: "link",
       testerList: [],
-      productList: [],
-      developerList: [],
+      // productList: [],
+      // developerList: [],
       demandList: [],
       phoneList: [],
 
       form1: {
         demand: "",
-        tester: [],
+        tester: "",
         developer: [],
         product: []
       },
@@ -204,6 +189,12 @@ export default {
   },
 
   methods: {
+    getTesters: function() {
+      https.fetchGet('/api/tester')
+      .then((resp) => {
+          this.testerList = resp.data.data;
+      })
+    },
     dataFormat() {
       let time = this.form2.time;
       this.form2.time[0] = this.moment(time[0]).format("YYYY-MM-DD HH:mm:ss");
@@ -233,7 +224,7 @@ export default {
       }
     },
     getDemandList: function() {
-      https.fetchGet("/api/demand").then(resp => {
+      https.fetchGet("/api/getdemand").then(resp => {
         console.log(resp);
         this.demandList = resp.data.data;
       });
@@ -244,18 +235,16 @@ export default {
         this.phoneList = resp.data.data;
       });
     },
-    onSelectCase(val) {
-      if (val == "link") {
-        this.case_type = "link";
-      } else {
-        this.case_type = "file";
-      }
-    },
+    // onSelectCase(val) {
+    //   if (val == "link") {
+    //     this.case_type = "link";
+    //   } else {
+    //     this.case_type = "file";
+    //   }
+    // },
     onSelectDemand(item) {
       var demand_id = item;
-      console.log(demand_id);
       https.fetchGet("/api/developerall", { id: demand_id }).then(resp => {
-        console.log(resp.data);
       });
     },
     resetForm: function(forms) {
@@ -275,11 +264,11 @@ export default {
     }
   },
   created() {
-      // this.getTesters();
-      // this.getProcduct();
-      // this.getDeveloper();
-    this.getDemandList();
-    this.getPhoneList();
+      this.getTesters();
+        // this.getProcduct();
+        // this.getDeveloper();
+      this.getDemandList();
+      this.getPhoneList();
   }
 };
 </script>

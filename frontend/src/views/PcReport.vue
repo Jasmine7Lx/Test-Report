@@ -6,15 +6,15 @@
           <el-option v-for="item in demandList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="tester_name" label="测试人员:">
-        <el-select v-model="form1.tester" size="small" multiple filterable placeholder="请选择">
+      <el-form-item prop="tester_name" label="测试负责人:">
+        <el-select v-model="form1.tester" size="small" filterable placeholder="请选择">
           <el-option v-for="item in testerList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="developer_name" label="开发人员:">
+      <!-- <el-form-item prop="developer_name" label="开发人员:">
         <el-select v-model="form1.developer" size="small" multiple filterable placeholder="请选择">
           <el-option
-            v-for="item in developerList"
+            v-for="item in Developers"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -23,9 +23,9 @@
       </el-form-item>
       <el-form-item prop="demander_name" label="产品负责人:">
         <el-select v-model="form1.product" size="small" multiple filterable placeholder="请选择">
-          <el-option v-for="item in productList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          <el-option v-for="item in Products" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <hr>
 
@@ -249,17 +249,17 @@ export default {
       // 用来暂时存放异步数据
       case_type: "link",
       testerList: [],
-      productList: [],
-      developerList: [],
+      // productList: [],
+      // developerList: [],
       demandList: [],
       computerList: [],
       browserList: [],
-
+      demandDetail: [],
       form1: {
         demand: "",
-        tester: [],
-        developer: [],
-        product: []
+        tester: "",
+        // developer: [],
+        // product: []
       },
       form2: {
         result: "pass",
@@ -315,94 +315,111 @@ export default {
     };
   },
   computed: {
-    Form1Rule: () => form1Rule,
-    TestResult: () => testResult,
-    Environments: () => environments,
-    BugsStatus: () => bugsStatus
+      Form1Rule: () => form1Rule,
+      TestResult: () => testResult,
+      Environments: () => environments,
+      BugsStatus: () => bugsStatus,
+      // Testers: function(){
+      //   if(this.demandDetail.tester){
+      //     var test = []
+      //     for(let i in this.demandDetail.tester){
+      //       var testers = this.demandDetail.tester[i]
+      //       test[i] = testers
+      //     }
+      //     return test
+      //   }
+      // },
   },
   methods: {
-    dataFormat() {
-      let time = this.form2.time;
-      this.form2.time[0] = this.moment(time[0]).format("YYYY-MM-DD HH:mm:ss");
-      this.form2.time[1] = this.moment(time[1]).format("YYYY-MM-DD HH:mm:ss");
-    },
-    addList(name) {
-      this.form2[`${name}s`].push({
-        [name]: ""
-      });
-    },
-    removeList(name, item) {
-      const index = this.form2[`${name}s`].indexOf(item);
-      if (index !== -1) {
-        this.form2[`${name}s`].splice(index, 1);
+      getTesters: function() {
+        https.fetchGet('/api/tester')
+        .then((resp) => {
+            this.testerList = resp.data.data;
+        })
+      },
+      dataFormat() {
+        let time = this.form2.time;
+        this.form2.time[0] = this.moment(time[0]).format("YYYY-MM-DD HH:mm:ss");
+        this.form2.time[1] = this.moment(time[1]).format("YYYY-MM-DD HH:mm:ss");
+      },
+      addList(name) {
+        this.form2[`${name}s`].push({
+          [name]: ""
+        });
+      },
+      removeList(name, item) {
+        const index = this.form2[`${name}s`].indexOf(item);
+        if (index !== -1) {
+          this.form2[`${name}s`].splice(index, 1);
+        }
+      },
+      addBugs(name) {
+        this.form2[`${name}bugs`].push({
+          status: "",
+          [`${name}bug`]: ""
+        });
+      },
+      removeBugs(name, item) {
+        const index = this.form2[`${name}bugs`].indexOf(item);
+        if (index !== -1) {
+          this.form2[`${name}bugs`].splice(index, 1);
+        }
+      },
+      getDemandList: function() {
+        https.fetchGet("/api/getdemand").then(resp => {
+          console.log(resp);
+          this.demandList = resp.data.data;
+        });
+      },
+      getComputerList: function() {
+        https.fetchGet("/api/computer").then(resp => {
+          console.log(resp);
+          this.computerList = resp.data.data;
+        });
+      },
+      getBrowserList: function() {
+        https.fetchGet("/api/browser").then(resp => {
+          this.browserList = resp.data.data;
+        });
+      },
+      // onSelectCase(val) {
+      //   if (val == "link") {
+      //     this.case_type = "link";
+      //   } else {
+      //     this.case_type = "file";
+      //   }
+      // },
+      onSelectDemand: function(item) {
+        var demand_id = item;
+        https.fetchGet("/api/developerall", { id: demand_id })
+        .then(resp => {
+          console.log(resp.data.data)
+          this.demandDetail = resp.data.data
+        })
+      },
+      resetForm: function(forms) {
+        console.log("reset");
+      },
+      submitForm: function() {
+        var dataList = Object.assign(
+          this.form1,
+          this.form2,
+          this.form3,
+          this.form4
+        );
+        https.fetchPost("/api/pcreport", dataList).then(resp => {
+          console.log(dataList);
+          this.$router.push({ path: "/" });
+        });
       }
-    },
-    addBugs(name) {
-      this.form2[`${name}bugs`].push({
-        status: "",
-        [`${name}bug`]: ""
-      });
-    },
-    removeBugs(name, item) {
-      const index = this.form2[`${name}bugs`].indexOf(item);
-      if (index !== -1) {
-        this.form2[`${name}bugs`].splice(index, 1);
-      }
-    },
-    getDemandList: function() {
-      https.fetchGet("/api/demand").then(resp => {
-        console.log(resp);
-        this.demandList = resp.data.data;
-      });
-    },
-    getComputerList: function() {
-      https.fetchGet("/api/computer").then(resp => {
-        console.log(resp);
-        this.computerList = resp.data.data;
-      });
-    },
-    getBrowserList: function() {
-      https.fetchGet("/api/browser").then(resp => {
-        this.browserList = resp.data.data;
-      });
-    },
-    onSelectCase(val) {
-      if (val == "link") {
-        this.case_type = "link";
-      } else {
-        this.case_type = "file";
-      }
-    },
-    onSelectDemand(item) {
-      var demand_id = item;
-      console.log(demand_id);
-      https.fetchGet("/api/developerall", { id: demand_id }).then(resp => {
-        console.log(resp.data);
-      });
-    },
-    resetForm: function(forms) {
-      console.log("reset");
-    },
-    submitForm: function() {
-      var dataList = Object.assign(
-        this.form1,
-        this.form2,
-        this.form3,
-        this.form4
-      );
-      https.fetchPost("/api/pcreport", dataList).then(resp => {
-        console.log(dataList);
-        this.$router.push({ path: "/" });
-      });
-    }
   },
   created() {
-      // this.getTesters();
+      this.getTesters();
       // this.getProcduct();
       // this.getDeveloper();
-    this.getDemandList();
-    this.getComputerList();
-    this.getBrowserList();
+      this.getDemandList();
+      this.getComputerList();
+      this.getBrowserList();
   }
 };
 </script>

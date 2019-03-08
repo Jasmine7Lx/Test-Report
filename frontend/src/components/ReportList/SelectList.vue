@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="d1">
-        <el-select v-model="select_show">
+        <el-select v-model="select_show" @change="onSeleteShow">
           <el-option
             v-for="item in showlist"
             :key="item.value"
@@ -17,9 +17,11 @@
 </template>
 
 <script>
+import https from '../../https.js'
   export default {
     data() {
       return {
+        changeList: [],
         select_show: 'all',
         showlist: [{
             value: 'all',
@@ -32,6 +34,24 @@
             label: '查看移动端报告'
           }
         ]
+      }
+    },
+    methods: {
+      onSeleteShow: function(item){
+        if(item=="all"){
+          https.fetchGet('/api/reportlistall')
+          .then((resp) => {
+            console.log(resp.data)
+            this.reportList = resp.data.reportlist
+          })
+        }
+        else if(item=="pclist"){
+          https.fetchGet('/api/reportlistpc')
+          .then((resp) => {
+            console.log(resp.data)
+            this.reportList = resp.data.reportlist
+          })
+        }
       }
     }
   }

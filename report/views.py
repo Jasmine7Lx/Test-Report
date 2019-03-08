@@ -59,6 +59,14 @@ def getDemandAll(request):
         serializer = DemandAllSerializer(demands, many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
 
+@csrf_exempt
+def getDemandReport(request):
+    if request.method == 'GET':
+        demands = Demand.objects.filter(status="summit")
+        serializer = DemandAllSerializer(demands, many=True)
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+
+
 #报告编辑页，选择需求后获取对应产研测人员列表
 @csrf_exempt
 def getDeveloperAll(request):
@@ -138,11 +146,10 @@ def PcReport(request):
         start_time = time[0]
         end_time = time[1]
         demand_id = received_post_data.get("demand")
-        developer_id = 1
+        developer_id = received_post_data.get("tester")
         #数据存report表
         report_dic = {"report_type":"pc", "result":result,"env":env,"start_time":start_time,"end_time":end_time,"demand_id":demand_id, "developer_id":developer_id}
         report = Report.objects.create(**report_dic)
-        #report = Report.objects.get(id='3')
         report_id = report.id
         # #获取遗留问题数据
         remains = received_post_data.get("remains")
@@ -313,12 +320,26 @@ def AppReport(request):
         data['report'] = report.data
         return JsonResponse({"result": 200, "msg": "执行成功","data":data})
 
-#获取报告列表
+#获取全部报告列表
 @csrf_exempt
-def getReportList(request):
+def getReportListAll(request):
     if request.method == 'GET':
-        reports = Report.objects.select_related().all()
-        reportlist = ReportListSerializer(reports, many=True)
+        report_all = Report.objects.select_related().all()
+        reportlist = ReportListSerializer(report_all, many=True)
+        return JsonResponse({"result":200, "msg":"执行成功", "reportlist":reportlist.data})
+#获取PC端报告列表
+@csrf_exempt
+def getReportListPc(request):
+    if request.method == 'GET':
+        report_pc = Report.objects.select_related().filter(report_type="pc")
+        reportlist = ReportListSerializer(report_pc, many=True)
+        return JsonResponse({"result":200, "msg":"执行成功", "reportlist":reportlist.data})
+#获取APP端报告列表
+@csrf_exempt
+def getReportListApp(request):
+    if request.method == 'GET':
+        report_app = Report.objects.select_related().filter(report_type="app")
+        reportlist = ReportListSerializer(report_app, many=True)
         return JsonResponse({"result":200, "msg":"执行成功", "reportlist":reportlist.data})
 
 #增加需求
@@ -390,6 +411,15 @@ def editDemand(request):
             demand_update = Demand.objects.filter(id=demand_id).update(status=demand_status, finish_time=datetime.datetime.now())             
         return JsonResponse({"result": 200,"msg": "执行成功"})
 
+#删除需求
+@csrf_exempt
+def deleteDemand(request):
+    if request.method == 'GET':
+        demand_id = request.GET.get("id")
+        demand_obj = Demand.objects.get(id=demand_id)
+        demand_obj.developer.clear()
+        demand_obj = Demand.objects.filter(id=demand_id).delete()
+        return JsonResponse({"result": 200,"msg": "执行成功"})
 
 #bug列表
 @csrf_exempt

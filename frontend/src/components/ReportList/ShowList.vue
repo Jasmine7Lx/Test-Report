@@ -4,10 +4,12 @@
     style="width: 100%"
     height="440"
     highlight-current-row
+    :default-sort = "{prop: 'create_time', order: 'descending'}"
     >
     <el-table-column
       label="创建时间"
       prop="create_time"
+      sortable
       :formatter="formatDate">
     </el-table-column>
     <el-table-column
@@ -20,11 +22,11 @@
     </el-table-column>
     <el-table-column
       align="right">
-      <template slot="header">
-        <el-input
-          v-model="search"
-          size="mini"
-          placeholder="输入关键字搜索"/>
+      <template slot="header" slot-scope="scope">
+      <el-input
+        v-model="search"
+        size="mini"
+        placeholder="输入关键字搜索"/>
       </template>
       <template slot-scope="scope">
         <el-button
@@ -48,14 +50,13 @@ export default {
     },
     methods: {
       getReportList: function() {
-        https.fetchGet('/api/reportlist')
+        https.fetchGet('/api/reportlistall')
         .then((resp) => {
           console.log(resp.data)
           this.reportList = resp.data.reportlist
         })
       },
       handleDetail(index, row) {
-        console.log(index, row.id);
         this.$router.push({
           path:`/report/detail/${row.id}`
         })
