@@ -282,6 +282,9 @@ export default {
           if(this.status == "已完成"){
             this.disabledChange = true
           }
+          else{
+            this.disabledChange = false
+          }
         },
         AddDemand: function() {
             https.fetchPost('/api/demandlist', this.demandForm)

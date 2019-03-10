@@ -29,7 +29,7 @@
       </el-menu-item>
       <el-menu-item index="/bug/list">
         <i class="el-icon-info"></i>
-        <span slot="title">bug列表</span>
+        <span slot="title">Bug统计</span>
       </el-menu-item>
     </el-menu>
 </template>

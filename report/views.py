@@ -13,7 +13,7 @@ from .serializers import DemandAllSerializer,DeveloperListSerializer,CompatListS
 from django.http import HttpResponse
 from django.template import RequestContext
 from django import forms
-
+from django.db.models import Count
 # #表单
 # class LoginForm(forms.Form):
 #     username = forms.CharField(required=True, label="username", error_messages={'required':'用户名不能为空'})
@@ -257,7 +257,7 @@ def AppReport(request):
         start_time = time[0]
         end_time = time[1]
         demand_id = received_post_data.get("demand")
-        developer_id = 7
+        developer_id = received_post_data.get("tester")
         #数据存report表
         report_dic = {"report_type":"app", "result":result,"env":env,"start_time":start_time,"end_time":end_time,"demand_id":demand_id, "developer_id":developer_id}
         report = Report.objects.create(**report_dic)
@@ -425,8 +425,13 @@ def deleteDemand(request):
 @csrf_exempt
 def getBugList(request):
     if request.method == 'GET':
-        bugs = Bug.objects.all()
+        bugs = Bug.objects.filter(status="no_solve")
         serializer = BugListSerializer(bugs, many=True)
+        a = Demand.objects.annotate(num_bug=Count('bug'))
+        print(a)
+        for i in a:
+            print(i.num_bug)
+        # serializer_num = DemandAllSerializer(a,many=True)
         return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
 
    

@@ -407,6 +407,20 @@ export default {
           this.form3,
           this.form4
         );
+        if(this.form1.demand == ''){
+          this.$message({
+            message : '请选择需求！',
+            type : 'error'
+          })
+          return;
+        }
+        else if(this.form1.tester == ''){
+          this.$message({
+            message : '请选择测试负责人！',
+            type : 'error'
+          })
+          return;
+        }
         https.fetchPost("/api/pcreport", dataList).then(resp => {
           console.log(dataList);
           this.$router.push({ path: "/" });
