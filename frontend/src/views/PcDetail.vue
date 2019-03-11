@@ -1,71 +1,157 @@
 <template>
   <div class="edit">
-    <h1>测试结论：</h1>
-    <h1>遗留问题：</h1>
-    <span style="font-size:16.5px; padding-left:10px;">三、测试说明：</span>
-        <el-row>
-            <span class="explain">1.测试环境：</span>
-        </el-row >
-        <el-row>
-            <span class="explain">2.环境配置：</span>
-        </el-row>
-        <el-row>
-            <span class="explain">3.测试版本/链接：</span>
-        </el-row>
-        <el-row>
-            <span class="explain">4.测试时间：</span>
-        </el-row>
-    <span style="font-size:16.5px; padding-left:10px;">四、测试中发现的问题：</span>
-        <el-row>
-            <span class="explain">1.前端bug：</span>
-        </el-row>
-        <el-row>
-            <span class="explain">2.后端bug：</span>
-        </el-row>
-    <span style="font-size:16.5px; padding-left:10px;">五、兼容性：</span>
-        <el-row>
-            <el-col>
-                <span class="explain">1.电脑系统：</span>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col>
-                <span class="explain">2.浏览器：</span>
-            </el-col>
-        </el-row>
-    <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
-        <span class="explain">链接：</span>
-        <span class="explain">文件：</span>
-    </div>
+    <el-form label-position="left" label-width="180px">
+      <el-form-item label="一、测试结论：">{{report.result | resWord }}</el-form-item>
+      <el-form-item label="二、遗留问题：">
+        <p v-for="(item,index) in remain" :key="index" >
+          {{item.remain__content}}
+        </p>
+      </el-form-item>
+      <el-form-item label="三、测试说明：">
+        <br>
+        <el-form>
+          <el-form-item label="1.测试环境：">{{report.env | envWord}}</el-form-item>
+          <el-form-item label="2.环境配置：">
+            <p v-for="(item,index) in config" :key="index">{{item.config__content}}</p>
+          </el-form-item>
+          <el-form-item label="3.测试版本/链接：">
+            <p v-for="(item,index) in build" :key="index">{{item.build__site}}</p>
+          </el-form-item>
+          <el-form-item label="4.测试时间：">
+            <el-date-picker
+              v-model="testTime"
+              readonly
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            ></el-date-picker>
+          </el-form-item>
+        </el-form>
+      </el-form-item>
+      <el-form-item label="四、测试中发现的问题：">
+        <br>
+        <el-form label-position="left" label-width="100px">
+          <el-form-item label="1.前端bug：">
+            <p v-for="(item,index) in frontBug" :key="index">
+              <span>{{item.bug__content}}</span>
+              <el-tag v-if="item.bug__status=='solve'" type="success">已解决</el-tag>
+              <el-tag v-if="item.bug__status=='no_solve'" type="danger">待解决</el-tag>
+              <el-tag v-if="item.bug__status=='noneed_solve'" type="info">无需解决</el-tag>
+            </p>
+          </el-form-item>
+          <el-form-item label="2.后端bug：">
+            <p v-for="(item,index) in backBug" :key="index">
+              <span>{{item.bug__content}}</span>
+              <el-tag v-if="item.bug__status=='solve'" type="success">已解决</el-tag>
+              <el-tag v-if="item.bug__status=='no_solve'" type="danger">待解决</el-tag>
+              <el-tag v-if="item.bug__status=='noneed_solve'" type="info">无需解决</el-tag>
+            </p>
+          </el-form-item>
+        </el-form>
+      </el-form-item>
+      <el-form-item label="五、兼容性：">
+        <br>
+        <el-form label-position="left" label-width="100px">
+          <el-form-item label="1.电脑系统：">
+            <p v-for="(item,index) in computer" :key="index">{{item.system}}</p>
+          </el-form-item>
+          <el-form-item label="2.浏览器：">
+            <p v-for="(item,index) in browser" :key="index">{{item.system}}</p>
+          </el-form-item>
+        </el-form>
+      </el-form-item>
+    </el-form>
+    <!-- <span style="font-size:16.5px; padding-left:10px;">六、测试用例：</span>
+    <span class="explain">链接：</span>
+    <span class="explain">文件：</span> -->
+  </div>
 </template>
 <script>
-import https from '../https.js'
+import https from "../https.js";
+import Mock from "@/constants/mock";
 export default {
-    data() {
-        return {
-
-        }
+  filters: {
+    resWord(res) {
+      if (res == "pass") {
+        return "通过";
+      }
     },
-    methods: {
-        formatDate: function(row, column) {
-          const date = row[column.property]
-          if (date === undefined) {
-            return ''
-          }
-          //这里的格式根据需求修改
-          return moment(date).format('YYYY-MM-DD')
-        },
-        getReportDetail: function() {
-            let reportId = this.$route.params.id;
-            console.log(reportId)
-            https.fetchGet('api/pcreport', {id:reportId})
-            .then((resp) => {
-                console.log(resp.data);
-            })
-        }
-    },
-    created() {
-        this.getReportDetail()
+    envWord(env) {
+      const wordMap = {
+        test: "测试环境"
+      };
+      return wordMap[env];
     }
-}
+  },
+  data() {
+    return {
+      remain: "",
+      report: "",
+      config: [],
+      build: [],
+      bug: [],
+      compat: []
+    };
+  },
+  computed: {
+    testTime() {
+      return [this.report.start_time, this.report.end_time];
+    },
+    frontBug() {
+      return this.bug.filter(ele => {
+        return ele.bug__bug_type == "frontbug";
+      });
+    },
+    backBug() {
+      return this.bug.filter(ele => {
+        return ele.bug__bug_type == "backbug";
+      });
+    },
+    computer() {
+      return this.compat.filter(ele => {
+        return ele.compat_type == "computer";
+      });
+    },
+    browser() {
+      return this.compat.filter(ele => {
+        return ele.compat_type == "browser";
+      });
+    }
+  },
+  methods: {
+    formatDate: function(row, column) {
+      const date = row[column.property];
+      if (date === undefined) {
+        return "";
+      }
+      //这里的格式根据需求修改
+      return moment(date).format("YYYY-MM-DD");
+    },
+    getReportDetail: function() {
+      this.remain = Mock.remain;
+      this.report = Mock.report[0];
+      this.config = Mock.config;
+      this.build = Mock.build;
+      this.bug = Mock.bug;
+      this.compat = Mock.compat;
+      // let reportId = this.$route.params.id;
+      // console.log(reportId)
+      // https.fetchGet('api/pcreport', {id:reportId})
+      // .then((resp) => {
+      //     console.log(resp.data);
+      // })
+    }
+  },
+  created() {
+    this.getReportDetail();
+  }
+};
 </script>
+
+<style>
+p {
+  margin: 0;
+}
+</style>
+
