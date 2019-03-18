@@ -425,14 +425,14 @@ def deleteDemand(request):
 @csrf_exempt
 def getBugList(request):
     if request.method == 'GET':
-        bugs = Bug.objects.filter(status="no_solve")
+        bugs = Bug.objects.filter(status="no_solve").values('id','content','bug_type','status')
         serializer = BugListSerializer(bugs, many=True)
-        a = Demand.objects.annotate(num_bug=Count('bug'))
+        a = Demand.objects.filter(status="completed").annotate(num_bug=Count('bug'))
         print(a)
         for i in a:
             print(i.num_bug)
-        # serializer_num = DemandAllSerializer(a,many=True)
-        return JsonResponse({"result": 200, "msg": "执行成功", "data":serializer.data})
+        data = serializers.serialize('json',a)
+        return JsonResponse({"result": 200, "msg": "执行成功", "data":data})
 
    
 #登录验证

@@ -65,11 +65,19 @@ export default {
           type: 'category',
           data: ['视频播放', '音乐播放', '信息流', '手游', '登录', '三国', '设置'],
           axisTick: {
-            alignWithLabel: true
+            alignWithLabel: true,
+          },
+          axisLabel: {
+            show:true,
+            textStyle:{fontSize:18}
           }
         }],
         yAxis: [{
-          type: 'value'
+          type: 'value',
+          axisLabel: {
+            show:true,
+            textStyle:{fontSize:18}
+          }
         }],
         series: [{
           name: 'bug数量',

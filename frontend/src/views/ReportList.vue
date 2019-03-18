@@ -16,7 +16,7 @@
     <div>
       <el-table
         :data="reportList.filter(data => !search || data.demand_name.toLowerCase().includes(search.toLowerCase()))"
-        style="width: 100%"
+        style="width: 100%;font-size:16px"
         height="440"
         highlight-current-row
         :default-sort = "{prop: 'create_time', order: 'descending'}"
@@ -87,9 +87,18 @@ export default {
         })
       },
       handleDetail(index, row) {
-        this.$router.push({
-          path:`/report/detail/${row.id}`
-        })
+        if(row.report_type=='pc'){
+          this.$router.push({
+            path:`/report/detail/pc/${row.id}`
+            
+          })
+        }
+        else if(row.report_type=='app'){
+          this.$router.push({
+            path:`/report/detail/app/${row.id}`
+            
+          })
+        } 
       },
       formatDate: function(row, column) {
         console.log(row, column)
@@ -144,4 +153,7 @@ export default {
 .el-table-column {
   background-color: midnightblue
 }
+/* .el-buttion {
+  font-size:20px
+} */
 </style>

@@ -47,4 +47,7 @@
 .sidebar {
   border: none;
 }
+.el-menu-item {
+  font-size:18px
+}
 </style>

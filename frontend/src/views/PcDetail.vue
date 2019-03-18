@@ -1,5 +1,6 @@
 <template>
   <div class="edit">
+    <span>需求为：{{report.demand_name}}，测试结果如下:</span>
     <el-form label-position="left" label-width="180px">
       <el-form-item label="一、测试结论：">{{report.result | resWord }}</el-form-item>
       <el-form-item label="二、遗留问题：">
@@ -69,25 +70,36 @@
 </template>
 <script>
 import https from "../https.js";
-import Mock from "@/constants/mock";
+// import Mock from "@/constants/mock";
 export default {
   filters: {
     resWord(res) {
       if (res == "pass") {
-        return "通过";
+        return "测试通过";
+      }
+      else if(res == "block"){
+        return "测试不通过"
+      }
+      else if(res == "finish"){
+        return "测试完成"
       }
     },
     envWord(env) {
-      const wordMap = {
-        test: "测试环境"
-      };
-      return wordMap[env];
+      if (env == "test") {
+        return "测试环境";
+      }
+      else if(env == "formal"){
+        return "正式环境"
+      }
+      else if(env == "gray"){
+        return "灰度环境"
+      }
     }
   },
   data() {
     return {
-      remain: "",
-      report: "",
+      remain: [],
+      report: [],
       config: [],
       build: [],
       bug: [],
@@ -129,18 +141,23 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     getReportDetail: function() {
-      this.remain = Mock.remain;
-      this.report = Mock.report[0];
-      this.config = Mock.config;
-      this.build = Mock.build;
-      this.bug = Mock.bug;
-      this.compat = Mock.compat;
-      // let reportId = this.$route.params.id;
-      // console.log(reportId)
-      // https.fetchGet('api/pcreport', {id:reportId})
-      // .then((resp) => {
-      //     console.log(resp.data);
-      // })
+      // this.remain = Mock.remain;
+      // this.report = Mock.report[0];
+      // this.config = Mock.config;
+      // this.build = Mock.build;
+      // this.bug = Mock.bug;
+      // this.compat = Mock.compat;
+      let reportId = this.$route.params.id;
+      https.fetchGet('api/pcreport', {id:reportId})
+        .then((resp) => {
+            console.log(resp.data.data);
+            this.remain = resp.data.data.remain;
+            this.report = resp.data.data.report[0];
+            this.config = resp.data.data.config;
+            this.build = resp.data.data.build;
+            this.bug = resp.data.data.bug;
+            this.compat = resp.data.data.compat;
+        })
     }
   },
   created() {

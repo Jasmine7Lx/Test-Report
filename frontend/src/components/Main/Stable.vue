@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <h1>测试报告管理系统</h1>
+    <h1 style="font-size:40px">测试报告管理系统</h1>
     <div class="menu">
         <span class="name">
           <i style="margin-right: 10px"></i>
@@ -36,11 +36,12 @@ export default {
   line-height: 60px;
   float: left;
 }
-.menu {
+.menu{
   float: right;
   height: 60px;
   line-height: 60px;
   color: #fff;
+  font-size:30px;
 }
 .el-icon-edit,
 .name {

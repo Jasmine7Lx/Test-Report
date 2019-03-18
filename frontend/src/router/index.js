@@ -8,6 +8,7 @@ import BugList from '@/views/BugList'
 import DemandList from '@/views/DemandList'
 import ReportEdit from '@/views/ReportEdit'
 import PcDetail from '@/views/PcDetail'
+import AppDetail from '@/views/AppDetail'
 import Login from '@/views/Login.vue'
 
 Vue.use(Router)
@@ -39,9 +40,17 @@ export default new Router({
           }
         },
         {
-          path: '/report/detail/:id',
+          path: '/report/detail/pc/:id',
           name: 'PcDetail',
           component: PcDetail,
+          meta: {
+            keepAlive: true
+          }
+        },
+        {
+          path: '/report/detail/app/:id',
+          name: 'AppDetail',
+          component: AppDetail,
           meta: {
             keepAlive: true
           }

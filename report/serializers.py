@@ -44,5 +44,3 @@ class BugListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bug
         fields = ('id', 'bug_type', 'content', 'status', 'level', 'demand_name')
-
-    

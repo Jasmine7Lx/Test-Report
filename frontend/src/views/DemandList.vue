@@ -75,7 +75,7 @@
 
   <el-table
     :data="demandList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-    style="width: 100%"
+    style="width: 100%; font-size:16px"
     height="440"
     highlight-current-row
     @cell-click="getDemandDetail"
@@ -367,12 +367,19 @@ export default {
   background-color: midnightblue
 }
 .table-expand label {
-  width: 100px;
+  width: 140px;
   color: #99a9bf;
+  font-size:16px;
+}
+.table-expand span {
+  font-size:16px
 }
 .table-expand .el-form-item {
   margin-right: 0;
   margin-bottom: 0;
-  width: 50%;
+  /* width: 50%; */
 }
+/* .el-button {
+  font-size:20px
+} */
 </style>
