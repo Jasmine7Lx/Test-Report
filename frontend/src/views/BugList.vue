@@ -2,7 +2,6 @@
 <div>
   <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart">
   </div>
-  <h1>{{bugList}}</h1>
 </div>
 </template>
 <script>
@@ -30,11 +29,16 @@ export default {
   data() {
     return {
       chart: null,
-      bugList: []
+      bugList: [],
+      serie: [],
+      x: []
     }
   },
   mounted() {
     this.initChart();
+    window.addEventListener("resize", () => {
+      this.chart.resize();
+    })
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -48,6 +52,15 @@ export default {
       this.chart = echarts.init(this.$refs.myEchart);
       // 把配置和数据放这里
       this.chart.setOption({
+        title: {
+          text: 'bug统计',
+          x:'left',
+          y:'top',
+          textStyle: {
+            fontSize: 18,
+            color: '#333'
+          }
+        },
         color: ['#3398DB'],
         tooltip: {
           trigger: 'axis',
@@ -63,7 +76,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['视频播放', '音乐播放', '信息流', '手游', '登录', '三国', '设置'],
+          data: this.x,
           axisTick: {
             alignWithLabel: true,
           },
@@ -83,20 +96,24 @@ export default {
           name: 'bug数量',
           type: 'bar',
           barWidth: '60%',
-          data: [7, 5, 2, 0, 10, 3, 1]
+          data: this.serie
         }]
       })
     },
-    getBugs: function() {
-        https.fetchGet('/api/buglist')
-        .then((resp) => {
-            console.log(resp)
-            this.bugList = resp.data.data;
-        })
+    queryData() {
+      https.fetchGet('/api/buglist')
+      .then((resp => {
+        for(var i=0; i<resp.data.series.length; i++) {
+            this.serie[i] = resp.data.series[i].count
+            this.x[i] = resp.data.series[i].name
+          }
+          this.$nextTick(() => { this.initChart() })
+        }
+      ))
     },
   },
   created() {
-    this.getBugs()
+    this.queryData()
   },
 }
 </script>

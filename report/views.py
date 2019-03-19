@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_list_or_404,render_to_response, redirect
 from django.http import JsonResponse
 import datetime
-from django.db import models
+from django.db import models,connection
 from .models import User,Demand,Developer,Compat,Report,Remain,Config,Build,Bug,Compat
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django import forms
 from django.db.models import Count
+
 # #表单
 # class LoginForm(forms.Form):
 #     username = forms.CharField(required=True, label="username", error_messages={'required':'用户名不能为空'})
@@ -421,18 +422,23 @@ def deleteDemand(request):
         demand_obj = Demand.objects.filter(id=demand_id).delete()
         return JsonResponse({"result": 200,"msg": "执行成功"})
 
+def dictfetchall(cursor):
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc],row))
+        for row in cursor.fetchall()
+    ]
+
 #bug列表
 @csrf_exempt
 def getBugList(request):
     if request.method == 'GET':
-        bugs = Bug.objects.filter(status="no_solve").values('id','content','bug_type','status')
-        serializer = BugListSerializer(bugs, many=True)
-        a = Demand.objects.filter(status="completed").annotate(num_bug=Count('bug'))
-        print(a)
-        for i in a:
-            print(i.num_bug)
-        data = serializers.serialize('json',a)
-        return JsonResponse({"result": 200, "msg": "执行成功", "data":data})
+        data=[]
+        cursor = connection.cursor()
+        cursor.execute("SELECT report_demand.id, report_demand.name, COUNT(report_bug.demand_id) count FROM report_demand RIGHT JOIN report_bug ON report_demand.id=report_bug.demand_id GROUP BY report_demand.id;")
+        num_bugs = dictfetchall(cursor)
+        print(num_bugs)
+        return JsonResponse({"result": 200, "msg": "执行成功", "series":num_bugs})
 
    
 #登录验证

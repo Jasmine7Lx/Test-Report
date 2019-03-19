@@ -6,7 +6,7 @@
           <el-option v-for="item in demandList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="tester_name" label="测试人员:">
+      <el-form-item prop="tester_name" label="测试负责人:">
         <el-select v-model="form1.tester" size="small" filterable placeholder="请选择">
           <el-option v-for="item in testerList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
