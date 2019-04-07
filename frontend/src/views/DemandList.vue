@@ -76,7 +76,7 @@
   <el-table
     :data="demandList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
     style="width: 100%; font-size:16px"
-    height="440"
+    height="450"
     highlight-current-row
     @cell-click="getDemandDetail"
     >
@@ -298,7 +298,7 @@ export default {
           this.$nextTick(()=>{this.$refs['demandForm'].resetFields();})
         },
         EditDemand:function(index,row) {
-          console.log(this.demandId,this.status)
+          // console.log(this.demandId,this.status)
           https.fetchGet('/api/editdemand', {id:this.demandId, status:this.status})
           .then((resp) => {
             this.dialogVisible2 = false;
@@ -330,7 +330,7 @@ export default {
             let demandId = row.id
             https.fetchGet('/api/deletedemand', {id:demandId})
             .then((resp) => {
-                console.log("删除成功")
+                // console.log("删除成功")
                 this.getDemandList();
             })
             this.$message({

@@ -247,9 +247,9 @@ export default {
       https.fetchGet("/api/developerall", { id: demand_id }).then(resp => {
       });
     },
-    resetForm: function(forms) {
-      console.log("reset");
-    },
+    // resetForm: function(forms) {
+    //   console.log("reset");
+    // },
     submitForm: function() {
       var dataList = Object.assign(
         this.form1,
@@ -258,7 +258,7 @@ export default {
         this.form4
       );
       https.fetchPost("/api/appreport", dataList).then(resp => {
-        console.log(dataList);
+        // console.log(dataList);
         this.$router.push({ path: "/" });
       });
     }

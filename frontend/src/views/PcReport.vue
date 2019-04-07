@@ -393,12 +393,12 @@ export default {
         var demand_id = item;
         https.fetchGet("/api/developerall", { id: demand_id })
         .then(resp => {
-          console.log(resp.data.data)
+          // console.log(resp.data.data)
           this.demandDetail = resp.data.data
         })
       },
       resetForm: function(forms) {
-        console.log("reset");
+        // console.log("reset");
       },
       submitForm: function() {
         var dataList = Object.assign(
@@ -422,7 +422,7 @@ export default {
           return;
         }
         https.fetchPost("/api/pcreport", dataList).then(resp => {
-          console.log(dataList);
+          // console.log(dataList);
           this.$router.push({ path: "/" });
         });
       }

@@ -4,7 +4,7 @@
     <div class="menu">
         <span class="name">
           <i style="margin-right: 10px"></i>
-          Jasmine
+          Welcome
         </span>
         <el-button type="primary" size="mini" icon="el-icon-setting" @click="Logout()">退出</el-button>
     </div>

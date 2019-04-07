@@ -150,7 +150,7 @@ export default {
       let reportId = this.$route.params.id;
       https.fetchGet('api/pcreport', {id:reportId})
         .then((resp) => {
-            console.log(resp.data.data);
+            // console.log(resp.data.data);
             this.remain = resp.data.data.remain;
             this.report = resp.data.data.report[0];
             this.config = resp.data.data.config;

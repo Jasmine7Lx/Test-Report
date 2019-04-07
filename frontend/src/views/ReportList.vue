@@ -82,7 +82,7 @@ export default {
       getReportList: function() {
         https.fetchGet('/api/reportlistall')
         .then((resp) => {
-          console.log(resp.data)
+          // console.log(resp.data)
           this.reportList = resp.data.reportlist
         })
       },
@@ -101,7 +101,7 @@ export default {
         } 
       },
       formatDate: function(row, column) {
-        console.log(row, column)
+        // console.log(row, column)
         const date = row[column.property]
         if (date === undefined) {
           return ''
@@ -120,14 +120,14 @@ export default {
             else if(item=="pclist"){
               https.fetchGet('/api/reportlistpc')
               .then((resp) => {
-                console.log(resp.data)
+                // console.log(resp.data)
                 this.reportList = resp.data.reportlist
               })
             }
             else if(item=="applist"){
               https.fetchGet('/api/reportlistapp')
               .then((resp) => {
-                console.log(resp.data)
+                // console.log(resp.data)
                 this.reportList = resp.data.reportlist
               })
             }

@@ -436,8 +436,8 @@ def getBugList(request):
         data=[]
         cursor = connection.cursor()
         cursor.execute("SELECT report_demand.id, report_demand.name, COUNT(report_bug.demand_id) count FROM report_demand RIGHT JOIN report_bug ON report_demand.id=report_bug.demand_id GROUP BY report_demand.id;")
+        # cursor.execute("SELECT report_demand.id, report_demand.name, COUNT(report_bug.demand_id) count FROM report_demand RIGHT JOIN report_bug ON report_demand.id=report_bug.demand_id where date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m') GROUP BY report_demand.id ")
         num_bugs = dictfetchall(cursor)
-        print(num_bugs)
         return JsonResponse({"result": 200, "msg": "执行成功", "series":num_bugs})
 
    
